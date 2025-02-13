@@ -31,7 +31,7 @@ A modern chat application built with Next.js, TypeScript, and Supabase that prov
 ### Components
 - `QuestionInput.tsx`: Initial question input on home page
 - `ChatTemplates.tsx`: Display and management of chat templates
-- `ChatHistory.tsx`: Shows recent chat history
+- `ChatHistory.tsx`: Shows recent chat history if available
 
 ### Utilities
 - `markdown.ts`: Markdown configuration and syntax highlighting
@@ -166,6 +166,6 @@ The template management CLI provides an interactive interface to:
 MIT License
 
 # TODOS
-- [ ] add codeblock visualizer, and code showing region (will need to be able to classify whether code is visualizable or not - can tell if something is code by just whether if has backticks or not)
+- [ ] add codeblock visualizer, (will need to be able to classify whether code is visualizable or not - can tell if something is code by just whether if has backticks or not). NOTE: extra code region is implemented, used, but doesn't have renderer
 - [ ] add XR specific templates
 - [ ] UI/UX improvements, logo, backgrounds/images (video background?)
