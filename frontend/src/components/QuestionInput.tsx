@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/utils/supabase'
+import { motion } from 'framer-motion'
 
 const QuestionInput = () => {
   const router = useRouter()
@@ -16,7 +17,6 @@ const QuestionInput = () => {
     setIsSubmitting(true)
 
     try {
-      // Create chat first
       const { data: chat } = await supabase
         .from('chats')
         .insert([{ 
@@ -27,11 +27,9 @@ const QuestionInput = () => {
         .single()
 
       if (chat) {
-        // Add to localStorage
         const chatHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]')
         localStorage.setItem('chatHistory', JSON.stringify([...chatHistory, chat.id]))
         
-        // Navigate to chat with ID
         router.push(`/chat?id=${chat.id}&q=${encodeURIComponent(question)}`)
       }
     } catch (error) {
@@ -41,22 +39,29 @@ const QuestionInput = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full">
-      <div className="relative">
+    <motion.form 
+      onSubmit={handleSubmit} 
+      className="w-full"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <div className="relative max-w-2xl mx-auto">
         <input
           type="text"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="Ask me anything..."
-          className="w-full p-4 pr-12 rounded-lg border border-gray-300 dark:border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+          className="w-full p-4 pr-12 rounded-xl border border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none bg-slate-800/50 text-white placeholder-slate-400"
           aria-label="Ask a question"
           disabled={isSubmitting}
         />
-        <button
+        <motion.button
           type="submit"
-          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 disabled:opacity-50"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-blue-400 disabled:opacity-50 disabled:hover:text-slate-400"
           aria-label="Submit question"
           disabled={isSubmitting}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -72,9 +77,9 @@ const QuestionInput = () => {
               d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
             />
           </svg>
-        </button>
+        </motion.button>
       </div>
-    </form>
+    </motion.form>
   )
 }
 

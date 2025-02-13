@@ -20,8 +20,6 @@ export function configureMarked() {
     gfm: true,
     breaks: true,
     pedantic: false,
-    smartLists: true,
-    smartypants: true
   });
 
   if (typeof window !== 'undefined' && !window.copyCode) {

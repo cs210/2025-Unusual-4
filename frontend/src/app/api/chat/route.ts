@@ -2,6 +2,18 @@ import OpenAI from 'openai'
 import { NextResponse } from 'next/server'
 import { type NextRequest } from 'next/server'
 
+// Define message type
+interface ChatMessage {
+  role: 'user' | 'assistant' | 'system'
+  content: string
+}
+
+// Define request body type
+interface RequestBody {
+  message: string
+  messages: ChatMessage[]
+}
+
 // Initialize OpenAI client
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
@@ -9,13 +21,13 @@ const openai = new OpenAI({
 
 export async function POST(req: NextRequest) {
   try {
-    const { message, messages } = await req.json()
+    const { message, messages } = (await req.json()) as RequestBody
 
     // Create stream
     const stream = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
-        ...messages.map((msg: any) => ({
+        ...messages.map((msg: ChatMessage) => ({
           role: msg.role,
           content: msg.content
         })),
@@ -49,4 +61,4 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     )
   }
-} 
+}

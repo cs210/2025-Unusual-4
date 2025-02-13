@@ -1,18 +1,18 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useState, useEffect, useRef, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Message } from '@/types/chat'
 import { marked } from 'marked'
 import { configureMarked } from '@/utils/markdown'
 import { supabase } from '@/utils/supabase'
-import type { Chat, ChatMessage } from '@/utils/supabase'
+import CodeView from '@/components/CodeView'
+import { extractCodeBlocks } from '@/utils/code'
+import { motion, AnimatePresence } from 'framer-motion'
 
-const ChatPage = () => {
-  const router = useRouter()
+const ChatPageContent = () => {
   const searchParams = useSearchParams()
   const initialQuestion = searchParams.get('q')
-  const templateId = searchParams.get('template')
   const chatId = searchParams.get('id')
   
   const [messages, setMessages] = useState<Message[]>([])
@@ -23,6 +23,7 @@ const ChatPage = () => {
   const [initialQuestionProcessed, setInitialQuestionProcessed] = useState(false)
   const [streamingMessage, setStreamingMessage] = useState('')
   const [isInitialized, setIsInitialized] = useState(false)
+  const [hasCode, setHasCode] = useState(false)
   
   // Use a ref to track ongoing requests
   const activeRequestRef = useRef<boolean>(false)
@@ -96,6 +97,15 @@ const ChatPage = () => {
     }
   }, [chatId])
 
+  // Check for code blocks in messages
+  useEffect(() => {
+    const hasCodeBlock = messages.some(message => {
+      const blocks = extractCodeBlocks(message.content)
+      return blocks.some(block => block.isCode)
+    })
+    setHasCode(hasCodeBlock)
+  }, [messages])
+
   const handleSendMessage = async (content: string) => {
     if (!content.trim() || activeRequestRef.current) return
 
@@ -166,77 +176,177 @@ const ChatPage = () => {
     }
   }
 
-  const renderMarkdown = (content: string) => {
-    return { __html: marked(content) }
+  const renderMessage = (content: string) => {
+    const blocks = extractCodeBlocks(content)
+    
+    return blocks.map((block, index) => (
+      block.isCode ? (
+        <CodeView 
+          key={index}
+          code={block.code}
+          language={block.language}
+        />
+      ) : (
+        <div
+          key={index}
+          className="prose dark:prose-invert max-w-none"
+          dangerouslySetInnerHTML={{ __html: marked(block.content) }}
+        />
+      )
+    ))
   }
 
   return (
-    <div className="min-h-screen p-4 max-w-3xl mx-auto bg-gray-50 dark:bg-gray-900">
-      {chatTitle && (
-        <h1 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">
-          {chatTitle}
-        </h1>
-      )}
-      <div className="space-y-4 mb-24">
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`p-4 rounded-lg ${
-              message.role === 'user' 
-                ? 'bg-blue-100 dark:bg-blue-900 text-gray-900 dark:text-white ml-12' 
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white mr-12'
-            }`}
+    <div className="min-h-screen bg-slate-900">
+      <div className="p-4 w-full">
+        <AnimatePresence>
+          {chatTitle && (
+            <motion.h1 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-xl font-semibold mb-6 text-white max-w-6xl mx-auto"
+            >
+              {chatTitle}
+            </motion.h1>
+          )}
+        </AnimatePresence>
+        
+        <div className={`${hasCode ? 'grid grid-cols-2 gap-4' : 'flex justify-center'} max-w-full`}>
+          {/* Chat Area */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className={`space-y-4 mb-24 ${hasCode ? 'px-4' : 'w-[60%] px-8 py-6 bg-slate-800/30 rounded-2xl'}`}
           >
-            <div 
-              className="prose dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={renderMarkdown(message.content)}
-            />
-          </div>
-        ))}
-        
-        {streamingMessage && (
-          <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mr-12 text-gray-900 dark:text-white">
-            <div 
-              className="prose dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={renderMarkdown(streamingMessage)}
-            />
-          </div>
-        )}
-        
-        {isLoading && !streamingMessage && (
-          <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mr-12 animate-pulse text-gray-900 dark:text-white">
-            Thinking...
-          </div>
-        )}
-      </div>
+            <AnimatePresence>
+              {messages.map((message, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className={`p-4 rounded-xl max-w-[90%] ${
+                    message.role === 'user' 
+                      ? 'bg-blue-900/50 text-white ml-auto' 
+                      : 'bg-slate-800/50 text-white mr-auto'
+                  }`}
+                >
+                  {message.role === 'assistant' && hasCode ? (
+                    <div className="prose dark:prose-invert max-w-none">
+                      {extractCodeBlocks(message.content)
+                        .filter(block => !block.isCode)
+                        .map((block, idx) => (
+                          <div
+                            key={idx}
+                            dangerouslySetInnerHTML={{ __html: marked(block.content) }}
+                          />
+                        ))}
+                    </div>
+                  ) : (
+                    renderMessage(message.content)
+                  )}
+                </motion.div>
+              ))}
+            </AnimatePresence>
+            
+            <AnimatePresence>
+              {streamingMessage && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="bg-slate-800/50 p-4 rounded-xl mr-auto max-w-[90%] text-white"
+                >
+                  {renderMessage(streamingMessage)}
+                </motion.div>
+              )}
+            </AnimatePresence>
+            
+            <AnimatePresence>
+              {isLoading && !streamingMessage && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="bg-slate-800/50 p-4 rounded-xl mr-auto max-w-[90%] animate-pulse text-white"
+                >
+                  Thinking...
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          handleSendMessage(input)
-        }}
-        className="fixed bottom-0 left-0 right-0 p-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700"
-      >
-        <div className="max-w-3xl mx-auto flex gap-2">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="flex-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-            placeholder="Type your message..."
-            aria-label="Chat message"
-          />
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:hover:bg-blue-500"
-            disabled={isLoading || !input.trim()}
-            aria-label="Send message"
-          >
-            Send
-          </button>
+          {/* Code Area */}
+          <AnimatePresence>
+            {hasCode && (
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="h-[calc(100vh-12rem)] bg-slate-800 rounded-xl overflow-hidden sticky top-4"
+              >
+                <div className="h-full overflow-auto">
+                  {messages.map((message, index) => (
+                    message.role === 'assistant' && extractCodeBlocks(message.content)
+                      .filter(block => block.isCode)
+                      .map((block, blockIndex) => (
+                        <CodeView
+                          key={`${index}-${blockIndex}`}
+                          code={block.code}
+                          language={block.language}
+                        />
+                      ))
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-      </form>
+
+        {/* Input Form */}
+        <motion.form
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          onSubmit={(e) => {
+            e.preventDefault()
+            handleSendMessage(input)
+          }}
+          className="fixed bottom-0 left-0 right-0 p-4 bg-slate-800/80 border-t border-slate-700 backdrop-blur-sm"
+        >
+          <div className="max-w-6xl mx-auto flex gap-2">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="flex-1 p-2 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-slate-900 text-white border-slate-700"
+              placeholder="Type your message..."
+              aria-label="Chat message"
+            />
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-600"
+              disabled={isLoading || !input.trim()}
+              aria-label="Send message"
+            >
+              Send
+            </button>
+          </div>
+        </motion.form>
+      </div>
     </div>
+  )
+}
+
+const ChatPage = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    }>
+      <ChatPageContent />
+    </Suspense>
   )
 }
 
