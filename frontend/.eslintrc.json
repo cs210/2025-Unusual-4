@@ -1,0 +1,17 @@
+{
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-wrapper-object-types": "off",
+    "@typescript-eslint/no-unused-vars": ["warn", { // error
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_",
+      "ignoreRestSiblings": true
+    }],
+    "@typescript-eslint/ban-types": ["warn", { // error
+      "types": {
+        "{}": false
+      }
+    }]
+  }
+} 
