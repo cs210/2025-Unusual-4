@@ -33,19 +33,14 @@ export default function Home() {
           className="text-4xl font-bold text-center text-white"
           variants={itemVariants}
         >
-          AI Chat Assistant
+          XeleR
         </motion.h1>
         
         <motion.div variants={itemVariants}>
           <QuestionInput />
         </motion.div>
         
-        <motion.div 
-          className="bg-slate-800/30 rounded-2xl p-6"
-          variants={itemVariants}
-        >
-          <ChatHistory />
-        </motion.div>
+        <ChatHistory />
         
         <motion.div 
           className="bg-slate-800/30 rounded-2xl p-6"
