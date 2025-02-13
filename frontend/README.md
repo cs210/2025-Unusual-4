@@ -1,36 +1,171 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Chat Assistant
 
-## Getting Started
+A modern chat application built with Next.js, TypeScript, and Supabase that provides an interactive AI chat experience with templating capabilities.
 
-First, run the development server:
+## Architecture Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Core Features
+- Real-time AI chat interactions using OpenAI's GPT-3.5
+- Streaming responses for a more dynamic experience
+- Chat history persistence
+- Template system for predefined chat scenarios
+- Markdown rendering with syntax highlighting
+- Dark mode support
+- Responsive design
+
+### Tech Stack
+- **Frontend**: Next.js 14 with App Router
+- **Language**: TypeScript
+- **Database**: Supabase (PostgreSQL)
+- **AI**: OpenAI GPT-3.5
+- **Styling**: TailwindCSS
+- **Markdown**: Marked + Prism.js
+
+## Component Structure
+
+### Pages
+- `app/page.tsx`: Home page with question input and templates
+- `app/chat/page.tsx`: Main chat interface with streaming responses
+- `app/api/chat/route.ts`: API route for OpenAI interactions
+
+### Components
+- `QuestionInput.tsx`: Initial question input on home page
+- `ChatTemplates.tsx`: Display and management of chat templates
+- `ChatHistory.tsx`: Shows recent chat history
+
+### Utilities
+- `markdown.ts`: Markdown configuration and syntax highlighting
+- `supabase.ts`: Supabase client and type definitions
+
+## Database Schema
+
+### Tables
+
+#### Chats
+```sql
+create table chats (
+  id uuid default uuid_generate_v4() primary key,
+  title text not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  is_template boolean default false,
+  description text,
+  template_category text,
+  template_image text
+);
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### Messages
+```sql
+create table messages (
+  id uuid default uuid_generate_v4() primary key,
+  chat_id uuid references chats(id) on delete cascade not null,
+  role text not null check (role in ('user', 'assistant')),
+  content text not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Indexes
+```sql
+create index idx_templates on chats (is_template) where is_template = true;
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment Variables
 
-## Learn More
+Create a `.env.local` file with:
 
-To learn more about Next.js, take a look at the following resources:
+```env
+# OpenAI API Key
+OPENAI_API_KEY=your_openai_api_key
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Template Management
 
-## Deploy on Vercel
+Templates can be managed via CLI:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# Install dependencies
+npm install
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Create a new template
+npm run templates create
+
+# List all templates
+npm run templates list
+
+# Delete a template
+npm run templates delete
+```
+
+## Features
+
+### Chat System
+- Real-time message streaming
+- Markdown rendering with syntax highlighting
+- Message history persistence
+- Local storage for recent chats
+- Dark mode support
+- Responsive design
+
+### Template System
+- Convert existing chats to templates
+- Categorize templates
+- Custom icons/emojis for templates
+- Template management via CLI
+- Template preview and quick start
+
+### Data Persistence
+- Chat history stored in Supabase
+- Message history with timestamps
+- Template configuration
+- Local storage for recent chats
+
+## Development
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up environment variables in `.env.local`
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+## Database Setup
+
+1. Create a Supabase project
+2. Run the SQL commands in the database schema section
+3. Set up the environment variables
+4. Enable Row Level Security (RLS) policies as needed
+
+## Template CLI Usage
+
+The template management CLI provides an interactive interface to:
+- Convert existing chats to templates
+- Add descriptions and categories
+- Set custom images or emojis
+- List all templates
+- Delete templates
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (e.g. `<username>/<feature-name>`)
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## License
+
+MIT License
+
+# TODOS
+- [ ] add codeblock visualizer, and code showing region (will need to be able to classify whether code is visualizable or not - can tell if something is code by just whether if has backticks or not)
+- [ ] add XR specific templates
+- [ ] UI/UX improvements, logo, backgrounds/images (video background?)
