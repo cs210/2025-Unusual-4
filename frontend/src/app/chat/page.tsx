@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Message } from '@/types/chat'
 import { marked } from 'marked'
@@ -23,6 +23,9 @@ const ChatPage = () => {
   const [initialQuestionProcessed, setInitialQuestionProcessed] = useState(false)
   const [streamingMessage, setStreamingMessage] = useState('')
   const [isInitialized, setIsInitialized] = useState(false)
+  
+  // Use a ref to track ongoing requests
+  const activeRequestRef = useRef<boolean>(false)
 
   // Configure marked when component mounts
   useEffect(() => {
@@ -69,6 +72,10 @@ const ChatPage = () => {
             // Handle initial question if it exists and no messages yet
             if (initialQuestion && chatMessages.length === 0 && !initialQuestionProcessed) {
               setInitialQuestionProcessed(true)
+              // Add initial question to messages first
+              const initialMessage: Message = { role: 'user', content: initialQuestion }
+              setMessages([initialMessage])
+              // Then send it to get the response
               handleSendMessage(initialQuestion)
             }
           }
@@ -90,16 +97,16 @@ const ChatPage = () => {
   }, [chatId])
 
   const handleSendMessage = async (content: string) => {
-    if (!content.trim()) return
-
-    const newMessage: Message = { role: 'user', content }
-    setMessages(prev => [...prev, newMessage])
-    setInput('')
-    setIsLoading(true)
-    setStreamingMessage('')
+    if (!content.trim() || activeRequestRef.current) return
 
     try {
-      // Save user message first
+      activeRequestRef.current = true
+      const newMessage: Message = { role: 'user', content }
+      setMessages(prev => [...prev, newMessage])
+      setInput('')
+      setIsLoading(true)
+      setStreamingMessage('')
+
       if (currentChatId) {
         await supabase
           .from('messages')
@@ -110,7 +117,6 @@ const ChatPage = () => {
           }])
       }
 
-      // Get AI response with streaming
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -124,7 +130,6 @@ const ChatPage = () => {
         throw new Error('Stream response not available')
       }
 
-      // Handle streaming response
       const reader = response.body.getReader()
       const decoder = new TextDecoder()
       let fullMessage = ''
@@ -139,7 +144,6 @@ const ChatPage = () => {
           setStreamingMessage(fullMessage)
         }
 
-        // Only save and update messages once streaming is complete
         if (currentChatId) {
           await supabase
             .from('messages')
@@ -158,6 +162,7 @@ const ChatPage = () => {
       console.error('Error:', error)
     } finally {
       setIsLoading(false)
+      activeRequestRef.current = false
     }
   }
 
