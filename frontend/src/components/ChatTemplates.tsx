@@ -3,11 +3,12 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/utils/supabase'
-import type { Chat } from '@/utils/supabase'
+import type { Chat, ChatMessage } from '@/utils/supabase'
 
 const ChatTemplates = () => {
   const router = useRouter()
   const [templates, setTemplates] = useState<Chat[]>([])
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const loadTemplates = async () => {
@@ -25,8 +26,57 @@ const ChatTemplates = () => {
     loadTemplates()
   }, [])
 
-  const handleTemplateClick = (template: Chat) => {
-    router.push(`/chat?template=${template.id}`)
+  const handleTemplateClick = async (template: Chat) => {
+    if (isLoading) return
+    setIsLoading(true)
+
+    try {
+      // First, create a new chat based on the template
+      const { data: newChat } = await supabase
+        .from('chats')
+        .insert([{
+          title: template.title,
+          is_template: false,
+          description: template.description,
+          template_category: template.template_category,
+          template_image: template.template_image
+        }])
+        .select()
+        .single()
+
+      if (newChat) {
+        // Get template messages
+        const { data: templateMessages } = await supabase
+          .from('messages')
+          .select('*')
+          .eq('chat_id', template.id)
+          .order('created_at', { ascending: true })
+
+        // Copy messages to new chat if they exist
+        if (templateMessages && templateMessages.length > 0) {
+          await supabase
+            .from('messages')
+            .insert(
+              templateMessages.map(msg => ({
+                chat_id: newChat.id,
+                role: msg.role,
+                content: msg.content
+              }))
+            )
+        }
+
+        // Add to localStorage
+        const chatHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]')
+        localStorage.setItem('chatHistory', JSON.stringify([...chatHistory, newChat.id]))
+
+        // Navigate to the new chat
+        router.push(`/chat?id=${newChat.id}`)
+      }
+    } catch (error) {
+      console.error('Error creating chat from template:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -38,6 +88,7 @@ const ChatTemplates = () => {
           className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors duration-200 text-left bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
           tabIndex={0}
           aria-label={`Start ${template.title} chat`}
+          disabled={isLoading}
         >
           <div className="flex items-center gap-3 mb-4">
             <span className="text-2xl">{template.template_image}</span>
