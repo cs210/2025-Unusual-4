@@ -3,45 +3,56 @@ interface CodeBlock {
   language: string
   isCode: boolean
   content: string
+  isXRCode?: boolean
 }
 
+
 export const extractCodeBlocks = (content: string): CodeBlock[] => {
-  const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g
-  const blocks: CodeBlock[] = []
-  let lastIndex = 0
-  let match
+  const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
+  const blocks: CodeBlock[] = [];
+  let lastIndex = 0;
+  let match;
 
   while ((match = codeBlockRegex.exec(content)) !== null) {
-    // Add text before code block
     if (match.index > lastIndex) {
       blocks.push({
         isCode: false,
         content: content.slice(lastIndex, match.index),
         code: '',
-        language: ''
-      })
+        language: '',
+      });
     }
 
-    // Add code block
+    // Detect if the code block contains XR/WebGL-related keywords
+    const isXRCode = /THREE|WebGLRenderer|AR|VR/.test(match[2]);
+
     blocks.push({
       isCode: true,
       content: match[0],
       code: match[2].trim(),
-      language: match[1] || 'plaintext'
-    })
+      language: match[1] || 'plaintext',
+      isXRCode, // True if it's XR/WebGL code
+    });
 
-    lastIndex = match.index + match[0].length
+
+    // // Print statement to verify XR identification
+    // if (isXRCode) {
+    //   console.log("XR Code Detected:", match[2].trim());
+    // } else {
+    //   console.log("Non-XR Code:", match[2].trim());
+    // }
+
+    lastIndex = match.index + match[0].length; 
   }
 
-  // Add remaining text
   if (lastIndex < content.length) {
     blocks.push({
       isCode: false,
       content: content.slice(lastIndex),
       code: '',
-      language: ''
-    })
+      language: '',
+    });
   }
 
-  return blocks
-} 
+  return blocks;
+};

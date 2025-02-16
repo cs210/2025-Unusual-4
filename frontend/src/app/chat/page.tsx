@@ -1,20 +1,22 @@
 'use client'
 
-import { useState, useEffect, useRef, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { Message } from '@/types/chat'
-import { marked } from 'marked'
-import { configureMarked } from '@/utils/markdown'
-import { supabase } from '@/utils/supabase'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Suspense, useEffect, useRef, useState } from 'react'
+
 import CodeView from '@/components/CodeView'
+import { Message } from '@/types/chat'
+import SceneView from '@/components/SceneView'
+import { configureMarked } from '@/utils/markdown'
 import { extractCodeBlocks } from '@/utils/code'
-import { motion, AnimatePresence } from 'framer-motion'
+import { marked } from 'marked'
+import { supabase } from '@/utils/supabase'
+import { useSearchParams } from 'next/navigation'
 
 const ChatPageContent = () => {
   const searchParams = useSearchParams()
   const initialQuestion = searchParams.get('q')
   const chatId = searchParams.get('id')
-  
+
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -24,23 +26,21 @@ const ChatPageContent = () => {
   const [streamingMessage, setStreamingMessage] = useState('')
   const [isInitialized, setIsInitialized] = useState(false)
   const [hasCode, setHasCode] = useState(false)
-  
-  // Use a ref to track ongoing requests
+  const [activeTab, setActiveTab] = useState<'code' | 'scene'>('code') // Track active tab
+  const [latestCodeBlock, setLatestCodeBlock] = useState<{ code: string, language: string } | null>(null) // Latest code block
+
   const activeRequestRef = useRef<boolean>(false)
 
-  // Configure marked when component mounts
   useEffect(() => {
     configureMarked()
   }, [])
 
-  // Combined chat loading and initial question handling
   useEffect(() => {
     const initializeChat = async () => {
       if (!chatId || isInitialized) return
       setIsInitialized(true)
-      
+
       try {
-        // Load chat details
         const { data: chat } = await supabase
           .from('chats')
           .select('*')
@@ -50,14 +50,12 @@ const ChatPageContent = () => {
         if (chat) {
           setCurrentChatId(chat.id)
           setChatTitle(chat.title)
-          
-          // Add to localStorage
+
           const chatHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]')
           if (!chatHistory.includes(chat.id)) {
             localStorage.setItem('chatHistory', JSON.stringify([...chatHistory, chat.id]))
           }
 
-          // Load existing messages
           const { data: chatMessages } = await supabase
             .from('messages')
             .select('*')
@@ -70,13 +68,10 @@ const ChatPageContent = () => {
               content: msg.content
             })))
 
-            // Handle initial question if it exists and no messages yet
             if (initialQuestion && chatMessages.length === 0 && !initialQuestionProcessed) {
               setInitialQuestionProcessed(true)
-              // Add initial question to messages first
               const initialMessage: Message = { role: 'user', content: initialQuestion }
               setMessages([initialMessage])
-              // Then send it to get the response
               handleSendMessage(initialQuestion)
             }
           }
@@ -89,7 +84,6 @@ const ChatPageContent = () => {
     initializeChat()
   }, [chatId, initialQuestion])
 
-  // Reset initialization when chatId changes
   useEffect(() => {
     if (!chatId) {
       setIsInitialized(false)
@@ -97,13 +91,29 @@ const ChatPageContent = () => {
     }
   }, [chatId])
 
-  // Check for code blocks in messages
   useEffect(() => {
-    const hasCodeBlock = messages.some(message => {
-      const blocks = extractCodeBlocks(message.content)
-      return blocks.some(block => block.isCode)
+    // Extract the latest code block from the assistant's responses
+    const lastMessageWithCode = [...messages].reverse().find(message => {
+      if (message.role === 'assistant') {
+        const blocks = extractCodeBlocks(message.content)
+        return blocks.some(block => block.isCode)
+      }
+      return false
     })
-    setHasCode(hasCodeBlock)
+
+    if (lastMessageWithCode) {
+      const blocks = extractCodeBlocks(lastMessageWithCode.content)
+      const latestBlock = blocks.find(block => block.isCode)
+      if (latestBlock) {
+        setLatestCodeBlock({ code: latestBlock.code, language: latestBlock.language })
+        setHasCode(true)
+      } else {
+        setHasCode(false)
+      }
+    } else {
+      setHasCode(false)
+      setLatestCodeBlock(null)
+    }
   }, [messages])
 
   const handleSendMessage = async (content: string) => {
@@ -178,7 +188,7 @@ const ChatPageContent = () => {
 
   const renderMessage = (content: string) => {
     const blocks = extractCodeBlocks(content)
-    
+
     return blocks.map((block, index) => (
       block.isCode ? (
         <CodeView 
@@ -212,7 +222,6 @@ const ChatPageContent = () => {
         </AnimatePresence>
         
         <div className={`${hasCode ? 'grid grid-cols-2 gap-4' : 'flex justify-center'} max-w-full`}>
-          {/* Chat Area */}
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -277,34 +286,46 @@ const ChatPageContent = () => {
             </AnimatePresence>
           </motion.div>
 
-          {/* Code Area */}
           <AnimatePresence>
-            {hasCode && (
+            {hasCode && latestCodeBlock && (
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
                 className="h-[calc(100vh-12rem)] bg-slate-800 rounded-xl overflow-hidden sticky top-4"
               >
+                <div className="flex border-b border-slate-700">
+                  <button
+                    onClick={() => setActiveTab('code')}
+                    className={`flex-1 p-4 text-center ${activeTab === 'code' ? 'bg-slate-900 text-white' : 'bg-slate-800 text-gray-400'}`}
+                  >
+                    Code View
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('scene')}
+                    className={`flex-1 p-4 text-center ${activeTab === 'scene' ? 'bg-slate-900 text-white' : 'bg-slate-800 text-gray-400'}`}
+                  >
+                    Scene View
+                  </button>
+                </div>
                 <div className="h-full overflow-auto">
-                  {messages.map((message, index) => (
-                    message.role === 'assistant' && extractCodeBlocks(message.content)
-                      .filter(block => block.isCode)
-                      .map((block, blockIndex) => (
-                        <CodeView
-                          key={`${index}-${blockIndex}`}
-                          code={block.code}
-                          language={block.language}
-                        />
-                      ))
-                  ))}
+                  {activeTab === 'code' && (
+                    <CodeView
+                      code={latestCodeBlock.code}
+                      language={latestCodeBlock.language}
+                    />
+                  )}
+                  {activeTab === 'scene' && (
+                    <SceneView
+                      code={latestCodeBlock.code}
+                    />
+                  )}
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Input Form */}
         <motion.form
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -350,4 +371,4 @@ const ChatPage = () => {
   )
 }
 
-export default ChatPage 
+export default ChatPage
