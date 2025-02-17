@@ -166,6 +166,6 @@ The template management CLI provides an interactive interface to:
 MIT License
 
 # TODOS
-- [ ] add codeblock visualizer, (will need to be able to classify whether code is visualizable or not - can tell if something is code by just whether if has backticks or not). NOTE: extra code region is implemented, used, but doesn't have renderer
+- [X] add codeblock visualizer, (will need to be able to classify whether code is visualizable or not - can tell if something is code by just whether if has backticks or not). NOTE: extra code region is implemented, used, but doesn't have renderer
 - [ ] add XR specific templates
 - [ ] UI/UX improvements, logo, backgrounds/images (video background?)
