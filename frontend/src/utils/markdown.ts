@@ -1,6 +1,13 @@
 import { marked } from 'marked';
 import Prism from 'prismjs';
 
+// Add type declaration for window.copyCode
+declare global {
+  interface Window {
+    copyCode: (id: string) => void;
+  }
+}
+
 // Import additional Prism languages
 import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-javascript';
