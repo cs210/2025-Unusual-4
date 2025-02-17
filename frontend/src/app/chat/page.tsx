@@ -1,16 +1,32 @@
 'use client'
 
 import { AnimatePresence, motion } from 'framer-motion'
-import { Suspense, useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState, useCallback } from 'react'
+import dynamic from 'next/dynamic'
 
-import CodeView from '@/components/CodeView'
+// Dynamically import components that use browser APIs
+const CodeView = dynamic(() => import('@/components/CodeView'), { ssr: false })
+const SceneView = dynamic(() => import('@/components/SceneView'), { ssr: false })
+
 import { Message } from '@/types/chat'
-import SceneView from '@/components/SceneView'
 import { configureMarked } from '@/utils/markdown'
 import { extractCodeBlocks } from '@/utils/code'
 import { marked } from 'marked'
 import { supabase } from '@/utils/supabase'
 import { useSearchParams } from 'next/navigation'
+
+// Move localStorage operations to a utility function
+const updateChatHistory = (chatId: string) => {
+  try {
+    if (typeof window === 'undefined') return
+    const chatHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]')
+    if (!chatHistory.includes(chatId)) {
+      localStorage.setItem('chatHistory', JSON.stringify([...chatHistory, chatId]))
+    }
+  } catch (error) {
+    console.warn('Error updating chat history:', error)
+  }
+}
 
 const ChatPageContent = () => {
   const searchParams = useSearchParams()
@@ -32,91 +48,12 @@ const ChatPageContent = () => {
   const activeRequestRef = useRef<boolean>(false)
 
   useEffect(() => {
-    configureMarked()
+    if (typeof window !== 'undefined') {
+      configureMarked()
+    }
   }, [])
 
-  useEffect(() => {
-    const initializeChat = async () => {
-      if (!chatId || isInitialized) return
-      setIsInitialized(true)
-
-      try {
-        const { data: chat } = await supabase
-          .from('chats')
-          .select('*')
-          .eq('id', chatId)
-          .single()
-
-        if (chat) {
-          setCurrentChatId(chat.id)
-          setChatTitle(chat.title)
-
-          const chatHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]')
-          if (!chatHistory.includes(chat.id)) {
-            localStorage.setItem('chatHistory', JSON.stringify([...chatHistory, chat.id]))
-          }
-
-          const { data: chatMessages } = await supabase
-            .from('messages')
-            .select('*')
-            .eq('chat_id', chat.id)
-            .order('created_at', { ascending: true })
-
-          if (chatMessages) {
-            setMessages(chatMessages.map(msg => ({
-              role: msg.role as 'user' | 'assistant',
-              content: msg.content
-            })))
-
-            if (initialQuestion && chatMessages.length === 0 && !initialQuestionProcessed) {
-              setInitialQuestionProcessed(true)
-              const initialMessage: Message = { role: 'user', content: initialQuestion }
-              setMessages([initialMessage])
-              handleSendMessage(initialQuestion)
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Error initializing chat:', error)
-      }
-    }
-
-    initializeChat()
-  }, [chatId, initialQuestion])
-
-  useEffect(() => {
-    if (!chatId) {
-      setIsInitialized(false)
-      setInitialQuestionProcessed(false)
-    }
-  }, [chatId])
-
-  useEffect(() => {
-    // Extract the latest code block from the assistant's responses
-    const lastMessageWithCode = [...messages].reverse().find(message => {
-      if (message.role === 'assistant') {
-        const blocks = extractCodeBlocks(message.content)
-        return blocks.some(block => block.isCode)
-      }
-      return false
-    })
-
-    if (lastMessageWithCode) {
-      const blocks = extractCodeBlocks(lastMessageWithCode.content)
-      const latestBlock = blocks.find(block => block.isCode)
-      if (latestBlock) {
-        setLatestCodeBlock({ code: latestBlock.code, language: latestBlock.language })
-        setHasCode(true)
-      } else {
-        setHasCode(false)
-      }
-    } else {
-      setHasCode(false)
-      setLatestCodeBlock(null)
-    }
-  }, [messages])
-
-  const handleSendMessage = async (content: string) => {
+  const handleSendMessage = useCallback(async (content: string) => {
     if (!content.trim() || activeRequestRef.current) return
 
     try {
@@ -184,7 +121,84 @@ const ChatPageContent = () => {
       setIsLoading(false)
       activeRequestRef.current = false
     }
-  }
+  }, [currentChatId, messages])
+
+  useEffect(() => {
+    const initializeChat = async () => {
+      if (!chatId || isInitialized) return
+      setIsInitialized(true)
+
+      try {
+        const { data: chat } = await supabase
+          .from('chats')
+          .select('*')
+          .eq('id', chatId)
+          .single()
+
+        if (chat) {
+          setCurrentChatId(chat.id)
+          setChatTitle(chat.title)
+          updateChatHistory(chat.id)
+
+          const { data: chatMessages } = await supabase
+            .from('messages')
+            .select('*')
+            .eq('chat_id', chat.id)
+            .order('created_at', { ascending: true })
+
+          if (chatMessages) {
+            setMessages(chatMessages.map(msg => ({
+              role: msg.role as 'user' | 'assistant',
+              content: msg.content
+            })))
+
+            if (initialQuestion && chatMessages.length === 0 && !initialQuestionProcessed) {
+              setInitialQuestionProcessed(true)
+              const initialMessage: Message = { role: 'user', content: initialQuestion }
+              setMessages([initialMessage])
+              handleSendMessage(initialQuestion)
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error initializing chat:', error)
+      }
+    }
+
+    initializeChat()
+  }, [chatId, initialQuestion, isInitialized, initialQuestionProcessed, handleSendMessage])
+
+  useEffect(() => {
+    if (!chatId) {
+      setIsInitialized(false)
+      setInitialQuestionProcessed(false)
+    }
+  }, [chatId])
+
+  useEffect(() => {
+    // Extract the latest code block from the assistant's responses
+    const lastMessageWithCode = [...messages].reverse().find(message => {
+      if (message.role === 'assistant') {
+        const blocks = extractCodeBlocks(message.content)
+        return blocks.some(block => block.isCode)
+      }
+      return false
+    })
+
+    if (lastMessageWithCode) {
+      const blocks = extractCodeBlocks(lastMessageWithCode.content)
+      const latestBlock = blocks.find(block => block.isCode)
+      if (latestBlock) {
+        setLatestCodeBlock({ code: latestBlock.code, language: latestBlock.language })
+        setHasCode(true)
+      } else {
+        setHasCode(false)
+      }
+    } else {
+      setHasCode(false)
+      setLatestCodeBlock(null)
+    }
+  }, [messages])
 
   const renderMessage = (content: string) => {
     const blocks = extractCodeBlocks(content)
@@ -359,16 +373,15 @@ const ChatPageContent = () => {
   )
 }
 
-const ChatPage = () => {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <div className="text-white">Loading...</div>
-      </div>
-    }>
-      <ChatPageContent />
-    </Suspense>
-  )
-}
+// Wrap the entire page component with dynamic import to disable SSR
+const ChatPage = dynamic(() => Promise.resolve(() => (
+  <Suspense fallback={
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+      <div className="text-white">Loading...</div>
+    </div>
+  }>
+    <ChatPageContent />
+  </Suspense>
+)), { ssr: false })
 
 export default ChatPage
