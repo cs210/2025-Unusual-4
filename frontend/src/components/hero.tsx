@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { FileText, Sparkles } from "lucide-react"
-import { FloatingARObjects } from "@/components/floating-paper"
-import { ARHeadsetAnimation } from "@/components/robo-animation"
+import { FloatingARObjects } from "@/components/FloatingARObjects"
+import { ARHeadsetAnimation } from "@/components/ARHeadsetAnimation"
 
 export default function Hero() {
   return (
