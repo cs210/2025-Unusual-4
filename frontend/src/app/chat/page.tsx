@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { Suspense, useEffect, useRef, useState, useCallback } from "react"
 import dynamic from "next/dynamic"
+import Link from "next/link"
 
 // Dynamically import components that use browser APIs
 const CodeView = dynamic(() => import("@/components/CodeView"), { ssr: false })
@@ -46,6 +47,7 @@ const ChatPageContent = () => {
   const [hasCode, setHasCode] = useState(false)
   const [activeTab, setActiveTab] = useState<"code" | "scene">("code")
   const [latestCodeBlock, setLatestCodeBlock] = useState<{ code: string; language: string } | null>(null)
+  const [recentChats, setRecentChats] = useState<{ id: string; title: string }[]>([])
 
   const activeRequestRef = useRef<boolean>(false)
 
@@ -55,12 +57,20 @@ const ChatPageContent = () => {
     }
   }, [])
 
-  useEffect(() => {
-    console.log("ChatPageContent mounted")
-    return () => {
-      console.log("ChatPageContent unmounted")
+  const fetchRecentChats = useCallback(async () => {
+    try {
+      const { data, error } = await supabase.from("chats").select("id, title").order("created_at", { ascending: false })
+
+      if (error) throw error
+      setRecentChats(data || [])
+    } catch (error) {
+      console.error("Error fetching recent chats:", error)
     }
   }, [])
+
+  useEffect(() => {
+    fetchRecentChats()
+  }, [fetchRecentChats])
 
   const handleSendMessage = useCallback(
     async (content: string) => {
@@ -272,148 +282,182 @@ const ChatPageContent = () => {
     <main className="min-h-screen bg-black antialiased relative overflow-hidden">
       <Navbar />
 
-      <div className="container mx-auto px-6 relative z-20 pt-20 pb-16">
-        <AnimatePresence>
-          {chatTitle && (
-            <motion.h1
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600"
-            >
-              {chatTitle}
-            </motion.h1>
-          )}
-        </AnimatePresence>
-
-        <div className={`${hasCode ? "grid grid-cols-2 gap-4" : "flex justify-center"} max-w-full`}>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className={`space-y-4 mb-24 ${hasCode ? "px-4" : "w-[60%] px-8 py-6 bg-gradient-to-br from-purple-900/30 to-pink-900/30 rounded-2xl backdrop-blur-sm border border-purple-500/20"}`}
-          >
-            <AnimatePresence>
-              {messages.map((message, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className={`p-4 rounded-xl max-w-[90%] ${
-                    message.role === "user"
-                      ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white ml-auto"
-                      : "bg-gradient-to-r from-gray-800 to-gray-700 text-white mr-auto"
+      <div className="flex relative z-30 pt-16">
+        {/* Recent Chats Sidebar */}
+        <div className="w-64 fixed left-0 top-16 bottom-0 bg-gray-900/50 backdrop-blur-sm border-r border-purple-500/20 overflow-y-auto">
+          <h2 className="text-xl font-bold mb-4 text-white px-4 pt-4">Recent Chats</h2>
+          <ul className="space-y-2">
+            {recentChats.map((chat) => (
+              <li key={chat.id}>
+                <Link
+                  href={`/chat?id=${chat.id}`}
+                  className={`block px-4 py-2 text-white hover:bg-purple-900/50 transition-colors ${
+                    chat.id === currentChatId ? "bg-purple-900/50" : ""
                   }`}
                 >
-                  {message.role === "assistant" && hasCode ? (
-                    <div className="prose dark:prose-invert max-w-none">
-                      {extractCodeBlocks(message.content)
-                        .filter((block) => !block.isCode)
-                        .map((block, idx) => (
-                          <div key={idx} dangerouslySetInnerHTML={{ __html: marked(block.content) }} />
-                        ))}
-                    </div>
-                  ) : (
-                    renderMessage(message.content)
-                  )}
-                </motion.div>
-              ))}
-            </AnimatePresence>
-
-            <AnimatePresence>
-              {streamingMessage && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  className="bg-gradient-to-r from-gray-800 to-gray-700 p-4 rounded-xl mr-auto max-w-[90%] text-white"
-                >
-                  {renderMessage(streamingMessage)}
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <AnimatePresence>
-              {isLoading && !streamingMessage && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="bg-gradient-to-r from-gray-800 to-gray-700 p-4 rounded-xl mr-auto max-w-[90%] animate-pulse text-white"
-                >
-                  Thinking...
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-
-          <AnimatePresence>
-            {hasCode && latestCodeBlock && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                className="h-[calc(100vh-12rem)] bg-gradient-to-br from-purple-900/30 to-pink-900/30 rounded-xl overflow-hidden sticky top-4 backdrop-blur-sm border border-purple-500/20"
-              >
-                <div className="flex border-b border-purple-500/20">
-                  <button
-                    onClick={() => setActiveTab("code")}
-                    className={`flex-1 p-4 text-center ${activeTab === "code" ? "bg-purple-900/50 text-white" : "bg-transparent text-gray-400"}`}
-                  >
-                    Code View
-                  </button>
-                  <button
-                    onClick={() => setActiveTab("scene")}
-                    className={`flex-1 p-4 text-center ${activeTab === "scene" ? "bg-purple-900/50 text-white" : "bg-transparent text-gray-400"}`}
-                  >
-                    Scene View
-                  </button>
-                </div>
-                <div className="h-full overflow-auto">
-                  {activeTab === "code" && latestCodeBlock && (
-                    <CodeView code={latestCodeBlock.code} language={latestCodeBlock.language} />
-                  )}
-                  {activeTab === "scene" && latestCodeBlock && (
-                    <Suspense fallback={<div className="text-white p-4">Loading 3D Scene...</div>}>
-                      <div className="w-full h-[400px]">
-                        <SceneView code={latestCodeBlock.code} />
-                      </div>
-                    </Suspense>
-                  )}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                  {chat.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <motion.form
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          onSubmit={(e) => {
-            e.preventDefault()
-            handleSendMessage(input)
-          }}
-          className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-r from-purple-900/80 to-pink-900/80 border-t border-purple-500/20 backdrop-blur-sm"
-        >
-          <div className="max-w-6xl mx-auto flex gap-2">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              className="flex-1 p-2 border rounded-full focus:ring-2 focus:ring-purple-500 outline-none bg-gray-900/50 text-white border-purple-500/20"
-              placeholder="Type your message..."
-              aria-label="Chat message"
-            />
-            <button
-              type="submit"
-              className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:hover:from-purple-600 disabled:hover:to-pink-600"
-              disabled={isLoading || !input.trim()}
-              aria-label="Send message"
+        {/* Main Chat Area */}
+        <div className="flex-1 ml-64 px-6 pt-4">
+          <AnimatePresence>
+            {chatTitle && (
+              <motion.h1
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600"
+              >
+                {chatTitle}
+              </motion.h1>
+            )}
+          </AnimatePresence>
+
+          <div className={`${hasCode ? "grid grid-cols-2 gap-4" : "flex justify-center"} max-w-full mb-40`}>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className={`space-y-4 mb-24 ${
+                hasCode
+                  ? "px-4"
+                  : "w-[60%] px-8 py-6 bg-gradient-to-br from-purple-900/30 to-pink-900/30 rounded-2xl backdrop-blur-sm border border-purple-500/20"
+              }`}
             >
-              Send
-            </button>
+              <AnimatePresence>
+                {messages.map((message, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className={`p-4 rounded-xl max-w-[90%] ${
+                      message.role === "user"
+                        ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white ml-auto"
+                        : "bg-gradient-to-r from-gray-800 to-gray-700 text-white mr-auto"
+                    }`}
+                  >
+                    {message.role === "assistant" && hasCode ? (
+                      <div className="prose dark:prose-invert max-w-none">
+                        {extractCodeBlocks(message.content)
+                          .filter((block) => !block.isCode)
+                          .map((block, idx) => (
+                            <div key={idx} dangerouslySetInnerHTML={{ __html: marked(block.content) }} />
+                          ))}
+                      </div>
+                    ) : (
+                      renderMessage(message.content)
+                    )}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+
+              <AnimatePresence>
+                {streamingMessage && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="bg-gradient-to-r from-gray-800 to-gray-700 p-4 rounded-xl mr-auto max-w-[90%] text-white"
+                  >
+                    {renderMessage(streamingMessage)}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <AnimatePresence>
+                {isLoading && !streamingMessage && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="bg-gradient-to-r from-gray-800 to-gray-700 p-4 rounded-xl mr-auto max-w-[90%] animate-pulse text-white"
+                  >
+                    Thinking...
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+
+            <AnimatePresence>
+              {hasCode && latestCodeBlock && (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  className="h-[calc(100vh-12rem)] bg-gradient-to-br from-purple-900/30 to-pink-900/30 rounded-xl overflow-hidden sticky top-20 backdrop-blur-sm border border-purple-500/20"
+                >
+                  <div className="flex border-b border-purple-500/20">
+                    <button
+                      onClick={() => setActiveTab("code")}
+                      className={`flex-1 p-4 text-center ${
+                        activeTab === "code" ? "bg-purple-900/50 text-white" : "bg-transparent text-gray-400"
+                      }`}
+                    >
+                      Code View
+                    </button>
+                    <button
+                      onClick={() => setActiveTab("scene")}
+                      className={`flex-1 p-4 text-center ${
+                        activeTab === "scene" ? "bg-purple-900/50 text-white" : "bg-transparent text-gray-400"
+                      }`}
+                    >
+                      Scene View
+                    </button>
+                  </div>
+                  <div className="h-full overflow-auto">
+                    {activeTab === "code" && latestCodeBlock && (
+                      <CodeView code={latestCodeBlock.code} language={latestCodeBlock.language} />
+                    )}
+                    {activeTab === "scene" && latestCodeBlock && (
+                      <Suspense fallback={<div className="text-white p-4">Loading 3D Scene...</div>}>
+                        <div className="w-full h-[400px]">
+                          <SceneView code={latestCodeBlock.code} />
+                        </div>
+                      </Suspense>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        </motion.form>
+
+          <div className="fixed bottom-0 left-64 right-0 bg-gradient-to-r from-purple-900/80 to-pink-900/80 border-t border-purple-500/20 backdrop-blur-sm">
+            <div className="container mx-auto px-6">
+              <motion.form
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  handleSendMessage(input)
+                }}
+                className="py-4"
+              >
+                <div className="flex gap-2 items-center">
+                  <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    className="flex-1 p-2 border rounded-full focus:ring-2 focus:ring-purple-500 outline-none bg-gray-900/50 text-white border-purple-500/20"
+                    placeholder="Type your message..."
+                    aria-label="Chat message"
+                  />
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:hover:from-purple-600 disabled:hover:to-pink-600"
+                    disabled={isLoading || !input.trim()}
+                    aria-label="Send message"
+                  >
+                    Send
+                  </button>
+                </div>
+              </motion.form>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   )
