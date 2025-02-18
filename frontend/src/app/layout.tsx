@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "XeleR",
   description: "Text to XR made easy",
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
