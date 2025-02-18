@@ -77,8 +77,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.5 }}
             >
-              Transform your XR projects with our AI-powered development tools. Streamline workflows, generate immersive
-              content, and bring your ideas to life faster than ever.
+              Streamline workflows, generate immersive content, and bring your ideas to life faster than ever.
             </motion.p>
 
             <motion.div
