@@ -6,7 +6,9 @@ import dynamic from "next/dynamic"
 
 // Dynamically import components that use browser APIs
 const CodeView = dynamic(() => import("@/components/CodeView"), { ssr: false })
-const SceneView = dynamic(() => import("@/components/SceneView"), { ssr: false })
+//const SceneView = dynamic(() => import("@/components/SceneView"), { ssr: false })
+const SceneView = dynamic(() => import("@/components/3DSceneView"), { ssr: false })
+const FileUpload = dynamic(() => import("@/components/FileUpload"), { ssr: false })
 
 import type { Message } from "@/types/chat"
 import { configureMarked } from "@/utils/markdown"
@@ -32,6 +34,7 @@ const updateChatHistory = (chatId: string) => {
 const ChatPageContent = () => {
   const searchParams = useSearchParams()
   const initialQuestion = searchParams.get("q")
+  const initialCode = searchParams.get("code")
   const chatId = searchParams.get("id")
 
   const [messages, setMessages] = useState<Message[]>([])
@@ -45,6 +48,7 @@ const ChatPageContent = () => {
   const [hasCode, setHasCode] = useState(false)
   const [activeTab, setActiveTab] = useState<"code" | "scene">("code")
   const [latestCodeBlock, setLatestCodeBlock] = useState<{ code: string; language: string } | null>(null)
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null)
 
   const activeRequestRef = useRef<boolean>(false)
 
@@ -155,37 +159,46 @@ const ChatPageContent = () => {
 
   useEffect(() => {
     const initializeChat = async () => {
-      if (!chatId || isInitialized) return
+      if (!chatId && !initialQuestion) return
+      if (isInitialized) return
       setIsInitialized(true)
 
       try {
-        const { data: chat } = await supabase.from("chats").select("*").eq("id", chatId).single()
+        if (chatId) {
+          const { data: chat } = await supabase.from("chats").select("*").eq("id", chatId).single()
 
-        if (chat) {
-          setCurrentChatId(chat.id)
-          setChatTitle(chat.title)
-          updateChatHistory(chat.id)
+          if (chat) {
+            setCurrentChatId(chat.id)
+            setChatTitle(chat.title)
+            updateChatHistory(chat.id)
 
-          const { data: chatMessages } = await supabase
-            .from("messages")
-            .select("*")
-            .eq("chat_id", chat.id)
-            .order("created_at", { ascending: true })
+            const { data: chatMessages } = await supabase
+              .from("messages")
+              .select("*")
+              .eq("chat_id", chat.id)
+              .order("created_at", { ascending: true })
 
-          if (chatMessages) {
-            setMessages(
-              chatMessages.map((msg) => ({
-                role: msg.role as "user" | "assistant",
-                content: msg.content,
-              })),
-            )
-
-            if (initialQuestion && chatMessages.length === 0 && !initialQuestionProcessed) {
-              setInitialQuestionProcessed(true)
-              const initialMessage: Message = { role: "user", content: initialQuestion }
-              setMessages([initialMessage])
-              handleSendMessage(initialQuestion)
+            if (chatMessages) {
+              setMessages(
+                chatMessages.map((msg) => ({
+                  role: msg.role as "user" | "assistant",
+                  content: msg.content,
+                })),
+              )
             }
+          }
+        }
+
+        if (initialQuestion && !initialQuestionProcessed) {
+          setInitialQuestionProcessed(true)
+          const initialMessage: Message = { role: "user", content: initialQuestion }
+          setMessages([initialMessage])
+          handleSendMessage(initialQuestion)
+
+          if (initialCode) {
+            setLatestCodeBlock({ code: decodeURIComponent(initialCode), language: "javascript" })
+            setHasCode(true)
+            setActiveTab("scene")
           }
         }
       } catch (error) {
@@ -194,14 +207,14 @@ const ChatPageContent = () => {
     }
 
     initializeChat()
-  }, [chatId, initialQuestion, isInitialized, initialQuestionProcessed, handleSendMessage])
+  }, [chatId, initialQuestion, initialCode, isInitialized, initialQuestionProcessed, handleSendMessage])
 
   useEffect(() => {
-    if (!chatId) {
+    if (!chatId && !initialQuestion) {
       setIsInitialized(false)
       setInitialQuestionProcessed(false)
     }
-  }, [chatId])
+  }, [chatId, initialQuestion])
 
   useEffect(() => {
     // Extract the latest code block from the assistant's responses
@@ -217,7 +230,22 @@ const ChatPageContent = () => {
       const blocks = extractCodeBlocks(lastMessageWithCode.content)
       const latestBlock = blocks.find((block) => block.isCode)
       if (latestBlock) {
-        setLatestCodeBlock({ code: latestBlock.code, language: latestBlock.language })
+        // Wrap the code in a function to ensure it's executed in the animation loop
+        const wrappedCode = `
+          let scene, camera, renderer, controls;
+          function initScene() {
+            ${latestBlock.code}
+          }
+          initScene();
+          
+          function animate() {
+            requestAnimationFrame(animate);
+            if (controls) controls.update();
+            renderer.render(scene, camera);
+          }
+          animate();
+        `
+        setLatestCodeBlock({ code: wrappedCode, language: latestBlock.language })
         setHasCode(true)
       } else {
         setHasCode(false)
@@ -227,6 +255,12 @@ const ChatPageContent = () => {
       setLatestCodeBlock(null)
     }
   }, [messages])
+
+  const handleFileUpload = (file: File) => {
+    setUploadedFile(file)
+    setHasCode(true)
+    setActiveTab("scene")
+  }
 
   const renderMessage = (content: string) => {
     const blocks = extractCodeBlocks(content)
@@ -261,11 +295,15 @@ const ChatPageContent = () => {
           )}
         </AnimatePresence>
 
-        <div className={`${hasCode ? "grid grid-cols-2 gap-4" : "flex justify-center"} max-w-full`}>
+        <div className={`${hasCode ? "grid grid-cols-2 gap-4" : "flex justify-center"} max-w-full mb-40`}>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className={`space-y-4 mb-24 ${hasCode ? "px-4" : "w-[60%] px-8 py-6 bg-gradient-to-br from-purple-900/30 to-pink-900/30 rounded-2xl backdrop-blur-sm border border-purple-500/20"}`}
+            className={`space-y-4 mb-24 ${
+              hasCode
+                ? "px-4"
+                : "w-[60%] px-8 py-6 bg-gradient-to-br from-purple-900/30 to-pink-900/30 rounded-2xl backdrop-blur-sm border border-purple-500/20"
+            }`}
           >
             <AnimatePresence>
               {messages.map((message, index) => (
@@ -324,7 +362,7 @@ const ChatPageContent = () => {
           </motion.div>
 
           <AnimatePresence>
-            {hasCode && latestCodeBlock && (
+            {hasCode && (latestCodeBlock || uploadedFile) && (
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -334,13 +372,17 @@ const ChatPageContent = () => {
                 <div className="flex border-b border-purple-500/20">
                   <button
                     onClick={() => setActiveTab("code")}
-                    className={`flex-1 p-4 text-center ${activeTab === "code" ? "bg-purple-900/50 text-white" : "bg-transparent text-gray-400"}`}
+                    className={`flex-1 p-4 text-center ${
+                      activeTab === "code" ? "bg-purple-900/50 text-white" : "bg-transparent text-gray-400"
+                    }`}
                   >
                     Code View
                   </button>
                   <button
                     onClick={() => setActiveTab("scene")}
-                    className={`flex-1 p-4 text-center ${activeTab === "scene" ? "bg-purple-900/50 text-white" : "bg-transparent text-gray-400"}`}
+                    className={`flex-1 p-4 text-center ${
+                      activeTab === "scene" ? "bg-purple-900/50 text-white" : "bg-transparent text-gray-400"
+                    }`}
                   >
                     Scene View
                   </button>
@@ -349,41 +391,54 @@ const ChatPageContent = () => {
                   {activeTab === "code" && latestCodeBlock && (
                     <CodeView code={latestCodeBlock.code} language={latestCodeBlock.language} />
                   )}
-                  {activeTab === "scene" && latestCodeBlock && <SceneView code={latestCodeBlock.code} />}
+                  {activeTab === "scene" && (
+                    <Suspense fallback={<div className="text-white p-4">Loading 3D Scene...</div>}>
+                      <div className="w-full h-[400px]">
+                        <SceneView code={latestCodeBlock?.code} file={uploadedFile} />
+                      </div>
+                    </Suspense>
+                  )}
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        <motion.form
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          onSubmit={(e) => {
-            e.preventDefault()
-            handleSendMessage(input)
-          }}
-          className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-r from-purple-900/80 to-pink-900/80 border-t border-purple-500/20 backdrop-blur-sm"
-        >
-          <div className="max-w-6xl mx-auto flex gap-2">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              className="flex-1 p-2 border rounded-full focus:ring-2 focus:ring-purple-500 outline-none bg-gray-900/50 text-white border-purple-500/20"
-              placeholder="Type your message..."
-              aria-label="Chat message"
-            />
-            <button
-              type="submit"
-              className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:hover:from-purple-600 disabled:hover:to-pink-600"
-              disabled={isLoading || !input.trim()}
-              aria-label="Send message"
+        <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-purple-900/80 to-pink-900/80 border-t border-purple-500/20 backdrop-blur-sm">
+          <div className="container mx-auto px-6">
+            <motion.form
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              onSubmit={(e) => {
+                e.preventDefault()
+                handleSendMessage(input)
+              }}
+              className="py-4"
             >
-              Send
-            </button>
+              <div className="flex gap-2 items-center">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  className="flex-1 p-2 border rounded-full focus:ring-2 focus:ring-purple-500 outline-none bg-gray-900/50 text-white border-purple-500/20"
+                  placeholder="Type your message..."
+                  aria-label="Chat message"
+                />
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:hover:from-purple-600 disabled:hover:to-pink-600"
+                  disabled={isLoading || !input.trim()}
+                  aria-label="Send message"
+                >
+                  Send
+                </button>
+              </div>
+            </motion.form>
+            <div className="pb-4 pl-2">
+              <FileUpload onFileUpload={handleFileUpload} />
+            </div>
           </div>
-        </motion.form>
+        </div>
       </div>
     </main>
   )
