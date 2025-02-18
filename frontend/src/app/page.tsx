@@ -1,6 +1,8 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useState, useCallback } from "react"
+import { useRouter } from "next/navigation"
 import { FloatingARObjects } from "@/components/FloatingARObjects"
 import { ARHeadsetAnimation } from "@/components/ARHeadsetAnimation"
 import QuestionInput from "@/components/QuestionInput"
@@ -25,9 +27,28 @@ const itemVariants = {
 }
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+
+  const handleQuestionSubmit = useCallback(
+    async (question: string, code?: string) => {
+      setIsLoading(true)
+      try {
+        const queryParams = new URLSearchParams({ q: question })
+        if (code) {
+          queryParams.append("code", encodeURIComponent(code))
+        }
+        router.push(`/chat?${queryParams.toString()}`)
+      } catch (error) {
+        console.error("Error submitting question:", error)
+        setIsLoading(false)
+      }
+    },
+    [router],
+  )
+
   return (
     <main className="min-h-screen bg-black/[0.96] antialiased bg-grid-white/[0.02] relative overflow-hidden">
-      {/* Navbar */}
       <Navbar />
 
       {/* Glittering stars background */}
@@ -47,42 +68,44 @@ export default function Home() {
         <FloatingARObjects count={6} />
       </div>
 
-      <div className="container mx-auto px-6 relative z-20">
+      <div className="container mx-auto px-6 relative z-20 flex flex-col justify-center min-h-screen">
         <motion.div
-          className="max-w-4xl mx-auto pt-20 pb-16 space-y-12"
+          className="max-w-4xl mx-auto space-y-8"
           variants={containerVariants}
           initial="hidden"
           animate="show"
         >
-          <motion.h1
-            className="text-4xl md:text-6xl lg:text-7xl font-bold text-center text-white mb-6"
-            variants={itemVariants}
-          >
-            Accelerate XR Development with{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">XeleR</span>
-          </motion.h1>
+          <div className="flex flex-col items-center justify-center">
+            <motion.h1
+              className="text-5xl md:text-6xl lg:text-7xl font-bold text-center text-white mb-8"
+              variants={itemVariants}
+            >
+              Accelerate XR Development with{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">XeleR</span>
+            </motion.h1>
 
-          <motion.p variants={itemVariants} className="text-gray-400 text-xl mb-8 max-w-2xl mx-auto text-center">
-            Transform your XR projects with our AI-powered development tools. Streamline workflows, generate immersive
-            content, and bring your ideas to life faster than ever.
-          </motion.p>
+            <motion.p variants={itemVariants} className="text-gray-400 text-xl mb-8 max-w-2xl mx-auto text-center">
+              Transform your XR projects with our AI-powered development tools. Streamline workflows, generate immersive
+              content, and bring your ideas to life faster than ever.
+            </motion.p>
 
-          <motion.div variants={itemVariants}>
-            <QuestionInput />
-          </motion.div>
+            <motion.div variants={itemVariants} className="w-full max-w-2xl mb-12">
+              <QuestionInput onSubmit={handleQuestionSubmit} isLoading={isLoading} />
+            </motion.div>
+          </div>
 
           <motion.div variants={itemVariants}>
             <ChatHistory />
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <ChatTemplates />
+            <ChatTemplates onSelectTemplate={handleQuestionSubmit} />
           </motion.div>
         </motion.div>
       </div>
 
       {/* Animated AR headset */}
-      <div className="absolute bottom-0 right-0 w-96 h-96 z-30">
+      <div className="absolute bottom-4 right-4 w-80 h-80 z-30">
         <ARHeadsetAnimation />
       </div>
     </main>
