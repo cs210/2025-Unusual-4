@@ -113,34 +113,42 @@ const SceneView: React.FC<SceneViewProps> = ({ code }) => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader()
         reader.onload = (event) => {
-          if (event.target?.result) {
-            const contents = event.target.result
-            const fileExtension = file.name.split(".").pop()?.toLowerCase()
+          if (!event.target?.result) return reject(new Error("Failed to read file"))
+          
+          const contents = event.target.result
+          const fileExtension = file.name.split(".").pop()?.toLowerCase()
 
-            let loader
+          try {
             if (fileExtension === "obj") {
-              loader = new OBJLoader()
-            } else if (fileExtension === "fbx") {
-              loader = new FBXLoader()
-            } else {
-              reject(new Error("Unsupported file type"))
-              return
-            }
-
-            try {
+              // OBJ files are text-based
+              if (typeof contents !== "string") {
+                throw new Error("Invalid content type for OBJ file")
+              }
+              const loader = new OBJLoader()
               const object = loader.parse(contents)
               resolve(object)
-            } catch (error) {
-              reject(error)
+            } else if (fileExtension === "fbx") {
+              // FBX files are binary
+              if (!(contents instanceof ArrayBuffer)) {
+                throw new Error("Invalid content type for FBX file")
+              }
+              const loader = new FBXLoader()
+              const object = loader.parse(contents, '')
+              resolve(object)
+            } else {
+              reject(new Error("Unsupported file type"))
             }
+          } catch (error) {
+            reject(error)
           }
         }
         reader.onerror = (error) => reject(error)
 
+        // Use appropriate reader method based on file type
         if (file.name.toLowerCase().endsWith(".obj")) {
-          reader.readAsText(file)
+          reader.readAsText(file)  // Read OBJ files as text
         } else {
-          reader.readAsArrayBuffer(file)
+          reader.readAsArrayBuffer(file)  // Read FBX files as binary
         }
       })
     }
@@ -169,27 +177,32 @@ const SceneView: React.FC<SceneViewProps> = ({ code }) => {
       )
 
       executeCode(THREE, scene, camera, renderer, controls, updateOrCreate, addDebugInfo, loadModel, TWEEN)
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error executing WebGL code:", error)
-      setError(error.message)
+      if (error instanceof Error) {
+        setError(error.message)
+      } else {
+        setError("An unknown error occurred")
+      }
     }
 
     // Load uploaded file if present
     if (uploadedFile) {
       loadUploadedFile(uploadedFile)
-        .then((object: THREE.Object3D) => {
-          scene.add(object)
+        .then((object) => {
+          const loadedObject = object as THREE.Object3D
+          scene.add(loadedObject)
 
           // Center and scale the loaded object
-          const box = new THREE.Box3().setFromObject(object)
+          const box = new THREE.Box3().setFromObject(loadedObject)
           const center = box.getCenter(new THREE.Vector3())
           const size = box.getSize(new THREE.Vector3())
 
           const maxDim = Math.max(size.x, size.y, size.z)
           const scale = 5 / maxDim // Scale to fit in a 5x5x5 cube
-          object.scale.multiplyScalar(scale)
+          loadedObject.scale.multiplyScalar(scale)
 
-          object.position.sub(center.multiplyScalar(scale))
+          loadedObject.position.sub(center.multiplyScalar(scale))
 
           camera.position.set(0, 0, 10)
           camera.lookAt(0, 0, 0)
@@ -197,9 +210,13 @@ const SceneView: React.FC<SceneViewProps> = ({ code }) => {
 
           //addDebugInfo("File loaded successfully")
         })
-        .catch((error) => {
+        .catch((error: unknown) => {
           console.error("Error loading file:", error)
-          setError("Error loading file: " + error.message)
+          if (error instanceof Error) {
+            setError(`Error loading file: ${error.message}`)
+          } else {
+            setError("An unknown error occurred while loading the file")
+          }
         })
     }
 
