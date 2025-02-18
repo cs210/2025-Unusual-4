@@ -36,8 +36,8 @@ const ChatHistory = () => {
         }
 
         if (data) {
-          // Keep only the latest 9 chats
-          setChats(data.slice(0, 9))
+          // Keep only the latest 3 chats
+          setChats(data.slice(0, 3))
         }
       } catch (error) {
         console.error("Error in loadChatHistory:", error)
