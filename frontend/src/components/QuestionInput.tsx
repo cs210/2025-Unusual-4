@@ -8,7 +8,12 @@ import { supabase } from "@/utils/supabase"
 import { motion } from "framer-motion"
 import { Send } from "lucide-react"
 
-const QuestionInput = () => {
+interface QuestionInputProps {
+  onSubmit: (question: string, code?: string) => Promise<void>;
+  isLoading: boolean;
+}
+
+const QuestionInput: React.FC<QuestionInputProps> = ({ onSubmit, isLoading }) => {
   const router = useRouter()
   const [question, setQuestion] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)

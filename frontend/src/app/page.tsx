@@ -6,25 +6,9 @@ import { useRouter } from "next/navigation"
 import { FloatingARObjects } from "@/components/FloatingARObjects"
 import { ARHeadsetAnimation } from "@/components/ARHeadsetAnimation"
 import QuestionInput from "@/components/QuestionInput"
-import ChatHistory from "@/components/ChatHistory"
 import ChatTemplates from "@/components/ChatTemplates"
 import Navbar from "@/components/Navbar"
 import { SparklesCore } from "@/components/SparklesCore"
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
-}
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false)
@@ -68,40 +52,56 @@ export default function Home() {
         <FloatingARObjects count={6} />
       </div>
 
-      <div className="container mx-auto px-6 relative z-20 flex flex-col justify-center min-h-screen">
-        <motion.div
-          className="max-w-4xl mx-auto space-y-8"
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-        >
-          <div className="flex flex-col items-center justify-center">
+      <div className="relative z-20 flex flex-col min-h-screen">
+        <div className="flex-grow" />
+        <div className="container mx-auto px-6 flex flex-col items-center justify-center">
+          <motion.div
+            className="max-w-4xl mx-auto space-y-12 text-center mb-20"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             <motion.h1
-              className="text-5xl md:text-6xl lg:text-7xl font-bold text-center text-white mb-8"
-              variants={itemVariants}
+              className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
             >
               Accelerate XR Development with{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">XeleR</span>
             </motion.h1>
 
-            <motion.p variants={itemVariants} className="text-gray-400 text-xl mb-8 max-w-2xl mx-auto text-center">
+            <motion.p
+              className="text-gray-400 text-xl mb-8 max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+            >
               Transform your XR projects with our AI-powered development tools. Streamline workflows, generate immersive
               content, and bring your ideas to life faster than ever.
             </motion.p>
 
-            <motion.div variants={itemVariants} className="w-full max-w-2xl mb-12">
+            <motion.div
+              className="w-full max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
               <QuestionInput onSubmit={handleQuestionSubmit} isLoading={isLoading} />
             </motion.div>
-          </div>
-
-          <motion.div variants={itemVariants}>
-            <ChatHistory />
           </motion.div>
+        </div>
 
-          <motion.div variants={itemVariants}>
+        <div className="container mx-auto px-6 pb-20">
+          <motion.div
+            className="max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.5 }}
+          >
             <ChatTemplates onSelectTemplate={handleQuestionSubmit} />
           </motion.div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Animated AR headset */}

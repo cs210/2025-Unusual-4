@@ -8,9 +8,10 @@ window.sceneRegistry = window.sceneRegistry || {};
 
 interface SceneViewProps {
   code: string;
+  onRender?: () => void;
 }
 
-const SceneView = ({ code }: SceneViewProps) => {
+const SceneView = ({ code, onRender }: SceneViewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Persistent refs for scene, camera, and renderer
@@ -19,6 +20,7 @@ const SceneView = ({ code }: SceneViewProps) => {
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
 
   useEffect(() => {
+    console.log('SceneView mounting with code:', code.substring(0, 50) + '...');
     if (!containerRef.current) return;
 
     // Create the scene, camera, and renderer once
@@ -104,7 +106,17 @@ const SceneView = ({ code }: SceneViewProps) => {
     } catch (error) {
       console.error('Error executing WebGL code:', error);
     }
-  }, [code]);
+
+    // Call onRender when scene is ready
+    if (onRender) {
+      onRender();
+    }
+
+    return () => {
+      console.log('SceneView unmounting');
+      // ... existing cleanup code ...
+    };
+  }, [code, onRender]);
 
   return <div ref={containerRef} className="w-full h-96 bg-black rounded-xl"></div>;
 };
