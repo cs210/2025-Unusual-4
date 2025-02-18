@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react"
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import TWEEN from "@tweenjs/tween.js"
 
 interface SceneViewProps {
@@ -15,6 +17,7 @@ const SceneView: React.FC<SceneViewProps> = ({ code }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [error, setError] = useState<string | null>(null)
   const [debugInfo, setDebugInfo] = useState<string>("")
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null)
 
   // Persistent refs for scene, camera, renderer, and controls
   const sceneRef = useRef<THREE.Scene | null>(null)
@@ -105,6 +108,43 @@ const SceneView: React.FC<SceneViewProps> = ({ code }) => {
       })
     }
 
+    // Helper function to load uploaded file
+    const loadUploadedFile = (file: File) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          if (event.target?.result) {
+            const contents = event.target.result
+            const fileExtension = file.name.split(".").pop()?.toLowerCase()
+
+            let loader
+            if (fileExtension === "obj") {
+              loader = new OBJLoader()
+            } else if (fileExtension === "fbx") {
+              loader = new FBXLoader()
+            } else {
+              reject(new Error("Unsupported file type"))
+              return
+            }
+
+            try {
+              const object = loader.parse(contents)
+              resolve(object)
+            } catch (error) {
+              reject(error)
+            }
+          }
+        }
+        reader.onerror = (error) => reject(error)
+
+        if (file.name.toLowerCase().endsWith(".obj")) {
+          reader.readAsText(file)
+        } else {
+          reader.readAsArrayBuffer(file)
+        }
+      })
+    }
+
     // Execute the injected code with context that includes the helpers
     try {
       const executeCode = new Function(
@@ -134,6 +174,35 @@ const SceneView: React.FC<SceneViewProps> = ({ code }) => {
       setError(error.message)
     }
 
+    // Load uploaded file if present
+    if (uploadedFile) {
+      loadUploadedFile(uploadedFile)
+        .then((object: THREE.Object3D) => {
+          scene.add(object)
+
+          // Center and scale the loaded object
+          const box = new THREE.Box3().setFromObject(object)
+          const center = box.getCenter(new THREE.Vector3())
+          const size = box.getSize(new THREE.Vector3())
+
+          const maxDim = Math.max(size.x, size.y, size.z)
+          const scale = 5 / maxDim // Scale to fit in a 5x5x5 cube
+          object.scale.multiplyScalar(scale)
+
+          object.position.sub(center.multiplyScalar(scale))
+
+          camera.position.set(0, 0, 10)
+          camera.lookAt(0, 0, 0)
+          controls.update()
+
+          //addDebugInfo("File loaded successfully")
+        })
+        .catch((error) => {
+          console.error("Error loading file:", error)
+          setError("Error loading file: " + error.message)
+        })
+    }
+
     // Animation loop
     const animate = () => {
       requestAnimationFrame(animate)
@@ -159,7 +228,14 @@ const SceneView: React.FC<SceneViewProps> = ({ code }) => {
     return () => {
       window.removeEventListener("resize", handleResize)
     }
-  }, [code])
+  }, [code, uploadedFile])
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      setUploadedFile(file)
+    }
+  }
 
   if (error) {
     return (
@@ -176,6 +252,15 @@ const SceneView: React.FC<SceneViewProps> = ({ code }) => {
       {debugInfo && (
         <pre className="absolute top-0 left-0 p-2 bg-black bg-opacity-50 text-white text-xs">{debugInfo}</pre>
       )}
+      <div className="absolute bottom-4 left-4">
+        <input type="file" accept=".obj,.fbx" onChange={handleFileUpload} className="hidden" id="file-upload" />
+        <label
+          htmlFor="file-upload"
+          className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-2 px-4 rounded-full cursor-pointer transition-colors duration-300"
+        >
+          Upload 3D Model
+        </label>
+      </div>
     </div>
   )
 }
