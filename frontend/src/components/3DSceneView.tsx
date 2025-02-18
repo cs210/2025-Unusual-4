@@ -4,18 +4,17 @@ import type React from "react"
 import { useEffect, useRef, useState } from "react"
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
-import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import TWEEN from "@tweenjs/tween.js"
 
 interface SceneViewProps {
-  code?: string
-  file?: File
+  code: string
 }
 
-const SceneView: React.FC<SceneViewProps> = ({ code, file }) => {
+const SceneView: React.FC<SceneViewProps> = ({ code }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [error, setError] = useState<string | null>(null)
+  const [debugInfo, setDebugInfo] = useState<string>("")
 
   // Persistent refs for scene, camera, renderer, and controls
   const sceneRef = useRef<THREE.Scene | null>(null)
@@ -37,13 +36,6 @@ const SceneView: React.FC<SceneViewProps> = ({ code, file }) => {
       )
       rendererRef.current = new THREE.WebGLRenderer({ antialias: true })
       rendererRef.current.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight)
-
-      // Update: Renderer settings for better color accuracy
-      rendererRef.current.outputEncoding = THREE.sRGBEncoding
-      rendererRef.current.toneMapping = THREE.ACESFilmicToneMapping
-      rendererRef.current.toneMappingExposure = 1.2
-      rendererRef.current.gammaFactor = 2.2
-
       containerRef.current.appendChild(rendererRef.current.domElement)
 
       // Set initial camera position for better 3D viewing
@@ -66,57 +58,44 @@ const SceneView: React.FC<SceneViewProps> = ({ code, file }) => {
       scene.remove(scene.children[0])
     }
 
-    // Update: Enhanced lighting setup
-    // Clear existing lights
-    scene.children.forEach((child) => {
-      if (child instanceof THREE.Light) {
-        scene.remove(child)
-      }
-    })
-
-    // Add a strong directional light
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1)
-    directionalLight.position.set(5, 10, 7.5)
-    scene.add(directionalLight)
-
-    // Add ambient light
+    // Add ambient light for better 3D visibility
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
     scene.add(ambientLight)
 
-    // Add hemisphere light
-    const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.5)
-    scene.add(hemisphereLight)
+    // Add directional light for 3D shading
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5)
+    directionalLight.position.set(5, 5, 5)
+    scene.add(directionalLight)
 
-    // Add environment map
-    const pmremGenerator = new THREE.PMREMGenerator(renderer)
-    pmremGenerator.compileEquirectangularShader()
+    const addDebugInfo = (info: string) => {
+      setDebugInfo((prev) => prev + info + "\n")
+    }
 
-    new THREE.TextureLoader().load("/path/to/environment_map.jpg", (texture) => {
-      const envMap = pmremGenerator.fromEquirectangular(texture).texture
-      scene.environment = envMap
-      scene.background = envMap
-
-      texture.dispose()
-      pmremGenerator.dispose()
-    })
-
-    // Helper function to load 3D models
-    const loadModel = (url: string, fileType: string) => {
-      return new Promise((resolve, reject) => {
-        let loader
-        if (fileType === "obj") {
-          loader = new OBJLoader()
-        } else if (fileType === "fbx") {
-          loader = new FBXLoader()
-        } else {
-          reject(new Error("Unsupported file type"))
+    // Define a generic helper function for create-or-update logic
+    function updateOrCreate(name: string, createFn: () => THREE.Object3D, updateFn: (object: THREE.Object3D) => void) {
+      let object = scene.getObjectByName(name)
+      if (object) {
+        updateFn(object)
+      } else {
+        object = createFn()
+        if (!object) {
+          console.error("Error: createFn did not return a valid object for", name)
           return
         }
+        object.name = name
+        scene.add(object)
+      }
+      return object
+    }
 
+    // Helper function to load 3D models
+    const loadModel = (url: string) => {
+      return new Promise((resolve, reject) => {
+        const loader = new GLTFLoader()
         loader.load(
           url,
-          (object) => {
-            resolve(object)
+          (gltf) => {
+            resolve(gltf.scene)
           },
           undefined,
           (error) => {
@@ -126,127 +105,33 @@ const SceneView: React.FC<SceneViewProps> = ({ code, file }) => {
       })
     }
 
-    if (file) {
-      const fileType = file.name.split(".").pop()?.toLowerCase()
-      let loader
-
-      if (fileType === "obj") {
-        loader = new OBJLoader()
-      } else if (fileType === "fbx") {
-        loader = new FBXLoader()
-      } else {
-        setError("Unsupported file type. Please upload an OBJ or FBX file.")
-        return
-      }
-
-      const reader = new FileReader()
-
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          const contents = event.target.result
-
-          let object: THREE.Object3D // Declare object variable
-
-          if (fileType === "obj") {
-            object = (loader as OBJLoader).parse(contents as string)
-            scene.add(object)
-          } else if (fileType === "fbx") {
-            object = (loader as FBXLoader).parse(contents as ArrayBuffer, "")
-            scene.add(object)
-          }
-
-          // Update: Improved material handling for FBX files
-          if (fileType === "fbx") {
-            scene.traverse((child) => {
-              if (child instanceof THREE.Mesh) {
-                if (child.material) {
-                  // Ensure the material is MeshStandardMaterial
-                  if (!(child.material instanceof THREE.MeshStandardMaterial)) {
-                    child.material = new THREE.MeshStandardMaterial({
-                      color: child.material.color,
-                      map: child.material.map,
-                    })
-                  }
-
-                  // Adjust material properties
-                  child.material.side = THREE.DoubleSide
-                  child.material.needsUpdate = true
-                  child.material.metalness = 0.1
-                  child.material.roughness = 0.8
-
-                  // Preserve original colors
-                  if (child.material.color) {
-                    child.material.color.convertSRGBToLinear()
-                  }
-                  if (child.material.map) {
-                    child.material.map.encoding = THREE.sRGBEncoding
-                  }
-                }
-              }
-            })
-          }
-
-          // Adjust camera and controls
-          const box = new THREE.Box3().setFromObject(scene)
-          const center = box.getCenter(new THREE.Vector3())
-          const size = box.getSize(new THREE.Vector3())
-
-          const maxDim = Math.max(size.x, size.y, size.z)
-          const fov = camera.fov * (Math.PI / 180)
-          let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2))
-          cameraZ *= 2 // Zoom out more to ensure the entire object is visible
-
-          camera.position.set(center.x, center.y, center.z + cameraZ)
-          camera.lookAt(center)
-          controls.target.set(center.x, center.y, center.z)
-          controls.update()
-
-          // Fit scene to camera
-          camera.updateProjectionMatrix()
-          controls.saveState()
-
-          // Log camera position and target for debugging
-          console.log("Camera position:", camera.position)
-          console.log("Controls target:", controls.target)
+    // Execute the injected code with context that includes the helpers
+    try {
+      const executeCode = new Function(
+        "THREE",
+        "scene",
+        "camera",
+        "renderer",
+        "controls",
+        "updateOrCreate",
+        "addDebugInfo",
+        "loadModel",
+        "TWEEN",
+        `
+        try {
+          ${code}
+          //addDebugInfo("Custom code executed successfully");
+        } catch (error) {
+          addDebugInfo("Error executing custom code: " + error.message);
+          throw error;
         }
-      }
+      `,
+      )
 
-      reader.onerror = (error) => {
-        console.error(`Error reading ${fileType.toUpperCase()} file:`, error)
-        setError(`Error reading ${fileType.toUpperCase()} file`)
-      }
-
-      if (fileType === "obj") {
-        reader.readAsText(file)
-      } else if (fileType === "fbx") {
-        reader.readAsArrayBuffer(file)
-      }
-    } else if (code) {
-      // Execute the injected code
-      try {
-        const executeCode = new Function(
-          "THREE",
-          "scene",
-          "camera",
-          "renderer",
-          "controls",
-          "loadModel",
-          "TWEEN",
-          `
-          try {
-            ${code}
-          } catch (error) {
-            console.error("Error executing custom code:", error);
-            throw error;
-          }
-        `,
-        )
-
-        executeCode(THREE, scene, camera, renderer, controls, loadModel, TWEEN)
-      } catch (error) {
-        console.error("Error executing WebGL code:", error)
-        setError(error.message)
-      }
+      executeCode(THREE, scene, camera, renderer, controls, updateOrCreate, addDebugInfo, loadModel, TWEEN)
+    } catch (error) {
+      console.error("Error executing WebGL code:", error)
+      setError(error.message)
     }
 
     // Animation loop
@@ -274,12 +159,13 @@ const SceneView: React.FC<SceneViewProps> = ({ code, file }) => {
     return () => {
       window.removeEventListener("resize", handleResize)
     }
-  }, [code, file])
+  }, [code])
 
   if (error) {
     return (
       <div className="text-red-500 p-4">
         <p>Error: {error}</p>
+        <pre className="mt-4 p-2 bg-gray-800 text-white rounded">{debugInfo}</pre>
       </div>
     )
   }
@@ -287,6 +173,9 @@ const SceneView: React.FC<SceneViewProps> = ({ code, file }) => {
   return (
     <div className="relative w-full h-full">
       <div ref={containerRef} className="w-full h-full bg-black rounded-xl" />
+      {debugInfo && (
+        <pre className="absolute top-0 left-0 p-2 bg-black bg-opacity-50 text-white text-xs">{debugInfo}</pre>
+      )}
     </div>
   )
 }
