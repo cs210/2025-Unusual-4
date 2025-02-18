@@ -40,8 +40,8 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
   return (
     <div
       className={`inline-flex items-center justify-center ${
-        dragActive ? "bg-purple-600" : "bg-gray-700"
-      } rounded-full p-2 cursor-pointer transition-colors duration-300 hover:bg-purple-500`}
+        dragActive ? "bg-purple-600" : "bg-gradient-to-r from-purple-600 to-pink-600"
+      } rounded-full p-2 cursor-pointer transition-colors duration-300 hover:from-purple-700 hover:to-pink-700`}
       onDragEnter={handleDrag}
       onDragLeave={handleDrag}
       onDragOver={handleDrag}
