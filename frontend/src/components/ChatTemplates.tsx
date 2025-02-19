@@ -11,35 +11,42 @@ interface ChatTemplatesProps {
 
 export const templates = [
   {
-    question: "Render a 3D cube",
+    question: "Render a red cube",
     code: `function initScene() {
-    function createCube() {
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-    const cube = new THREE.Mesh(geometry, material);
-    cube.name = 'cube';
-    scene.add(cube);
-}
+    // Function to create or update a cube in the scene
+    function createOrUpdateCube() {
+        // Check if cube already exists in the scene
+        const existingCube = scene.getObjectByName('cube');
 
-function updateCube() {
-    const cube = scene.getObjectByName('cube');
-    if (cube) {
-        // Update cube properties if needed
-    } else {
-        createCube();
+        if (existingCube) {
+            // Update existing cube
+            existingCube.position.set(0, 0, 0); // Reset position
+            existingCube.scale.set(0.7, 0.7, 0.7); // Reset scale
+        } else {
+            // Create new cube
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+            const cube = new THREE.Mesh(geometry, material);
+            cube.name = 'cube'; // Assign unique name
+            scene.add(cube);
+
+            // Move the camera backward so the cube remains visible
+            camera.position.z = 5;
+        }
     }
+
+    // Call the function to create or update the cube
+    createOrUpdateCube();
 }
 
-updateOrCreate('cube', createCube, updateCube);
-          }
-          initScene();
-          
-          function animate() {
-            requestAnimationFrame(animate);
-            if (controls) controls.update();
-            renderer.render(scene, camera);
-          }
-          animate();`,
+initScene();
+
+function animate() {
+    requestAnimationFrame(animate);
+    if (controls) controls.update();
+    renderer.render(scene, camera);
+}
+animate();`,
   },
   {
     question: "Make the cube jump",
@@ -53,7 +60,7 @@ function initScene() {
         if (existingCube) {
             // Update existing cube
             existingCube.position.set(0, 0, 0); // Set position
-            existingCube.scale.set(1, 1, 1); // Set scale
+            existingCube.scale.set(0.7, 0.7, 0.7); // Set scale
         } else {
             // Create new cube
             const geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -109,6 +116,33 @@ function animate() {
 animate();
       `,
   },
+  {
+    question: "Remove the cube",
+    code: `function initScene() {
+    // Function to remove the cube if it exists
+    function removeCube() {
+        const existingCube = scene.getObjectByName('cube');
+        if (existingCube) {
+            scene.remove(existingCube);
+        }
+        
+        // Keep camera position
+        camera.position.z = 5;
+    }
+
+    // Remove the cube
+    removeCube();
+}
+
+initScene();
+
+function animate() {
+    requestAnimationFrame(animate);
+    if (controls) controls.update();
+    renderer.render(scene, camera);
+}
+animate();`,
+  },
 ]
 
 const ChatTemplates: React.FC<ChatTemplatesProps> = ({ onSelectTemplate }) => {
@@ -132,7 +166,7 @@ const ChatTemplates: React.FC<ChatTemplatesProps> = ({ onSelectTemplate }) => {
             className="bg-gradient-to-r from-purple-800/50 to-pink-800/50 hover:from-purple-700/50 hover:to-pink-700/50 text-white rounded-lg p-4 transition-colors backdrop-blur-sm border border-purple-500/20 flex flex-col items-start text-left w-full"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => onSelectTemplate(template.question, template.code)}
+            onClick={() => onSelectTemplate(template.question)}
           >
             <h3 className="font-medium text-lg mb-4">{template.question}</h3>
             {template.code && (
