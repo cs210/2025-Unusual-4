@@ -30,6 +30,16 @@ const updateChatHistory = (chatId: string) => {
   }
 }
 
+// Add this near the top of the file after imports
+const getTemplateForMessage = (message: string, templates: any[]) => {
+  // Normalize message for comparison
+  const normalizedMessage = message.toLowerCase().trim()
+  
+  return templates.find(template => 
+    normalizedMessage.includes(template.question.toLowerCase())
+  )?.code || null
+}
+
 const ChatPageContent = () => {
   const searchParams = useSearchParams()
   const initialQuestion = searchParams.get("q")
@@ -95,15 +105,20 @@ const ChatPageContent = () => {
           ])
         }
 
-        // Check if this is a template code from URL
+        // Import templates
+        const { templates } = await import("@/components/ChatTemplates")
+        
+        // First check if there's a template for the current message
+        const messageTemplate = getTemplateForMessage(content, templates)
+        // Only use URL params if no message template exists
         const urlParams = new URLSearchParams(window.location.search)
-        const templateCode = urlParams.get('code')
+        const templateCode = messageTemplate || urlParams.get('code')
         
         if (templateCode) {
-          // Use template code directly without API call
+          // Use template code
           const assistantMessage: Message = {
             role: "assistant",
-            content: `Here's your cube:\n\`\`\`javascript\n${decodeURIComponent(templateCode)}\n\`\`\``,
+            content: `Here's your scene:\n\`\`\`javascript\n${decodeURIComponent(templateCode)}\n\`\`\``,
           }
           setMessages((prev) => [...prev, assistantMessage])
           if (currentChatId) {

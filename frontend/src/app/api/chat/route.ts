@@ -22,115 +22,6 @@ const openai = new OpenAI({
 export async function POST(req: NextRequest) {
   try {
     const { message, messages } = (await req.json()) as RequestBody
-    
-    console.log("Received message:", message); // Debug log
-    
-    // Check for exact match of "make the cube jump"
-    if (message === "make the cube jump") {
-      return new Response(
-        JSON.stringify({
-          role: "assistant",
-          content: `I'll add jumping functionality to your cube. Press the spacebar to make it jump!
-
-\`\`\`javascript
-function initScene() {
-            // Function to create or update a cube in the scene
-function createOrUpdateCube() {
-    // Check if cube already exists in the scene
-    const existingCube = scene.getObjectByName('cube');
-
-    if (existingCube) {
-        // Update existing cube
-        existingCube.position.set(0, 0, 0); // Set position
-        existingCube.scale.set(1, 1, 1); // Set scale
-    } else {
-        // Create new cube
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshNormalMaterial();
-        const cube = new THREE.Mesh(geometry, material);
-        cube.name = 'cube'; // Assign unique name
-        scene.add(cube);
-
-        // Move the camera backward so the cube remains visible
-        camera.position.z = 5;
-    }
-}
-
-// Call the function to create or update the cube
-createOrUpdateCube();
-
-// Function to handle key press event
-function onKeyPress(event) {
-    const keyCode = event.keyCode;
-    
-    // If space key is pressed (key code 32)
-    if (keyCode === 32) {
-        const cube = scene.getObjectByName('cube');
-        
-        if (cube) {
-            cube.position.y += 1; // Move cube up by 1 unit
-        }
-    }
-}
-
-// Event listener to handle key press
-document.addEventListener('keypress', onKeyPress);
-          }
-          initScene();
-          
-          function animate() {
-            requestAnimationFrame(animate);
-            if (controls) controls.update();
-            renderer.render(scene, camera);
-          }
-          animate();
-\`\`\`
-
-Press the spacebar to make the cube jump!`
-        })
-      );
-    }
-    // Check for cube template
-    else if (message === "Render a 3D cube") {
-      return new Response(
-        JSON.stringify({
-          role: "assistant",
-          content: `Here's your cube:
-
-\`\`\`javascript
-function initScene() {
-    function createCube() {
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-    const cube = new THREE.Mesh(geometry, material);
-    cube.name = 'cube';
-    scene.add(cube);
-}
-
-function updateCube() {
-    const cube = scene.getObjectByName('cube');
-    if (cube) {
-        // Update cube properties if needed
-    } else {
-        createCube();
-    }
-}
-
-updateOrCreate('cube', createCube, updateCube);
-          }
-          initScene();
-          
-          function animate() {
-            requestAnimationFrame(animate);
-            if (controls) controls.update();
-            renderer.render(scene, camera);
-          }
-          animate();
-\`\`\`
-`
-        })
-      );
-    }
 
     // Define the system instruction that tells GPT-3.5-turbo not to recreate the Three.js setup
     const systemInstruction: ChatMessage = {
@@ -163,11 +54,30 @@ Ensure your generated code works generically for any object type the user wants 
       stream: true
     })
 
-    return new Response(stream.toReadableStream());
+    // Create a new TransformStream to process the chunks
+    const encoder = new TextEncoder()
+    const decoder = new TextDecoder()
+
+    const transformStream = new TransformStream({
+      async transform(chunk, controller) {
+        const data = JSON.parse(decoder.decode(chunk))
+        
+        // Extract just the content from the chunk
+        const content = data.choices[0]?.delta?.content || ''
+        
+        // Only send the content if it exists
+        if (content) {
+          controller.enqueue(encoder.encode(content))
+        }
+      }
+    })
+
+    return new Response(stream.toReadableStream().pipeThrough(transformStream))
+
   } catch (error) {
-    console.error('Error in chat route:', error);
+    console.error('Error in chat route:', error)
     return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
       status: 500,
-    });
+    })
   }
 }
