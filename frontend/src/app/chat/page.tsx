@@ -48,6 +48,7 @@ const ChatPageContent = () => {
   const [activeTab, setActiveTab] = useState<"code" | "scene">("code")
   const [latestCodeBlock, setLatestCodeBlock] = useState<{ code: string; language: string } | null>(null)
   const [recentChats, setRecentChats] = useState<{ id: string; title: string }[]>([])
+  const [error, setError] = useState<string | null>(null)
 
   const activeRequestRef = useRef<boolean>(false)
 
@@ -94,74 +95,94 @@ const ChatPageContent = () => {
           ])
         }
 
-        console.log("Sending message to API...")
-        const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            message: content,
-            messages: [...messages, newMessage],
-          }),
-        })
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
-
-        if (!response.body) {
-          throw new Error("Stream response not available")
-        }
-
-        const reader = response.body.getReader()
-        const decoder = new TextDecoder()
-        let fullMessage = ""
-
-        try {
-          while (true) {
-            const { done, value } = await reader.read()
-            if (done) break
-
-            const text = decoder.decode(value)
-            fullMessage += text
-            setStreamingMessage(fullMessage)
-            console.log("Received chunk:", text)
+        // Check if this is a template code from URL
+        const urlParams = new URLSearchParams(window.location.search)
+        const templateCode = urlParams.get('code')
+        
+        if (templateCode) {
+          // Use template code directly without API call
+          const assistantMessage: Message = {
+            role: "assistant",
+            content: `Here's your cube:\n\`\`\`javascript\n${decodeURIComponent(templateCode)}\n\`\`\``,
           }
-
+          setMessages((prev) => [...prev, assistantMessage])
           if (currentChatId) {
             await supabase.from("messages").insert([
               {
                 chat_id: currentChatId,
                 role: "assistant",
-                content: fullMessage,
+                content: assistantMessage.content,
               },
             ])
           }
+        } else {
+          // Normal API call for non-template messages
+          console.log("Sending message to API...")
+          const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              message: content,
+              messages: [...messages, newMessage],
+            }),
+          })
 
-          setMessages((prev) => [...prev, { role: "assistant", content: fullMessage }])
-        } catch (error) {
-          console.error("Error in streaming:", error)
-          // Fallback: If streaming fails, try to get the full response
-          const fullResponse = await response.text()
-          console.log("Full response:", fullResponse)
-          setMessages((prev) => [
-            ...prev,
-            { role: "assistant", content: fullResponse || "Sorry, there was an error processing your request." },
-          ])
-        } finally {
-          setStreamingMessage("")
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+          }
+
+          if (!response.body) {
+            throw new Error("Stream response not available")
+          }
+
+          const reader = response.body.getReader()
+          const decoder = new TextDecoder()
+          let fullMessage = ""
+
+          try {
+            while (true) {
+              const { done, value } = await reader.read()
+              if (done) break
+
+              const text = decoder.decode(value)
+              fullMessage += text
+              setStreamingMessage(fullMessage)
+              console.log("Received chunk:", text)
+            }
+
+            if (currentChatId) {
+              await supabase.from("messages").insert([
+                {
+                  chat_id: currentChatId,
+                  role: "assistant",
+                  content: fullMessage,
+                },
+              ])
+            }
+
+            setMessages((prev) => [...prev, { role: "assistant", content: fullMessage }])
+          } catch (error) {
+            console.error("Error in streaming:", error)
+            // Fallback: If streaming fails, try to get the full response
+            const fullResponse = await response.text()
+            console.log("Full response:", fullResponse)
+            setMessages((prev) => [
+              ...prev,
+              { role: "assistant", content: fullResponse || "Sorry, there was an error processing your request." },
+            ])
+          } finally {
+            setStreamingMessage("")
+          }
         }
       } catch (error) {
         console.error("Error:", error)
-        setMessages((prev) => [
-          ...prev,
-          { role: "assistant", content: "Sorry, there was an error processing your request. Please try again." },
-        ])
+        setError("An error occurred while sending the message.")
       } finally {
         setIsLoading(false)
         activeRequestRef.current = false
       }
     },
-    [currentChatId, messages],
+    [messages, currentChatId]
   )
 
   useEffect(() => {

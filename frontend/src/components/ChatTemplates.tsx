@@ -11,25 +11,101 @@ interface ChatTemplatesProps {
 
 const ChatTemplates: React.FC<ChatTemplatesProps> = ({ onSelectTemplate }) => {
   const templates = [
-    //{ question: "How do I set up an AR scene in Unity?", code: null },
-    //{ question: "What are the best practices for AR user interface design?", code: null },
-    //{ question: "Can you explain the difference between ARKit and ARCore?", code: null },
-    //{ question: "How can I optimize AR performance on mobile devices?", code: null },
     {
       question: "Render a 3D cube",
-      code: `
-// Create a rotating cube
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+      code: `function initScene() {
+    function createCube() {
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    const cube = new THREE.Mesh(geometry, material);
+    cube.name = 'cube';
+    scene.add(cube);
+}
 
-// Add animation to the cube
+function updateCube() {
+    const cube = scene.getObjectByName('cube');
+    if (cube) {
+        // Update cube properties if needed
+    } else {
+        createCube();
+    }
+}
+
+updateOrCreate('cube', createCube, updateCube);
+          }
+          initScene();
+          
+          function animate() {
+            requestAnimationFrame(animate);
+            if (controls) controls.update();
+            renderer.render(scene, camera);
+          }
+          animate();`,
+    },
+    {
+      question: "Make the cube jump",
+      code: `
+function initScene() {
+    // Function to create or update a cube in the scene
+    function createOrUpdateCube() {
+        // Check if cube already exists in the scene
+        const existingCube = scene.getObjectByName('cube');
+
+        if (existingCube) {
+            // Update existing cube
+            existingCube.position.set(0, 0, 0); // Set position
+            existingCube.scale.set(1, 1, 1); // Set scale
+        } else {
+            // Create new cube
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            const material = new THREE.MeshNormalMaterial();
+            const cube = new THREE.Mesh(geometry, material);
+            cube.name = 'cube'; // Assign unique name
+            scene.add(cube);
+
+            // Move the camera backward so the cube remains visible
+            camera.position.z = 5;
+        }
+    }
+
+    // Call the function to create or update the cube
+    createOrUpdateCube();
+
+    // Function to handle key press event
+    function onKeyPress(event) {
+        const keyCode = event.keyCode;
+
+        // If space key is pressed (key code 32)
+        if (keyCode === 32) {
+            const cube = scene.getObjectByName('cube');
+
+            if (cube) {
+                // Jump animation for the cube
+                new TWEEN.Tween(cube.position)
+                    .to({ y: 5 }, 500) // Jump up to y = 5
+                    .easing(TWEEN.Easing.Quadratic.Out)
+                    .onComplete(() => {
+                        // Go back down to initial position after jumping
+                        new TWEEN.Tween(cube.position)
+                            .to({ y: 0 }, 500) // Go back down to initial position
+                            .easing(TWEEN.Easing.Quadratic.In)
+                            .start();
+                    })
+                    .start();
+            }
+        }
+    }
+
+    // Event listener to handle key press
+    document.addEventListener('keypress', onKeyPress);
+}
+
+initScene();
+
 function animate() {
-  requestAnimationFrame(animate);
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-  renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+    if (controls) controls.update();
+    renderer.render(scene, camera);
 }
 animate();
       `,

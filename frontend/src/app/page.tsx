@@ -9,27 +9,45 @@ import QuestionInput from "@/components/QuestionInput"
 import ChatTemplates from "@/components/ChatTemplates"
 import Navbar from "@/components/Navbar"
 import { SparklesCore } from "@/components/SparklesCore"
+import { supabase } from "@/utils/supabase"
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
-  const handleQuestionSubmit = useCallback(
-    async (question: string, code?: string) => {
-      setIsLoading(true)
-      try {
-        const queryParams = new URLSearchParams({ q: question })
+  const handleQuestionSubmit = async (question: string, code?: string) => {
+    setIsLoading(true);
+    try {
+      const { data: chat, error } = await supabase
+        .from("chats")
+        .insert([
+          {
+            title: question.substring(0, 50),
+            is_template: true,
+          },
+        ])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      if (chat) {
+        const chatHistory = JSON.parse(localStorage.getItem("chatHistory") || "[]");
+        localStorage.setItem("chatHistory", JSON.stringify([chat.id, ...chatHistory]));
+
+        // If code is provided (template selection), use it directly
         if (code) {
-          queryParams.append("code", encodeURIComponent(code))
+          router.push(`/chat?id=${chat.id}&q=${encodeURIComponent(question)}&code=${encodeURIComponent(code)}`);
+        } else {
+          router.push(`/chat?id=${chat.id}&q=${encodeURIComponent(question)}`);
         }
-        router.push(`/chat?${queryParams.toString()}`)
-      } catch (error) {
-        console.error("Error submitting question:", error)
-        setIsLoading(false)
       }
-    },
-    [router],
-  )
+    } catch (error) {
+      console.error("Error creating chat:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-black/[0.96] antialiased bg-grid-white/[0.02] relative overflow-hidden">
