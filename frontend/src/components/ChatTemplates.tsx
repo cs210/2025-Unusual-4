@@ -9,11 +9,10 @@ interface ChatTemplatesProps {
   onSelectTemplate: (template: string, code?: string) => void
 }
 
-const ChatTemplates: React.FC<ChatTemplatesProps> = ({ onSelectTemplate }) => {
-  const templates = [
-    {
-      question: "Render a 3D cube",
-      code: `function initScene() {
+export const templates = [
+  {
+    question: "Render a 3D cube",
+    code: `function initScene() {
     function createCube() {
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
@@ -41,10 +40,10 @@ updateOrCreate('cube', createCube, updateCube);
             renderer.render(scene, camera);
           }
           animate();`,
-    },
-    {
-      question: "Make the cube jump",
-      code: `
+  },
+  {
+    question: "Make the cube jump",
+    code: `
 function initScene() {
     // Function to create or update a cube in the scene
     function createOrUpdateCube() {
@@ -109,8 +108,12 @@ function animate() {
 }
 animate();
       `,
-    },
-  ]
+  },
+]
+
+const ChatTemplates: React.FC<ChatTemplatesProps> = ({ onSelectTemplate }) => {
+  // Make templates accessible as a static property
+  ChatTemplates.templates = templates
 
   return (
     <motion.div
@@ -143,6 +146,9 @@ animate();
     </motion.div>
   )
 }
+
+// Add static property to component type
+ChatTemplates.templates = templates
 
 export default ChatTemplates
 
