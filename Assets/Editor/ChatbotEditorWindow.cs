@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 public class ChatbotEditorWindow : EditorWindow
 {
-    private string openAiApiKey = "<OPENAI API KEY>";  
+    private string openAiApiKey = "<openai key>";  
 
     private const string PLACEHOLDER_TEXT = "Type your message...";
 
