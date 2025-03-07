@@ -1,0 +1,25 @@
+﻿<Properties StartupConfiguration="{91033056-DDF1-3CF4-CF22-3B15AC7A822E}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Editor/ChatbotEditorWindow.cs">
+    <Files>
+      <File FileName="Assets/Editor/ChatbotEditorWindow.cs" Line="15" Column="47" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="2025-Unusual-4" expanded="True">
+            <Node name="Assets" expanded="True" selected="True">
+              <Node name="Editor" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp-Editor PreferredExecutionTarget="f85652e1-3474-4256-aba6-e19c44537341" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
