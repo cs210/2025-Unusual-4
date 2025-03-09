@@ -1,33 +1,410 @@
 m_ProjectFiles:
   m_ManifestFileStatus:
-    m_FilePath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Packages/manifest.json
+    m_FilePath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Packages/manifest.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638769237980000000
-    m_Hash: 3251377733
+      ticks: 638770922390000000
+    m_Hash: 974864459
   m_LockFileStatus:
-    m_FilePath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Packages/packages-lock.json
+    m_FilePath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638769237990000000
-    m_Hash: 3020042986
+      ticks: 638770922390000000
+    m_Hash: 217122647
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
   m_LocalFileStatus: []
-m_ProjectPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Packages
+m_ProjectPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Packages
 m_EditorVersion: 2022.3.11f1 (d00248457e15)
 m_ResolvedPackages:
+- packageId: com.openai.unity@8.6.2
+  testable: 0
+  isDirectDependency: 1
+  version: 8.6.2
+  source: 1
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.openai.unity@8.6.2
+  assetPath: Packages/com.openai.unity
+  name: com.openai.unity
+  displayName: OpenAI
+  author:
+    name: Stephen Hodgson
+    email: 
+    url: https://github.com/StephenHodgson
+  category: 
+  type: 
+  description: 'A OpenAI package for the Unity Game Engine to use GPT-4, GPT-3.5,
+    GPT-3 and Dall-E though their RESTful API (currently in beta).
+
+
+    Independently
+    developed, this is not an official library and I am not affiliated with OpenAI.
+
+
+    An
+    OpenAI API account is required.'
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 1.0.0-preview.1
+    - 1.0.0
+    - 2.0.0-preview.1
+    - 2.0.0-preview.2
+    - 2.0.0-preview.3
+    - 2.0.0-preview.4
+    - 2.0.0-preview.5
+    - 2.0.0-preview.6
+    - 2.0.0
+    - 2.1.0
+    - 2.2.0
+    - 2.2.1
+    - 2.2.2
+    - 2.2.3
+    - 2.2.4
+    - 2.2.5
+    - 3.0.0
+    - 3.0.1
+    - 3.0.2
+    - 3.0.3
+    - 3.1.0
+    - 3.1.1
+    - 3.1.2
+    - 3.1.3
+    - 4.0.0
+    - 4.1.0
+    - 4.2.0
+    - 4.2.1
+    - 4.3.0
+    - 4.3.1
+    - 4.4.0
+    - 4.4.1
+    - 4.4.2
+    - 4.4.3
+    - 4.5.0
+    - 4.5.1
+    - 4.5.2
+    - 4.5.3
+    - 4.5.4
+    - 4.6.0
+    - 4.7.0
+    - 4.7.1
+    - 4.7.2
+    - 4.7.3
+    - 4.7.4
+    - 4.8.0
+    - 4.8.1
+    - 4.8.3
+    - 4.8.4
+    - 4.8.5
+    - 4.8.6
+    - 4.8.7
+    - 5.0.0
+    - 5.0.1
+    - 5.0.2
+    - 5.0.3
+    - 5.0.4
+    - 5.0.5
+    - 5.0.6
+    - 5.0.7
+    - 5.0.8
+    - 5.0.9
+    - 5.0.10
+    - 5.0.11
+    - 5.1.0
+    - 5.1.1
+    - 5.1.2
+    - 5.1.3
+    - 5.2.0
+    - 5.2.1
+    - 5.2.2
+    - 5.2.3
+    - 6.0.0
+    - 7.0.0
+    - 7.0.1
+    - 7.0.2
+    - 7.0.3
+    - 7.0.4
+    - 7.0.5
+    - 7.1.0
+    - 7.1.1
+    - 7.1.2
+    - 7.1.3
+    - 7.1.4
+    - 7.2.0
+    - 7.2.1
+    - 7.3.0
+    - 7.3.1
+    - 7.3.2
+    - 7.3.3
+    - 7.3.4
+    - 7.3.5
+    - 7.3.6
+    - 7.7.0
+    - 7.7.1
+    - 7.7.2
+    - 7.7.3
+    - 7.7.4
+    - 7.7.5
+    - 7.7.6
+    - 7.7.7
+    - 7.7.8
+    - 7.7.9
+    - 8.0.0
+    - 8.0.1
+    - 8.0.2
+    - 8.0.3
+    - 8.1.0
+    - 8.1.1
+    - 8.1.2
+    - 8.2.0
+    - 8.2.1
+    - 8.2.3
+    - 8.2.4
+    - 8.2.5
+    - 8.3.0
+    - 8.4.0
+    - 8.4.1
+    - 8.4.2
+    - 8.4.3
+    - 8.4.4
+    - 8.4.5
+    - 8.5.0
+    - 8.5.1
+    - 8.5.3
+    - 8.5.4
+    - 8.6.0
+    - 8.6.1
+    - 8.6.2
+    compatible:
+    - 1.0.0-preview.1
+    - 1.0.0
+    - 2.0.0-preview.1
+    - 2.0.0-preview.2
+    - 2.0.0-preview.3
+    - 2.0.0-preview.4
+    - 2.0.0-preview.5
+    - 2.0.0-preview.6
+    - 2.0.0
+    - 2.1.0
+    - 2.2.0
+    - 2.2.1
+    - 2.2.2
+    - 2.2.3
+    - 2.2.4
+    - 2.2.5
+    - 3.0.0
+    - 3.0.1
+    - 3.0.2
+    - 3.0.3
+    - 3.1.0
+    - 3.1.1
+    - 3.1.2
+    - 3.1.3
+    - 4.0.0
+    - 4.1.0
+    - 4.2.0
+    - 4.2.1
+    - 4.3.0
+    - 4.3.1
+    - 4.4.0
+    - 4.4.1
+    - 4.4.2
+    - 4.4.3
+    - 4.5.0
+    - 4.5.1
+    - 4.5.2
+    - 4.5.3
+    - 4.5.4
+    - 4.6.0
+    - 4.7.0
+    - 4.7.1
+    - 4.7.2
+    - 4.7.3
+    - 4.7.4
+    - 4.8.0
+    - 4.8.1
+    - 4.8.3
+    - 4.8.4
+    - 4.8.5
+    - 4.8.6
+    - 4.8.7
+    - 5.0.0
+    - 5.0.1
+    - 5.0.2
+    - 5.0.3
+    - 5.0.4
+    - 5.0.5
+    - 5.0.6
+    - 5.0.7
+    - 5.0.8
+    - 5.0.9
+    - 5.0.10
+    - 5.0.11
+    - 5.1.0
+    - 5.1.1
+    - 5.1.2
+    - 5.1.3
+    - 5.2.0
+    - 5.2.1
+    - 5.2.2
+    - 5.2.3
+    - 6.0.0
+    - 7.0.0
+    - 7.0.1
+    - 7.0.2
+    - 7.0.3
+    - 7.0.4
+    - 7.0.5
+    - 7.1.0
+    - 7.1.1
+    - 7.1.2
+    - 7.1.3
+    - 7.1.4
+    - 7.2.0
+    - 7.2.1
+    - 7.3.0
+    - 7.3.1
+    - 7.3.2
+    - 7.3.3
+    - 7.3.4
+    - 7.3.5
+    - 7.3.6
+    - 7.7.0
+    - 7.7.1
+    - 7.7.2
+    - 7.7.3
+    - 7.7.4
+    - 7.7.5
+    - 7.7.6
+    - 7.7.7
+    - 7.7.8
+    - 7.7.9
+    - 8.0.0
+    - 8.0.1
+    - 8.0.2
+    - 8.0.3
+    - 8.1.0
+    - 8.1.1
+    - 8.1.2
+    - 8.2.0
+    - 8.2.1
+    - 8.2.3
+    - 8.2.4
+    - 8.2.5
+    - 8.3.0
+    - 8.4.0
+    - 8.4.1
+    - 8.4.2
+    - 8.4.3
+    - 8.4.4
+    - 8.4.5
+    - 8.5.0
+    - 8.5.1
+    - 8.5.3
+    - 8.5.4
+    - 8.6.0
+    - 8.6.1
+    - 8.6.2
+    recommended: 
+    deprecated: []
+  dependencies:
+  - name: com.utilities.rest
+    version: 3.3.2
+  - name: com.utilities.websockets
+    version: 1.0.3
+  - name: com.utilities.encoder.wav
+    version: 2.2.1
+  resolvedDependencies:
+  - name: com.utilities.rest
+    version: 3.3.2
+  - name: com.utilities.async
+    version: 2.2.2
+  - name: com.unity.editorcoroutines
+    version: 1.0.0
+  - name: com.unity.test-framework
+    version: 1.4.2
+  - name: com.unity.ext.nunit
+    version: 2.0.3
+  - name: com.unity.modules.imgui
+    version: 1.0.0
+  - name: com.unity.modules.jsonserialize
+    version: 1.0.0
+  - name: com.unity.nuget.mono-cecil
+    version: 1.11.4
+  - name: com.utilities.extensions
+    version: 1.2.0
+  - name: com.unity.modules.physics
+    version: 1.0.0
+  - name: com.unity.ugui
+    version: 1.0.0
+  - name: com.unity.modules.ui
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequest
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequestassetbundle
+    version: 1.0.0
+  - name: com.unity.modules.assetbundle
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequestaudio
+    version: 1.0.0
+  - name: com.unity.modules.audio
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequesttexture
+    version: 1.0.0
+  - name: com.unity.modules.imageconversion
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequestwww
+    version: 1.0.0
+  - name: com.unity.nuget.newtonsoft-json
+    version: 3.2.1
+  - name: com.utilities.websockets
+    version: 1.0.3
+  - name: com.utilities.encoder.wav
+    version: 2.2.1
+  - name: com.utilities.audio
+    version: 2.2.1
+  - name: com.unity.modules.androidjni
+    version: 1.0.0
+  keywords: []
+  registry:
+    id: scoped:project:OpenUPM
+    name: OpenUPM
+    url: https://package.openupm.com
+    scopes:
+    - com.openai
+    - com.utilities
+    isDefault: 0
+    capabilities: 0
+    configSource: 4
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 638770029520220000
+  documentationUrl: https://github.com/RageAgainstThePixel/com.openai.unity#documentation
+  hasRepository: 1
+  repository:
+    type: git
+    url: 
+    revision: 
+    path: 
+  unityLifecycle:
+    version: 
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
 - packageId: com.unity.ai.navigation@1.1.5
   testable: 0
   isDirectDependency: 1
   version: 1.1.5
   source: 1
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.ai.navigation@1.1.5
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.ai.navigation@1.1.5
   assetPath: Packages/com.unity.ai.navigation
   name: com.unity.ai.navigation
   displayName: AI Navigation
@@ -96,83 +473,12 @@ m_ResolvedPackages:
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
-- packageId: com.unity.ext.nunit@1.0.6
-  testable: 0
-  isDirectDependency: 1
-  version: 1.0.6
-  source: 1
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.ext.nunit@1.0.6
-  assetPath: Packages/com.unity.ext.nunit
-  name: com.unity.ext.nunit
-  displayName: Custom NUnit
-  author:
-    name: 
-    email: 
-    url: 
-  category: Libraries
-  type: asset
-  description: Custom version of the nunit package build to work with Unity. Used
-    by the Unity Test Framework.
-  status: 0
-  errors: []
-  versions:
-    all:
-    - 0.1.5-preview
-    - 0.1.6-preview
-    - 0.1.9-preview
-    - 1.0.0
-    - 1.0.5
-    - 1.0.6
-    - 2.0.2
-    - 2.0.3
-    - 2.0.4
-    - 2.0.5
-    compatible:
-    - 1.0.6
-    - 2.0.2
-    - 2.0.3
-    - 2.0.4
-    - 2.0.5
-    recommended: 1.0.6
-    deprecated: []
-  dependencies: []
-  resolvedDependencies: []
-  keywords:
-  - nunit
-  - unittest
-  - test
-  registry:
-    id: main
-    name: 
-    url: https://packages.unity.com
-    scopes: []
-    isDefault: 1
-    capabilities: 7
-    configSource: 0
-  hideInEditor: 1
-  isAssetStorePackage: 0
-  datePublishedTicks: 637429759280000000
-  documentationUrl: 
-  hasRepository: 1
-  repository:
-    type: git
-    url: https://github.cds.internal.unity3d.com/unity/com.unity.ext.nunit.git
-    revision: 29ea4d6504a5f58fb3a6934db839aa80ae6d9d88
-    path: 
-  unityLifecycle:
-    version: 1.0.6
-    nextVersion: 
-    recommendedVersion: 
-    isDeprecated: 0
-    deprecationMessage: 
-  isDeprecated: 0
-  deprecationMessage: 
 - packageId: com.unity.ide.rider@3.0.25
   testable: 0
   isDirectDependency: 1
   version: 3.0.25
   source: 1
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.ide.rider@3.0.25
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.ide.rider@3.0.25
   assetPath: Packages/com.unity.ide.rider
   name: com.unity.ide.rider
   displayName: JetBrains Rider Editor
@@ -247,7 +553,7 @@ m_ResolvedPackages:
     version: 1.0.6
   resolvedDependencies:
   - name: com.unity.ext.nunit
-    version: 1.0.6
+    version: 2.0.3
   keywords: []
   registry:
     id: main
@@ -280,7 +586,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.2.5
   source: 1
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.ide.vscode@1.2.5
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.ide.vscode@1.2.5
   assetPath: Packages/com.unity.ide.vscode
   name: com.unity.ide.vscode
   displayName: Visual Studio Code Editor
@@ -343,121 +649,58 @@ m_ResolvedPackages:
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
-- packageId: com.unity.test-framework@1.1.33
+- packageId: com.unity.nuget.newtonsoft-json@3.2.1
   testable: 0
   isDirectDependency: 1
-  version: 1.1.33
+  version: 3.2.1
   source: 1
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.test-framework@1.1.33
-  assetPath: Packages/com.unity.test-framework
-  name: com.unity.test-framework
-  displayName: Test Framework
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.nuget.newtonsoft-json@3.2.1
+  assetPath: Packages/com.unity.nuget.newtonsoft-json
+  name: com.unity.nuget.newtonsoft-json
+  displayName: Newtonsoft Json
   author:
     name: 
     email: 
     url: 
-  category: Unity Test Framework
-  type: asset
-  description: Test framework for running Edit mode and Play mode tests in Unity.
+  category: 
+  type: library
+  description: 'Newtonsoft Json for use in Unity projects and Unity packages. Currently
+    synced to version 13.0.2.
+
+
+    This package is used for advanced json serialization
+    and deserialization. Most Unity users will be better suited using the existing
+    json tools built into Unity.
+
+    To avoid assembly clashes, please use this
+    package if you intend to use Newtonsoft Json.'
   status: 0
   errors: []
   versions:
     all:
-    - 0.0.4-preview
-    - 0.0.29-preview
-    - 1.0.0
-    - 1.0.7
-    - 1.0.9
-    - 1.0.11
-    - 1.0.12
-    - 1.0.13
-    - 1.0.14
-    - 1.0.16
-    - 1.0.17
-    - 1.0.18
-    - 1.1.0
-    - 1.1.1
+    - 1.0.0-preview.2
+    - 1.0.0-preview.3
+    - 1.0.0-preview.4
+    - 1.0.1-preview.1
     - 1.1.2
-    - 1.1.3
-    - 1.1.5
-    - 1.1.8
-    - 1.1.9
-    - 1.1.11
-    - 1.1.13
-    - 1.1.14
-    - 1.1.16
-    - 1.1.18
-    - 1.1.19
-    - 1.1.20
-    - 1.1.22
-    - 1.1.24
-    - 1.1.26
-    - 1.1.27
-    - 1.1.29
-    - 1.1.30
-    - 1.1.31
-    - 1.1.33
-    - 1.3.0
-    - 1.3.1
-    - 1.3.2
-    - 1.3.3
-    - 1.3.4
-    - 1.3.5
-    - 1.3.7
-    - 1.3.8
-    - 1.3.9
-    - 1.4.0
-    - 1.4.1
-    - 1.4.2
-    - 1.4.3
-    - 1.4.4
-    - 1.4.5
-    - 1.4.6
-    - 2.0.1-exp.1
-    - 2.0.1-exp.2
-    - 2.0.1-pre.12
-    - 2.0.1-pre.18
+    - 2.0.0-preview
+    - 2.0.0-preview.1
+    - 2.0.0-preview.2
+    - 2.0.0
+    - 2.0.1-preview.1
+    - 2.0.2
+    - 3.0.1
+    - 3.0.2
+    - 3.1.0
+    - 3.2.0
+    - 3.2.1
     compatible:
-    - 1.1.33
-    - 1.3.0
-    - 1.3.1
-    - 1.3.2
-    - 1.3.3
-    - 1.3.4
-    - 1.3.5
-    - 1.3.7
-    - 1.3.8
-    - 1.3.9
-    - 1.4.0
-    - 1.4.1
-    - 1.4.2
-    - 1.4.3
-    - 1.4.4
-    - 1.4.5
-    - 1.4.6
-    - 2.0.1-exp.1
-    - 2.0.1-exp.2
-    - 2.0.1-pre.12
-    - 2.0.1-pre.18
-    recommended: 1.1.33
+    - 3.2.1
+    recommended: 3.2.1
     deprecated: []
-  dependencies:
-  - name: com.unity.ext.nunit
-    version: 1.0.6
-  - name: com.unity.modules.imgui
-    version: 1.0.0
-  - name: com.unity.modules.jsonserialize
-    version: 1.0.0
-  resolvedDependencies:
-  - name: com.unity.ext.nunit
-    version: 1.0.6
-  - name: com.unity.modules.imgui
-    version: 1.0.0
-  - name: com.unity.modules.jsonserialize
-    version: 1.0.0
-  keywords:
-  - Test
-  - TestFramework
+  dependencies: []
+  resolvedDependencies: []
+  keywords: []
   registry:
     id: main
     name: 
@@ -468,16 +711,16 @@ m_ResolvedPackages:
     configSource: 0
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 637938212700000000
+  datePublishedTicks: 638186318800000000
   documentationUrl: 
   hasRepository: 1
   repository:
     type: git
-    url: https://github.com/Unity-Technologies/com.unity.test-framework.git
-    revision: 34a4d423d64926635eb36d3bb86276179cc186e1
+    url: https://github.cds.internal.unity3d.com/unity/com.unity.nuget.newtonsoft-json.git
+    revision: d8e49aef8979bef617144382052ec2f479645eaf
     path: 
   unityLifecycle:
-    version: 1.1.33
+    version: 3.2.1
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -489,7 +732,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 3.0.6
   source: 1
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.textmeshpro@3.0.6
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.textmeshpro@3.0.6
   assetPath: Packages/com.unity.textmeshpro
   name: com.unity.textmeshpro
   displayName: TextMeshPro
@@ -688,7 +931,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.ugui@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.ugui@1.0.0
   assetPath: Packages/com.unity.ugui
   name: com.unity.ugui
   displayName: Unity UI
@@ -755,12 +998,116 @@ m_ResolvedPackages:
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
+- packageId: com.unity.visualscripting@1.9.6
+  testable: 0
+  isDirectDependency: 1
+  version: 1.9.6
+  source: 1
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.visualscripting@1.9.6
+  assetPath: Packages/com.unity.visualscripting
+  name: com.unity.visualscripting
+  displayName: Visual Scripting
+  author:
+    name: 
+    email: 
+    url: 
+  category: 
+  type: tool
+  description: 'Visual scripting is a workflow that uses visual, node-based graphs
+    to design behaviors rather than write lines of C# script.
+
+
+    Enabling artists,
+    designers and programmers alike, visual scripting can be used to design final
+    logic, quickly create prototypes, iterate on gameplay and create custom nodes
+    to help streamline collaboration.
+
+
+    Visual scripting is compatible with third-party
+    APIs, including most packages, assets and custom libraries.'
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 1.5.0
+    - 1.5.1-pre.3
+    - 1.5.1-pre.5
+    - 1.5.1
+    - 1.5.2
+    - 1.6.0-pre.3
+    - 1.6.0
+    - 1.6.1
+    - 1.7.1
+    - 1.7.2
+    - 1.7.3
+    - 1.7.5
+    - 1.7.6
+    - 1.7.7
+    - 1.7.8
+    - 1.8.0-pre.1
+    - 1.8.0
+    - 1.9.0
+    - 1.9.1
+    - 1.9.2
+    - 1.9.4
+    - 1.9.5
+    - 1.9.6
+    compatible:
+    - 1.9.1
+    - 1.9.2
+    - 1.9.4
+    - 1.9.5
+    - 1.9.6
+    recommended: 1.9.6
+    deprecated:
+    - 1.8.0-pre.1
+  dependencies:
+  - name: com.unity.ugui
+    version: 1.0.0
+  - name: com.unity.modules.jsonserialize
+    version: 1.0.0
+  resolvedDependencies:
+  - name: com.unity.ugui
+    version: 1.0.0
+  - name: com.unity.modules.ui
+    version: 1.0.0
+  - name: com.unity.modules.imgui
+    version: 1.0.0
+  - name: com.unity.modules.jsonserialize
+    version: 1.0.0
+  keywords: []
+  registry:
+    id: main
+    name: 
+    url: https://packages.unity.com
+    scopes: []
+    isDefault: 1
+    capabilities: 7
+    configSource: 0
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 638769546699650000
+  documentationUrl: 
+  hasRepository: 1
+  repository:
+    type: git
+    url: https://github.cds.internal.unity3d.com/unity/com.unity.visualscripting.git
+    revision: d24c56a75889cb6fe0046a9472368815d56d6bc7
+    path: 
+  unityLifecycle:
+    version: 1.9.1
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
 - packageId: com.unity.modules.ai@1.0.0
   testable: 0
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.ai@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.ai@1.0.0
   assetPath: Packages/com.unity.modules.ai
   name: com.unity.modules.ai
   displayName: AI
@@ -815,7 +1162,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.androidjni@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.androidjni@1.0.0
   assetPath: Packages/com.unity.modules.androidjni
   name: com.unity.modules.androidjni
   displayName: Android JNI
@@ -869,7 +1216,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.animation@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.animation@1.0.0
   assetPath: Packages/com.unity.modules.animation
   name: com.unity.modules.animation
   displayName: Animation
@@ -924,7 +1271,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.assetbundle@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.assetbundle@1.0.0
   assetPath: Packages/com.unity.modules.assetbundle
   name: com.unity.modules.assetbundle
   displayName: Asset Bundle
@@ -979,7 +1326,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.audio@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.audio@1.0.0
   assetPath: Packages/com.unity.modules.audio
   name: com.unity.modules.audio
   displayName: Audio
@@ -1034,7 +1381,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.cloth@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.cloth@1.0.0
   assetPath: Packages/com.unity.modules.cloth
   name: com.unity.modules.cloth
   displayName: Cloth
@@ -1093,7 +1440,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.director@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.director@1.0.0
   assetPath: Packages/com.unity.modules.director
   name: com.unity.modules.director
   displayName: Director
@@ -1156,7 +1503,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.imageconversion@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.imageconversion@1.0.0
   assetPath: Packages/com.unity.modules.imageconversion
   name: com.unity.modules.imageconversion
   displayName: Image Conversion
@@ -1212,7 +1559,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.imgui@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.imgui@1.0.0
   assetPath: Packages/com.unity.modules.imgui
   name: com.unity.modules.imgui
   displayName: IMGUI
@@ -1267,7 +1614,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.jsonserialize@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.jsonserialize@1.0.0
   assetPath: Packages/com.unity.modules.jsonserialize
   name: com.unity.modules.jsonserialize
   displayName: JSONSerialize
@@ -1322,7 +1669,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.particlesystem@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.particlesystem@1.0.0
   assetPath: Packages/com.unity.modules.particlesystem
   name: com.unity.modules.particlesystem
   displayName: Particle System
@@ -1377,7 +1724,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.physics@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.physics@1.0.0
   assetPath: Packages/com.unity.modules.physics
   name: com.unity.modules.physics
   displayName: Physics
@@ -1432,7 +1779,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.physics2d@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.physics2d@1.0.0
   assetPath: Packages/com.unity.modules.physics2d
   name: com.unity.modules.physics2d
   displayName: Physics 2D
@@ -1487,7 +1834,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.screencapture@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.screencapture@1.0.0
   assetPath: Packages/com.unity.modules.screencapture
   name: com.unity.modules.screencapture
   displayName: Screen Capture
@@ -1546,7 +1893,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.terrain@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.terrain@1.0.0
   assetPath: Packages/com.unity.modules.terrain
   name: com.unity.modules.terrain
   displayName: Terrain
@@ -1601,7 +1948,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.terrainphysics@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.terrainphysics@1.0.0
   assetPath: Packages/com.unity.modules.terrainphysics
   name: com.unity.modules.terrainphysics
   displayName: Terrain Physics
@@ -1664,7 +2011,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.tilemap@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.tilemap@1.0.0
   assetPath: Packages/com.unity.modules.tilemap
   name: com.unity.modules.tilemap
   displayName: Tilemap
@@ -1722,7 +2069,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.ui@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.ui@1.0.0
   assetPath: Packages/com.unity.modules.ui
   name: com.unity.modules.ui
   displayName: UI
@@ -1777,7 +2124,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.uielements@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.uielements@1.0.0
   assetPath: Packages/com.unity.modules.uielements
   name: com.unity.modules.uielements
   displayName: UIElements
@@ -1844,7 +2191,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.umbra@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.umbra@1.0.0
   assetPath: Packages/com.unity.modules.umbra
   name: com.unity.modules.umbra
   displayName: Umbra
@@ -1899,7 +2246,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.unityanalytics@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.unityanalytics@1.0.0
   assetPath: Packages/com.unity.modules.unityanalytics
   name: com.unity.modules.unityanalytics
   displayName: Unity Analytics
@@ -1962,7 +2309,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.unitywebrequest@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.unitywebrequest@1.0.0
   assetPath: Packages/com.unity.modules.unitywebrequest
   name: com.unity.modules.unitywebrequest
   displayName: Unity Web Request
@@ -2017,7 +2364,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.unitywebrequestassetbundle@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.unitywebrequestassetbundle@1.0.0
   assetPath: Packages/com.unity.modules.unitywebrequestassetbundle
   name: com.unity.modules.unitywebrequestassetbundle
   displayName: Unity Web Request Asset Bundle
@@ -2080,7 +2427,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.unitywebrequestaudio@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.unitywebrequestaudio@1.0.0
   assetPath: Packages/com.unity.modules.unitywebrequestaudio
   name: com.unity.modules.unitywebrequestaudio
   displayName: Unity Web Request Audio
@@ -2143,7 +2490,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.unitywebrequesttexture@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.unitywebrequesttexture@1.0.0
   assetPath: Packages/com.unity.modules.unitywebrequesttexture
   name: com.unity.modules.unitywebrequesttexture
   displayName: Unity Web Request Texture
@@ -2206,7 +2553,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.unitywebrequestwww@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.unitywebrequestwww@1.0.0
   assetPath: Packages/com.unity.modules.unitywebrequestwww
   name: com.unity.modules.unitywebrequestwww
   displayName: Unity Web Request WWW
@@ -2285,7 +2632,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.vehicles@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.vehicles@1.0.0
   assetPath: Packages/com.unity.modules.vehicles
   name: com.unity.modules.vehicles
   displayName: Vehicles
@@ -2344,7 +2691,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.video@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.video@1.0.0
   assetPath: Packages/com.unity.modules.video
   name: com.unity.modules.video
   displayName: Video
@@ -2411,7 +2758,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.vr@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.vr@1.0.0
   assetPath: Packages/com.unity.modules.vr
   name: com.unity.modules.vr
   displayName: VR
@@ -2480,7 +2827,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.wind@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.wind@1.0.0
   assetPath: Packages/com.unity.modules.wind
   name: com.unity.modules.wind
   displayName: Wind
@@ -2535,7 +2882,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.xr@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.xr@1.0.0
   assetPath: Packages/com.unity.modules.xr
   name: com.unity.modules.xr
   displayName: XR
@@ -2602,7 +2949,7 @@ m_ResolvedPackages:
   isDirectDependency: 0
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/trisha/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.subsystems@1.0.0
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.modules.subsystems@1.0.0
   assetPath: Packages/com.unity.modules.subsystems
   name: com.unity.modules.subsystems
   displayName: Subsystems
@@ -2650,6 +2997,1228 @@ m_ResolvedPackages:
     path: 
   unityLifecycle:
     version: 
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+- packageId: com.utilities.rest@3.3.2
+  testable: 0
+  isDirectDependency: 0
+  version: 3.3.2
+  source: 1
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.utilities.rest@3.3.2
+  assetPath: Packages/com.utilities.rest
+  name: com.utilities.rest
+  displayName: Utilities.Rest
+  author:
+    name: Stephen Hodgson
+    email: 
+    url: 
+  category: 
+  type: 
+  description: This package contains useful RESTful utilities for the Unity Game
+    Engine.
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 1.0.0
+    - 1.0.1
+    - 1.0.2
+    - 1.1.0
+    - 1.2.0
+    - 1.2.1
+    - 1.2.2
+    - 1.2.3
+    - 1.2.4
+    - 1.2.5
+    - 1.2.6
+    - 1.3.0
+    - 1.3.1
+    - 1.3.2
+    - 1.3.3
+    - 1.4.0
+    - 1.4.1
+    - 1.4.2
+    - 1.4.3
+    - 1.4.4
+    - 1.4.5
+    - 1.4.6
+    - 2.0.0
+    - 2.0.1
+    - 2.0.2
+    - 2.0.3
+    - 2.0.4
+    - 2.0.5
+    - 2.0.6
+    - 2.0.7
+    - 2.1.0
+    - 2.1.1
+    - 2.1.2
+    - 2.1.3
+    - 2.1.4
+    - 2.1.5
+    - 2.1.6
+    - 2.1.7
+    - 2.1.8
+    - 2.2.0
+    - 2.2.1
+    - 2.2.2
+    - 2.2.3
+    - 2.2.4
+    - 2.2.5
+    - 2.2.6
+    - 2.2.7
+    - 2.3.1
+    - 2.4.0
+    - 2.4.1
+    - 2.4.2
+    - 2.4.3
+    - 2.4.4
+    - 2.4.5
+    - 2.4.6
+    - 2.5.0
+    - 2.5.1
+    - 2.5.2
+    - 2.5.3
+    - 2.5.4
+    - 2.5.5
+    - 2.5.6
+    - 2.5.7
+    - 3.0.0
+    - 3.0.1
+    - 3.1.0
+    - 3.1.1
+    - 3.1.2
+    - 3.2.0
+    - 3.2.1
+    - 3.2.2
+    - 3.2.3
+    - 3.2.4
+    - 3.2.5
+    - 3.3.0
+    - 3.3.1
+    - 3.3.2
+    compatible:
+    - 1.0.0
+    - 1.0.1
+    - 1.0.2
+    - 1.1.0
+    - 1.2.0
+    - 1.2.1
+    - 1.2.2
+    - 1.2.3
+    - 1.2.4
+    - 1.2.5
+    - 1.2.6
+    - 1.3.0
+    - 1.3.1
+    - 1.3.2
+    - 1.3.3
+    - 1.4.0
+    - 1.4.1
+    - 1.4.2
+    - 1.4.3
+    - 1.4.4
+    - 1.4.5
+    - 1.4.6
+    - 2.0.0
+    - 2.0.1
+    - 2.0.2
+    - 2.0.3
+    - 2.0.4
+    - 2.0.5
+    - 2.0.6
+    - 2.0.7
+    - 2.1.0
+    - 2.1.1
+    - 2.1.2
+    - 2.1.3
+    - 2.1.4
+    - 2.1.5
+    - 2.1.6
+    - 2.1.7
+    - 2.1.8
+    - 2.2.0
+    - 2.2.1
+    - 2.2.2
+    - 2.2.3
+    - 2.2.4
+    - 2.2.5
+    - 2.2.6
+    - 2.2.7
+    - 2.3.1
+    - 2.4.0
+    - 2.4.1
+    - 2.4.2
+    - 2.4.3
+    - 2.4.4
+    - 2.4.5
+    - 2.4.6
+    - 2.5.0
+    - 2.5.1
+    - 2.5.2
+    - 2.5.3
+    - 2.5.4
+    - 2.5.5
+    - 2.5.6
+    - 2.5.7
+    - 3.0.0
+    - 3.0.1
+    - 3.1.0
+    - 3.1.1
+    - 3.1.2
+    - 3.2.0
+    - 3.2.1
+    - 3.2.2
+    - 3.2.3
+    - 3.2.4
+    - 3.2.5
+    - 3.3.0
+    - 3.3.1
+    - 3.3.2
+    recommended: 
+    deprecated: []
+  dependencies:
+  - name: com.utilities.async
+    version: 2.2.2
+  - name: com.utilities.extensions
+    version: 1.2.0
+  - name: com.unity.modules.unitywebrequest
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequestassetbundle
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequestaudio
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequesttexture
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequestwww
+    version: 1.0.0
+  - name: com.unity.nuget.newtonsoft-json
+    version: 3.2.1
+  resolvedDependencies:
+  - name: com.utilities.async
+    version: 2.2.2
+  - name: com.unity.editorcoroutines
+    version: 1.0.0
+  - name: com.unity.test-framework
+    version: 1.4.2
+  - name: com.unity.ext.nunit
+    version: 2.0.3
+  - name: com.unity.modules.imgui
+    version: 1.0.0
+  - name: com.unity.modules.jsonserialize
+    version: 1.0.0
+  - name: com.unity.nuget.mono-cecil
+    version: 1.11.4
+  - name: com.utilities.extensions
+    version: 1.2.0
+  - name: com.unity.modules.physics
+    version: 1.0.0
+  - name: com.unity.ugui
+    version: 1.0.0
+  - name: com.unity.modules.ui
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequest
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequestassetbundle
+    version: 1.0.0
+  - name: com.unity.modules.assetbundle
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequestaudio
+    version: 1.0.0
+  - name: com.unity.modules.audio
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequesttexture
+    version: 1.0.0
+  - name: com.unity.modules.imageconversion
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequestwww
+    version: 1.0.0
+  - name: com.unity.nuget.newtonsoft-json
+    version: 3.2.1
+  keywords: []
+  registry:
+    id: scoped:project:OpenUPM
+    name: OpenUPM
+    url: https://package.openupm.com
+    scopes:
+    - com.openai
+    - com.utilities
+    isDefault: 0
+    capabilities: 0
+    configSource: 4
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 638769903897600000
+  documentationUrl: https://github.com/RageAgainstThePixel/com.utilities.rest#documentation
+  hasRepository: 1
+  repository:
+    type: git
+    url: 
+    revision: 
+    path: 
+  unityLifecycle:
+    version: 
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+- packageId: com.utilities.websockets@1.0.3
+  testable: 0
+  isDirectDependency: 0
+  version: 1.0.3
+  source: 1
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.utilities.websockets@1.0.3
+  assetPath: Packages/com.utilities.websockets
+  name: com.utilities.websockets
+  displayName: Utilities.WebSockets
+  author:
+    name: Stephen Hodgson
+    email: 
+    url: https://github.com/StephenHodgson
+  category: 
+  type: 
+  description: A simple websocket package for Unity (UPM)
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 1.0.0-preview.1
+    - 1.0.0-preview.2
+    - 1.0.0
+    - 1.0.1
+    - 1.0.2
+    - 1.0.3
+    compatible:
+    - 1.0.0-preview.1
+    - 1.0.0-preview.2
+    - 1.0.0
+    - 1.0.1
+    - 1.0.2
+    - 1.0.3
+    recommended: 
+    deprecated: []
+  dependencies:
+  - name: com.utilities.async
+    version: 2.2.2
+  - name: com.unity.nuget.newtonsoft-json
+    version: 3.2.1
+  resolvedDependencies:
+  - name: com.utilities.async
+    version: 2.2.2
+  - name: com.unity.editorcoroutines
+    version: 1.0.0
+  - name: com.unity.test-framework
+    version: 1.4.2
+  - name: com.unity.ext.nunit
+    version: 2.0.3
+  - name: com.unity.modules.imgui
+    version: 1.0.0
+  - name: com.unity.modules.jsonserialize
+    version: 1.0.0
+  - name: com.unity.nuget.mono-cecil
+    version: 1.11.4
+  - name: com.unity.nuget.newtonsoft-json
+    version: 3.2.1
+  keywords: []
+  registry:
+    id: scoped:project:OpenUPM
+    name: OpenUPM
+    url: https://package.openupm.com
+    scopes:
+    - com.openai
+    - com.utilities
+    isDefault: 0
+    capabilities: 0
+    configSource: 4
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 638769642770870000
+  documentationUrl: https://github.com/RageAgainstThePixel/com.utilities.websockets#documentation
+  hasRepository: 1
+  repository:
+    type: git
+    url: 
+    revision: 
+    path: 
+  unityLifecycle:
+    version: 
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+- packageId: com.utilities.encoder.wav@2.2.1
+  testable: 0
+  isDirectDependency: 0
+  version: 2.2.1
+  source: 1
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.utilities.encoder.wav@2.2.1
+  assetPath: Packages/com.utilities.encoder.wav
+  name: com.utilities.encoder.wav
+  displayName: Utilities.Encoder.Wav
+  author:
+    name: Stephen Hodgson
+    email: 
+    url: https://github.com/StephenHodgson
+  category: 
+  type: library
+  description: Simple library for WAV encoding support.
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 1.0.0-preview.1
+    - 1.0.0
+    - 1.0.1
+    - 1.0.2
+    - 1.0.3
+    - 1.0.4
+    - 1.0.5
+    - 1.0.6
+    - 1.0.7
+    - 1.0.8
+    - 1.1.0
+    - 1.1.1
+    - 1.1.2
+    - 1.1.3
+    - 1.1.4
+    - 1.1.5
+    - 1.2.0
+    - 1.2.1
+    - 1.2.2
+    - 1.2.3
+    - 2.0.0
+    - 2.0.1
+    - 2.0.2
+    - 2.1.0
+    - 2.2.0
+    - 2.2.1
+    compatible:
+    - 1.0.0-preview.1
+    - 1.0.0
+    - 1.0.1
+    - 1.0.2
+    - 1.0.3
+    - 1.0.4
+    - 1.0.5
+    - 1.0.6
+    - 1.0.7
+    - 1.0.8
+    - 1.1.0
+    - 1.1.1
+    - 1.1.2
+    - 1.1.3
+    - 1.1.4
+    - 1.1.5
+    - 1.2.0
+    - 1.2.1
+    - 1.2.2
+    - 1.2.3
+    - 2.0.0
+    - 2.0.1
+    - 2.0.2
+    - 2.1.0
+    - 2.2.0
+    - 2.2.1
+    recommended: 
+    deprecated: []
+  dependencies:
+  - name: com.utilities.audio
+    version: 2.2.1
+  resolvedDependencies:
+  - name: com.utilities.audio
+    version: 2.2.1
+  - name: com.unity.modules.androidjni
+    version: 1.0.0
+  - name: com.unity.modules.audio
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequestaudio
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequest
+    version: 1.0.0
+  - name: com.utilities.async
+    version: 2.2.2
+  - name: com.unity.editorcoroutines
+    version: 1.0.0
+  - name: com.unity.test-framework
+    version: 1.4.2
+  - name: com.unity.ext.nunit
+    version: 2.0.3
+  - name: com.unity.modules.imgui
+    version: 1.0.0
+  - name: com.unity.modules.jsonserialize
+    version: 1.0.0
+  - name: com.unity.nuget.mono-cecil
+    version: 1.11.4
+  keywords: []
+  registry:
+    id: scoped:project:OpenUPM
+    name: OpenUPM
+    url: https://package.openupm.com
+    scopes:
+    - com.openai
+    - com.utilities
+    isDefault: 0
+    capabilities: 0
+    configSource: 4
+  hideInEditor: 0
+  isAssetStorePackage: 0
+  datePublishedTicks: 638769909872450000
+  documentationUrl: https://github.com/RageAgainstThePixel/com.utilities.encoder.wav#documentation
+  hasRepository: 1
+  repository:
+    type: git
+    url: 
+    revision: 
+    path: 
+  unityLifecycle:
+    version: 
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+- packageId: com.utilities.audio@2.2.1
+  testable: 0
+  isDirectDependency: 0
+  version: 2.2.1
+  source: 1
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.utilities.audio@2.2.1
+  assetPath: Packages/com.utilities.audio
+  name: com.utilities.audio
+  displayName: Utilities.Audio
+  author:
+    name: Stephen Hodgson
+    email: 
+    url: https://github.com/StephenHodgson
+  category: 
+  type: 
+  description: A simple package for audio extensions and utilities.
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 1.0.0-preview.1
+    - 1.0.0-preview.2
+    - 1.0.0-preview.3
+    - 1.0.0-preview.4
+    - 1.0.0
+    - 1.0.1
+    - 1.0.2
+    - 1.0.3
+    - 1.0.4
+    - 1.0.5
+    - 1.0.6
+    - 1.0.7
+    - 1.0.8
+    - 1.0.9
+    - 1.0.10
+    - 1.0.11
+    - 1.0.12
+    - 1.0.13
+    - 1.0.14
+    - 1.1.0
+    - 1.1.1
+    - 1.1.2
+    - 1.1.3
+    - 1.2.0
+    - 1.2.1
+    - 1.2.2
+    - 1.2.3
+    - 2.0.0
+    - 2.0.1
+    - 2.0.2
+    - 2.1.0
+    - 2.2.0
+    - 2.2.1
+    - 2.2.2
+    compatible:
+    - 1.0.0-preview.1
+    - 1.0.0-preview.2
+    - 1.0.0-preview.3
+    - 1.0.0-preview.4
+    - 1.0.0
+    - 1.0.1
+    - 1.0.2
+    - 1.0.3
+    - 1.0.4
+    - 1.0.5
+    - 1.0.6
+    - 1.0.7
+    - 1.0.8
+    - 1.0.9
+    - 1.0.10
+    - 1.0.11
+    - 1.0.12
+    - 1.0.13
+    - 1.0.14
+    - 1.1.0
+    - 1.1.1
+    - 1.1.2
+    - 1.1.3
+    - 1.2.0
+    - 1.2.1
+    - 1.2.2
+    - 1.2.3
+    - 2.0.0
+    - 2.0.1
+    - 2.0.2
+    - 2.1.0
+    - 2.2.0
+    - 2.2.1
+    - 2.2.2
+    recommended: 
+    deprecated: []
+  dependencies:
+  - name: com.unity.modules.androidjni
+    version: 1.0.0
+  - name: com.unity.modules.audio
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequestaudio
+    version: 1.0.0
+  - name: com.utilities.async
+    version: 2.2.1
+  resolvedDependencies:
+  - name: com.unity.modules.androidjni
+    version: 1.0.0
+  - name: com.unity.modules.audio
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequestaudio
+    version: 1.0.0
+  - name: com.unity.modules.unitywebrequest
+    version: 1.0.0
+  - name: com.utilities.async
+    version: 2.2.2
+  - name: com.unity.editorcoroutines
+    version: 1.0.0
+  - name: com.unity.test-framework
+    version: 1.4.2
+  - name: com.unity.ext.nunit
+    version: 2.0.3
+  - name: com.unity.modules.imgui
+    version: 1.0.0
+  - name: com.unity.modules.jsonserialize
+    version: 1.0.0
+  - name: com.unity.nuget.mono-cecil
+    version: 1.11.4
+  keywords: []
+  registry:
+    id: scoped:project:OpenUPM
+    name: OpenUPM
+    url: https://package.openupm.com
+    scopes:
+    - com.openai
+    - com.utilities
+    isDefault: 0
+    capabilities: 0
+    configSource: 4
+  hideInEditor: 0
+  isAssetStorePackage: 0
+  datePublishedTicks: 638764906552980000
+  documentationUrl: https://github.com/RageAgainstThePixel/com.utilities.audio#documentation
+  hasRepository: 1
+  repository:
+    type: git
+    url: 
+    revision: 
+    path: 
+  unityLifecycle:
+    version: 
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+- packageId: com.utilities.async@2.2.2
+  testable: 0
+  isDirectDependency: 0
+  version: 2.2.2
+  source: 1
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.utilities.async@2.2.2
+  assetPath: Packages/com.utilities.async
+  name: com.utilities.async
+  displayName: Utilities.Async
+  author:
+    name: Stephen Hodgson
+    email: 
+    url: 
+  category: 
+  type: 
+  description: A set of utilities to ease the use of async methods in Unity.
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 1.0.0
+    - 1.0.1
+    - 1.0.2
+    - 1.1.0
+    - 1.1.1
+    - 1.2.0
+    - 1.2.1
+    - 1.2.2
+    - 1.2.3
+    - 1.2.4
+    - 1.3.0
+    - 2.0.0
+    - 2.0.1
+    - 2.1.0
+    - 2.1.1
+    - 2.1.2
+    - 2.1.3
+    - 2.1.4
+    - 2.1.5
+    - 2.1.6
+    - 2.1.7
+    - 2.1.8
+    - 2.2.0
+    - 2.2.1
+    - 2.2.2
+    compatible:
+    - 1.0.0
+    - 1.0.1
+    - 1.0.2
+    - 1.1.0
+    - 1.1.1
+    - 1.2.0
+    - 1.2.1
+    - 1.2.2
+    - 1.2.3
+    - 1.2.4
+    - 1.3.0
+    - 2.0.0
+    - 2.0.1
+    - 2.1.0
+    - 2.1.1
+    - 2.1.2
+    - 2.1.3
+    - 2.1.4
+    - 2.1.5
+    - 2.1.6
+    - 2.1.7
+    - 2.1.8
+    - 2.2.0
+    - 2.2.1
+    - 2.2.2
+    recommended: 
+    deprecated: []
+  dependencies:
+  - name: com.unity.editorcoroutines
+    version: 1.0.0
+  - name: com.unity.test-framework
+    version: 1.4.2
+  - name: com.unity.nuget.mono-cecil
+    version: 1.11.4
+  resolvedDependencies:
+  - name: com.unity.editorcoroutines
+    version: 1.0.0
+  - name: com.unity.test-framework
+    version: 1.4.2
+  - name: com.unity.ext.nunit
+    version: 2.0.3
+  - name: com.unity.modules.imgui
+    version: 1.0.0
+  - name: com.unity.modules.jsonserialize
+    version: 1.0.0
+  - name: com.unity.nuget.mono-cecil
+    version: 1.11.4
+  keywords: []
+  registry:
+    id: scoped:project:OpenUPM
+    name: OpenUPM
+    url: https://package.openupm.com
+    scopes:
+    - com.openai
+    - com.utilities
+    isDefault: 0
+    capabilities: 0
+    configSource: 4
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 638769579874980000
+  documentationUrl: https://github.com/RageAgainstThePixel/com.utilities.async#documentation
+  hasRepository: 1
+  repository:
+    type: git
+    url: 
+    revision: 
+    path: 
+  unityLifecycle:
+    version: 
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+- packageId: com.utilities.extensions@1.2.0
+  testable: 0
+  isDirectDependency: 0
+  version: 1.2.0
+  source: 1
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.utilities.extensions@1.2.0
+  assetPath: Packages/com.utilities.extensions
+  name: com.utilities.extensions
+  displayName: Utilities.Extensions
+  author:
+    name: Stephen Hodgson
+    email: 
+    url: https://github.com/StephenHodgson
+  category: 
+  type: 
+  description: Common extensions for Unity types (UPM)
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 1.0.0
+    - 1.0.1
+    - 1.0.2
+    - 1.0.3
+    - 1.0.4
+    - 1.0.5
+    - 1.0.6
+    - 1.1.0
+    - 1.1.1
+    - 1.1.2
+    - 1.1.3
+    - 1.1.4
+    - 1.1.5
+    - 1.1.6
+    - 1.1.7
+    - 1.1.8
+    - 1.1.9
+    - 1.1.10
+    - 1.1.11
+    - 1.1.12
+    - 1.1.13
+    - 1.1.14
+    - 1.1.15
+    - 1.1.16
+    - 1.1.17
+    - 1.2.0
+    compatible:
+    - 1.0.0
+    - 1.0.1
+    - 1.0.2
+    - 1.0.3
+    - 1.0.4
+    - 1.0.5
+    - 1.0.6
+    - 1.1.0
+    - 1.1.1
+    - 1.1.2
+    - 1.1.3
+    - 1.1.4
+    - 1.1.5
+    - 1.1.6
+    - 1.1.7
+    - 1.1.8
+    - 1.1.9
+    - 1.1.10
+    - 1.1.11
+    - 1.1.12
+    - 1.1.13
+    - 1.1.14
+    - 1.1.15
+    - 1.1.16
+    - 1.1.17
+    - 1.2.0
+    recommended: 
+    deprecated: []
+  dependencies:
+  - name: com.unity.modules.physics
+    version: 1.0.0
+  - name: com.unity.ugui
+    version: 1.0.0
+  resolvedDependencies:
+  - name: com.unity.modules.physics
+    version: 1.0.0
+  - name: com.unity.ugui
+    version: 1.0.0
+  - name: com.unity.modules.ui
+    version: 1.0.0
+  - name: com.unity.modules.imgui
+    version: 1.0.0
+  keywords: []
+  registry:
+    id: scoped:project:OpenUPM
+    name: OpenUPM
+    url: https://package.openupm.com
+    scopes:
+    - com.openai
+    - com.utilities
+    isDefault: 0
+    capabilities: 0
+    configSource: 4
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 638769626147310000
+  documentationUrl: https://github.com/RageAgainstThePixel/com.utilities.extensions#documentation
+  hasRepository: 1
+  repository:
+    type: git
+    url: 
+    revision: 
+    path: 
+  unityLifecycle:
+    version: 
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+- packageId: com.unity.editorcoroutines@1.0.0
+  testable: 0
+  isDirectDependency: 0
+  version: 1.0.0
+  source: 1
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.editorcoroutines@1.0.0
+  assetPath: Packages/com.unity.editorcoroutines
+  name: com.unity.editorcoroutines
+  displayName: Editor Coroutines
+  author:
+    name: 
+    email: 
+    url: 
+  category: 
+  type: asset
+  description: 'The editor coroutines package allows developers to start constructs
+    similar to Unity''s monobehaviour based coroutines within the editor using abitrary
+    objects. '
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 0.0.1-preview.3
+    - 0.0.1-preview.4
+    - 0.0.1-preview.5
+    - 0.0.2-preview.1
+    - 0.1.0-preview.1
+    - 0.1.0-preview.2
+    - 1.0.0
+    compatible:
+    - 1.0.0
+    recommended: 1.0.0
+    deprecated: []
+  dependencies: []
+  resolvedDependencies: []
+  keywords:
+  - coroutine
+  - coroutines
+  - editor
+  registry:
+    id: main
+    name: 
+    url: https://packages.unity.com
+    scopes: []
+    isDefault: 1
+    capabilities: 7
+    configSource: 0
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 637232611380000000
+  documentationUrl: 
+  hasRepository: 1
+  repository:
+    type: git
+    url: https://github.cds.internal.unity3d.com/unity/com.unity.editorcoroutines.git
+    revision: f67fc9992bbc7a553b17375de53a8b2db136528e
+    path: 
+  unityLifecycle:
+    version: 1.0.0
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+- packageId: com.unity.test-framework@1.4.2
+  testable: 0
+  isDirectDependency: 1
+  version: 1.4.2
+  source: 1
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.test-framework@1.4.2
+  assetPath: Packages/com.unity.test-framework
+  name: com.unity.test-framework
+  displayName: Test Framework
+  author:
+    name: 
+    email: 
+    url: 
+  category: Unity Test Framework
+  type: assets
+  description: Test framework for running Edit mode and Play mode tests in Unity.
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 0.0.4-preview
+    - 0.0.29-preview
+    - 1.0.0
+    - 1.0.7
+    - 1.0.9
+    - 1.0.11
+    - 1.0.12
+    - 1.0.13
+    - 1.0.14
+    - 1.0.16
+    - 1.0.17
+    - 1.0.18
+    - 1.1.0
+    - 1.1.1
+    - 1.1.2
+    - 1.1.3
+    - 1.1.5
+    - 1.1.8
+    - 1.1.9
+    - 1.1.11
+    - 1.1.13
+    - 1.1.14
+    - 1.1.16
+    - 1.1.18
+    - 1.1.19
+    - 1.1.20
+    - 1.1.22
+    - 1.1.24
+    - 1.1.26
+    - 1.1.27
+    - 1.1.29
+    - 1.1.30
+    - 1.1.31
+    - 1.1.33
+    - 1.3.0
+    - 1.3.1
+    - 1.3.2
+    - 1.3.3
+    - 1.3.4
+    - 1.3.5
+    - 1.3.7
+    - 1.3.8
+    - 1.3.9
+    - 1.4.0
+    - 1.4.1
+    - 1.4.2
+    - 1.4.3
+    - 1.4.4
+    - 1.4.5
+    - 1.4.6
+    - 2.0.1-exp.1
+    - 2.0.1-exp.2
+    - 2.0.1-pre.12
+    - 2.0.1-pre.18
+    compatible:
+    - 1.1.33
+    - 1.3.0
+    - 1.3.1
+    - 1.3.2
+    - 1.3.3
+    - 1.3.4
+    - 1.3.5
+    - 1.3.7
+    - 1.3.8
+    - 1.3.9
+    - 1.4.0
+    - 1.4.1
+    - 1.4.2
+    - 1.4.3
+    - 1.4.4
+    - 1.4.5
+    - 1.4.6
+    - 2.0.1-exp.1
+    - 2.0.1-exp.2
+    - 2.0.1-pre.12
+    - 2.0.1-pre.18
+    recommended: 1.1.33
+    deprecated: []
+  dependencies:
+  - name: com.unity.ext.nunit
+    version: 2.0.3
+  - name: com.unity.modules.imgui
+    version: 1.0.0
+  - name: com.unity.modules.jsonserialize
+    version: 1.0.0
+  resolvedDependencies:
+  - name: com.unity.ext.nunit
+    version: 2.0.3
+  - name: com.unity.modules.imgui
+    version: 1.0.0
+  - name: com.unity.modules.jsonserialize
+    version: 1.0.0
+  keywords:
+  - Test
+  - TestFramework
+  registry:
+    id: main
+    name: 
+    url: https://packages.unity.com
+    scopes: []
+    isDefault: 1
+    capabilities: 7
+    configSource: 0
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 638379866820000000
+  documentationUrl: https://docs.unity3d.com/Packages/com.unity.test-framework@1.4/manual/index.html
+  hasRepository: 1
+  repository:
+    type: git
+    url: https://github.com/Unity-Technologies/com.unity.test-framework.git
+    revision: 29edcbd6a45d5c7554f251728ff91c3676bfffa3
+    path: 
+  unityLifecycle:
+    version: 1.1.33
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+- packageId: com.unity.nuget.mono-cecil@1.11.4
+  testable: 0
+  isDirectDependency: 0
+  version: 1.11.4
+  source: 1
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.nuget.mono-cecil@1.11.4
+  assetPath: Packages/com.unity.nuget.mono-cecil
+  name: com.unity.nuget.mono-cecil
+  displayName: Mono Cecil
+  author:
+    name: 
+    email: 
+    url: 
+  category: 
+  type: library
+  description: 'The mono cecil library from https://www.nuget.org/packages/Mono.Cecil/
+
+
+    This
+    package is intended for internal Unity use only. Most Unity users will be better
+    suite using the existing community tooling.
+
+    To avoid assembly clashes, please
+    use this package if you intend to use Mono.Cecil.'
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 0.1.6-preview.2
+    - 1.0.0-preview.1
+    - 1.10.0-preview.1
+    - 1.10.1-preview.1
+    - 1.10.1
+    - 1.10.2
+    - 1.11.4
+    - 1.11.5
+    compatible:
+    - 1.11.4
+    - 1.11.5
+    recommended: 1.11.5
+    deprecated: []
+  dependencies: []
+  resolvedDependencies: []
+  keywords: []
+  registry:
+    id: main
+    name: 
+    url: https://packages.unity.com
+    scopes: []
+    isDefault: 1
+    capabilities: 7
+    configSource: 0
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 637852971930000000
+  documentationUrl: 
+  hasRepository: 1
+  repository:
+    type: git
+    url: https://github.cds.internal.unity3d.com/unity/com.unity.nuget.mono-cecil.git
+    revision: d0133ce672d724694b56bfd20672acf6f8737fec
+    path: 
+  unityLifecycle:
+    version: 1.11.4
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+- packageId: com.unity.ext.nunit@2.0.3
+  testable: 0
+  isDirectDependency: 1
+  version: 2.0.3
+  source: 1
+  resolvedPath: /Users/cs210student/Documents/GitHub/2025-Unusual-4/Library/PackageCache/com.unity.ext.nunit@2.0.3
+  assetPath: Packages/com.unity.ext.nunit
+  name: com.unity.ext.nunit
+  displayName: Custom NUnit
+  author:
+    name: 
+    email: 
+    url: 
+  category: Libraries
+  type: asset
+  description: A custom version of NUnit used by Unity Test Framework. Based on NUnit
+    version 3.5 and works with all platforms, il2cpp and Mono AOT.
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 0.1.5-preview
+    - 0.1.6-preview
+    - 0.1.9-preview
+    - 1.0.0
+    - 1.0.5
+    - 1.0.6
+    - 2.0.2
+    - 2.0.3
+    - 2.0.4
+    - 2.0.5
+    compatible:
+    - 1.0.6
+    - 2.0.2
+    - 2.0.3
+    - 2.0.4
+    - 2.0.5
+    recommended: 1.0.6
+    deprecated: []
+  dependencies: []
+  resolvedDependencies: []
+  keywords:
+  - nunit
+  - unittest
+  - test
+  registry:
+    id: main
+    name: 
+    url: https://packages.unity.com
+    scopes: []
+    isDefault: 1
+    capabilities: 7
+    configSource: 0
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 637920402200000000
+  documentationUrl: 
+  hasRepository: 1
+  repository:
+    type: git
+    url: https://github.cds.internal.unity3d.com/unity/com.unity.ext.nunit.git
+    revision: 2e41147762790f2a221103bff840a0138ca01b57
+    path: 
+  unityLifecycle:
+    version: 1.0.6
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
