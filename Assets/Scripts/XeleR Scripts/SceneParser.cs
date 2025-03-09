@@ -105,40 +105,41 @@ public class SceneParser: MonoBehaviour
     // the main function called for doing the scene analysis
     public async Task AnalyzeSceneAsync(string user_request)
     {
-        // remove unnecessary scene hierarchy to make the JSON leaner
+        Debug.Log("Starting scene analysis...");
+
         if (scene_clean_up)
         {
+            Debug.Log("Cleaning up scene hierarchy...");
             scene_hier_cleaner.CleanUpSceneHierarchy();
         }
 
-        // use vision models to process the background, which does not have a built-in hierarchy.
         if (tag_background && background_tagger != null && background_tagger.needs_to_run)
         {
+            Debug.Log("Processing background...");
             await background_tagger.ProcessBackground();
         }
 
         ParseSceneHierarchy();
-        // optionally, condition the summary on user output
-        // this helps with complex scenes, in which case the summary only includes the relevant information.
+
         if (mode == SceneAnalyzerMode.request_aware || mode == SceneAnalyzerMode.two_stages)
         {
-            chatbot.input = "Request: " + user_request + '\n';
-            chatbot.input += "Scene JSON: " +  scene_parsing_compact;
+            chatbot.input = "Request: " + user_request + '\n' + "Scene JSON: " + scene_parsing_compact;
         }
         else
         {
             chatbot.input = scene_parsing_compact;
         }
-        
-        // Note: if we have vision models, we should be careful about separating background and foreground objects
-        // since the background ones may exist IRL and is thus immutable.
+
+        Debug.Log("Chatbot Input: " + chatbot.input);
+
         await chatbot.SendNewChat();
+
+        Debug.Log("Chatbot Output: " + chatbot.output);
 
         if (mode == SceneAnalyzerMode.two_stages)
         {
-            // the output of the first stage is the GO names for all relevant objects
-            // the output of the second stage is the detailed information on the relevant GOs
-            chatbot.output = GetSecondStageOutput(); 
+            chatbot.output = GetSecondStageOutput();
+            Debug.Log("Second Stage Output: " + chatbot.output);
         }
     }
 
@@ -328,19 +329,19 @@ public class SceneParser: MonoBehaviour
 
     public void ParseSceneHierarchy()
     {
-        // Get the current scene
         Scene scene = SceneManager.GetActiveScene();
-
-        // Create a scene data object
         SceneData sceneData = new SceneData(scene, ignored);
-
-        // Convert the scene data object to JSON
         scene_parsing = JsonUtility.ToJson(sceneData, true);
 
-        // simplify the JSON file to save tokens
+        // Log full scene parsing output
+        Debug.Log("Scene Parsing Output: " + scene_parsing);
+
         scene_parsing_compact = RemoveQuotesAndSpacesIgnoringSummary(scene_parsing);
         scene_parsing_compact = RemoveEmptyChildrenAndScripts(scene_parsing_compact);
         scene_parsing_compact = RemoveBracesFromString(scene_parsing_compact);
+
+        // Log the compacted scene parsing output
+        Debug.Log("Scene Parsing Compact Output: " + scene_parsing_compact);
     }
 
     public string RemoveEmptyChildrenAndScripts(string json)
