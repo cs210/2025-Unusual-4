@@ -1,11 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GripperDemoManualInput : MonoBehaviour
 {
     public GameObject hand;
-
 
     void Update()
     {
@@ -19,11 +18,11 @@ public class GripperDemoManualInput : MonoBehaviour
     {
         if (input > 0)
         {
-            return BigHandState.MovingUp;
+            return BigHandState.MovingDown; // Was originally MovingUp
         }
         else if (input < 0)
         {
-            return BigHandState.MovingDown;
+            return BigHandState.MovingUp; // Was originally MovingDown
         }
         else
         {
