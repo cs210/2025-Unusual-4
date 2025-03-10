@@ -51,7 +51,7 @@ public class PlannerGPT : ChatBot
     {
         base.Awake();
         // Attempt to load the planner prompt from file.
-        string filePath = Path.Combine(Application.dataPath, "Scripts", "XeleR", "MetaPrompt", "Planner.txt");
+        string filePath = Path.Combine(Application.dataPath, "Scripts", "XeleR Scripts", "MetaPrompt", "PlannerGPT.txt");
         if (File.Exists(filePath))
         {
             string loadedPrompt = File.ReadAllText(filePath);
