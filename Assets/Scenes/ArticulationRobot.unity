@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641263, b: 0.57481724, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -505,6 +505,101 @@ MonoBehaviour:
   builder_FuzzyModelsAddition_metaprompt: 
   inspector_base_metaprompt: 
   inspector_SkillLibrary_metaprompt: 
+--- !u!1 &486875597
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 486875598}
+  - component: {fileID: 486875599}
+  m_Layer: 0
+  m_Name: PlannerGPT_Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &486875598
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486875597}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 502356290}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &486875599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486875597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7865a50317064bf8a47e474f376dd81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  metaprompt_file_name: 
+  input: 
+  output: 
+  history: 
+  metaprompt: 
+  processing_status_text: 
+  processing_finished_status_text: 
+  model_name: gpt-4
+  MaxTokens: 512
+  context_length: 8000
+  token_management_option: 0
+  Temperature: 0.7
+  FrequencyPenalty: 0
+  input_TMP: {fileID: 0}
+  output_TMP: {fileID: 0}
+  historyText: {fileID: 0}
+  sceneParser: {fileID: 1466704510}
+  sceneExtractor: {fileID: 0}
+  plannerPrompt: "Your goal is to discuss with the user what they want and to make
+    a plan for their request after gathering good information.\nThe user will ask
+    to make a scene in Unity.\n\n- You should pay attention to the user's requests
+    and come up with a plan that covers everything they ask for.\n- Each step of
+    your plan should be properly scoped so that the Builder can execute it successfully.\n-
+    Be flexible in your discussion but assertive in each step\u2014commit to a single
+    approach.\n- When you want to stop the conversation, output: [Conversation finished].\n-
+    Ask the user if the plan is good and end the conversation when they confirm.\n-
+    Only ask crucial questions, one at a time.\n- After two conversation turns, present
+    the final plan.\n\n## Example\nUser : Create a car\nAssistant : Okay ! Let me
+    confirm : do you want to download a car from sketchfab , or put together a car\nusing
+    Unity primitives ?\nUser : I want you to build it from primitives .\nAssistant
+    : Sounds good . Can you tell me a bit more about the car ? For example , what
+    are the components\nyou want on the car ?\nUser : I want it to have everything
+    a normal car will have . Four wheels , doors , seats , front windshield\n, etc
+    .\nAssistant : Of course . I've come up with a plan to build the car you want
+    . Can you see if it sounds\ngood to you ?\nPlan :\n- create a car with a body
+    and four wheels out of primitives .\n- create four doors and put them on the
+    car\n- create four seats and put them on the car\n- create a front wind shield
+    and a back cover on the car\n- create a spare tire and put it on the back of
+    the car\nLet me know if there is anything you want to change about the plan .\nUser
+    : Can you also add front lights to the car ?\nAssistant : Sure ! Here 's the
+    revised plan :\nPlan :\n- create a car with a body and four wheels out of primitives
+    .\n- create four doors and put them on the car\n- create four seats and put them
+    on the car\n- create a front wind shield and a back cover on the car\n- create
+    a spare tire and put it on the back of the car\n- create two front lights and
+    put them on the car\nLet me know if you want to change it further .\n\nUser :
+    This looks good . Please proceed .\nAssistant : [ Conversation finished ]\nUser
+    : Present the final plan .\nAssistant :\nPlan :\n- create a car with a body and
+    four wheels out of primitives .\n- create four doors and put them on the car\n-
+    create four seats and put them on the car\n- create a front wind shield and a
+    back cover on the car\n- create a spare tire and put it on the back of the car\n-
+    create two front lights and put them on the car"
 --- !u!1 &502356289
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,6 +631,7 @@ Transform:
   m_Children:
   - {fileID: 733528511}
   - {fileID: 426785034}
+  - {fileID: 486875598}
   m_Father: {fileID: 7754121}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &622386702
