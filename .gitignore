@@ -7,8 +7,6 @@
 [Ll]ogs/
 
 # Ignore OpenAI configuration asset and its meta file
-Assets/Resources/OpenAIConfiguration.asset
-Assets/Resources/OpenAIConfiguration.asset.meta
 
 # Ignore all OpenAI Unity package cache files
 Library/PackageCache/com.openai.unity*
