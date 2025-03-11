@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Compilation;
 
 [InitializeOnLoad]
@@ -72,6 +73,10 @@ public class ChatbotEditorWindow : EditorWindow
     // Add serialization for conversation history
     [SerializeField] private List<ChatMessage> conversationHistory = new List<ChatMessage>();
     
+    // Add a list to store multiple chat sessions
+    [SerializeField] private List<ChatSession> chatSessions = new List<ChatSession>();
+    [SerializeField] private int currentSessionIndex = 0;
+    
     // Serializable class to store chat messages
     [Serializable]
     private class ChatMessage
@@ -80,6 +85,25 @@ public class ChatbotEditorWindow : EditorWindow
         public string Content;
         public bool IsFileContent;
         public string FileName;
+    }
+    
+    // Serializable class to store a chat session
+    [Serializable]
+    private class ChatSession
+    {
+        public string Name;
+        public List<ChatMessage> Messages = new List<ChatMessage>();
+        public string LastLoadedScriptPath;
+        public string LastLoadedScriptContent;
+        public string LastLoadedScenePath;
+        public bool IsSceneLoaded;
+        public DateTime CreatedAt;
+        
+        public ChatSession(string name)
+        {
+            Name = name;
+            CreatedAt = DateTime.Now;
+        }
     }
 
     // Combined model selections
@@ -118,6 +142,8 @@ public class ChatbotEditorWindow : EditorWindow
     private Button browseScriptsButton;
     private Button browseScenesButton;
     private PopupField<ModelInfo> modelSelector;
+    private PopupField<string> sessionSelector;
+    private Button newChatButton;
 
     // Add these fields to store the last loaded script and scene information
     [SerializeField] private string lastLoadedScriptPath;
@@ -161,6 +187,27 @@ public class ChatbotEditorWindow : EditorWindow
         rootVisualElement.Clear();
         rootVisualElement.style.flexDirection = FlexDirection.Column;
 
+        // Initialize chat sessions if empty
+        if (chatSessions.Count == 0)
+        {
+            // Migrate existing conversation to a session if needed
+            if (conversationHistory.Count > 0)
+            {
+                var initialSession = new ChatSession("Chat 1");
+                initialSession.Messages = new List<ChatMessage>(conversationHistory);
+                initialSession.LastLoadedScriptPath = lastLoadedScriptPath;
+                initialSession.LastLoadedScriptContent = lastLoadedScriptContent;
+                initialSession.LastLoadedScenePath = lastLoadedScenePath;
+                initialSession.IsSceneLoaded = isSceneLoaded;
+                chatSessions.Add(initialSession);
+            }
+            else
+            {
+                chatSessions.Add(new ChatSession("Chat 1"));
+            }
+            currentSessionIndex = 0;
+        }
+
         // Scrollview for conversation
         conversationScrollView = new ScrollView(ScrollViewMode.Vertical);
         conversationScrollView.style.flexGrow = 1;
@@ -180,6 +227,35 @@ public class ChatbotEditorWindow : EditorWindow
                 height = 22 // Set fixed height for toolbar
             }
         };
+
+        // Add chat session selector
+        var sessionContainer = new VisualElement
+        {
+            style =
+            {
+                flexDirection = FlexDirection.Row,
+                height = 22,
+                marginRight = 8
+            }
+        };
+
+        var sessionNames = chatSessions.Select(s => s.Name).ToList();
+        sessionSelector = new PopupField<string>(
+            sessionNames,
+            Mathf.Min(currentSessionIndex, sessionNames.Count - 1)
+        );
+        sessionSelector.style.width = 120;
+        sessionSelector.style.height = 22;
+        sessionSelector.RegisterValueChangedCallback(OnSessionChanged);
+        sessionContainer.Add(sessionSelector);
+
+        // New chat button
+        newChatButton = new Button(OnNewChatClicked) { text = "+" };
+        newChatButton.style.width = 24;
+        newChatButton.style.height = 22;
+        sessionContainer.Add(newChatButton);
+
+        toolbar.Add(sessionContainer);
 
         // Browse scripts button
         browseScriptsButton = new Button(OnBrowseScriptsClicked) { text = "Browse Scripts" };
@@ -328,8 +404,8 @@ public class ChatbotEditorWindow : EditorWindow
             };
         }
 
-        // Restore conversation history from serialized data
-        RestoreConversationHistory();
+        // Restore conversation history from the current session
+        RestoreCurrentSession();
         
         // Ensure we scroll to the bottom after restoring history
         EditorApplication.delayCall += ScrollToBottom;
@@ -420,14 +496,17 @@ public class ChatbotEditorWindow : EditorWindow
         // Add to UI
         AddFileContentToHistoryWithoutSaving(fileName, content);
         
-        // Save to serialized history
-        conversationHistory.Add(new ChatMessage 
-        { 
-            Sender = "File", 
-            Content = content,
-            IsFileContent = true,
-            FileName = fileName
-        });
+        // Save to current session's history
+        if (currentSessionIndex >= 0 && currentSessionIndex < chatSessions.Count)
+        {
+            chatSessions[currentSessionIndex].Messages.Add(new ChatMessage 
+            { 
+                Sender = "File", 
+                Content = content,
+                IsFileContent = true,
+                FileName = fileName
+            });
+        }
     }
 
     private void AddFileContentToHistoryWithoutSaving(string fileName, string content)
@@ -1085,13 +1164,16 @@ public class ChatbotEditorWindow : EditorWindow
 
         conversationScrollView.Add(messageContainer);
 
-        // Save to serialized history
-        conversationHistory.Add(new ChatMessage 
-        { 
-            Sender = sender, 
-            Content = message,
-            IsFileContent = false
-        });
+        // Save to current session's history
+        if (currentSessionIndex >= 0 && currentSessionIndex < chatSessions.Count)
+        {
+            chatSessions[currentSessionIndex].Messages.Add(new ChatMessage 
+            { 
+                Sender = sender, 
+                Content = message,
+                IsFileContent = false
+            });
+        }
 
         // Scroll to bottom using the helper method
         EditorApplication.delayCall += ScrollToBottom;
@@ -1314,100 +1396,50 @@ public class ChatbotEditorWindow : EditorWindow
     // Add a method to clear conversation history
     private void ClearConversationHistory()
     {
-        conversationHistory.Clear();
-        if (conversationScrollView != null)
+        if (currentSessionIndex >= 0 && currentSessionIndex < chatSessions.Count)
         {
+            chatSessions[currentSessionIndex].Messages.Clear();
+            if (conversationScrollView != null)
+            {
+                conversationScrollView.Clear();
+            }
+            AddMessageToHistory("System", "Conversation history cleared.");
+        }
+    }
+
+    private void RestoreCurrentSession()
+    {
+        if (currentSessionIndex >= 0 && currentSessionIndex < chatSessions.Count)
+        {
+            var currentSession = chatSessions[currentSessionIndex];
+            
+            // Clear the conversation view
             conversationScrollView.Clear();
-        }
-        AddMessageToHistory("System", "Conversation history cleared.");
-    }
-
-    private void RestoreConversationHistory()
-    {
-        foreach (var message in conversationHistory)
-        {
-            if (message.IsFileContent)
+            
+            // Restore session state
+            lastLoadedScriptPath = currentSession.LastLoadedScriptPath;
+            lastLoadedScriptContent = currentSession.LastLoadedScriptContent;
+            lastLoadedScenePath = currentSession.LastLoadedScenePath;
+            isSceneLoaded = currentSession.IsSceneLoaded;
+            
+            // Restore messages
+            foreach (var message in currentSession.Messages)
             {
-                // Restore file content display
-                AddFileContentToHistoryWithoutSaving(message.FileName, message.Content);
-            }
-            else
-            {
-                // Restore regular message
-                AddMessageToHistoryWithoutSaving(message.Sender, message.Content);
-            }
-        }
-        
-        // Ensure we scroll to the bottom after restoring
-        EditorApplication.delayCall += ScrollToBottom;
-    }
-
-    // Helper method to restore messages without adding them to history again
-    private void AddMessageToHistoryWithoutSaving(string sender, string message)
-    {
-        // Create a container for the message
-        var messageContainer = new VisualElement
-        {
-            style =
-            {
-                marginBottom = 8,
-                paddingLeft = 4,
-                paddingRight = 4
-            }
-        };
-
-        // Add sender name with bold styling
-        var senderLabel = new Label
-        {
-            style =
-            {
-                unityFontStyleAndWeight = FontStyle.Bold,
-                marginBottom = 2
-            },
-            text = sender + ":"
-        };
-        messageContainer.Add(senderLabel);
-
-        // Process message for markdown if it's from the AI
-        if (sender == "XeleR")
-        {
-            // Create a content container for the message
-            var contentContainer = new VisualElement
-            {
-                style =
+                if (message.IsFileContent)
                 {
-                    marginLeft = 4,
-                    marginRight = 4
+                    // Restore file content display
+                    AddFileContentToHistoryWithoutSaving(message.FileName, message.Content);
                 }
-            };
-            
-            // Use the markdown renderer to format the message
-            var formattedContent = MarkdownRenderer.RenderMarkdown(message);
-            contentContainer.Add(formattedContent);
-            messageContainer.Add(contentContainer);
-            
-            // Process code blocks separately
-            ProcessCodeBlocksInMessage(message);
-        }
-        else
-        {
-            // For non-AI messages, just use a simple label
-            var contentLabel = new Label
-            {
-                style =
+                else
                 {
-                    whiteSpace = WhiteSpace.Normal,
-                    marginLeft = 4
-                },
-                text = message
-            };
-            messageContainer.Add(contentLabel);
+                    // Restore regular message
+                    AddMessageToHistoryWithoutSaving(message.Sender, message.Content);
+                }
+            }
+            
+            // Scroll to bottom
+            EditorApplication.delayCall += ScrollToBottom;
         }
-
-        conversationScrollView.Add(messageContainer);
-
-        // Scroll to bottom using the helper method
-        EditorApplication.delayCall += ScrollToBottom;
     }
 
     // Handle Enter key in the query field
@@ -1440,11 +1472,8 @@ public class ChatbotEditorWindow : EditorWindow
         // If we already have a UI built, restore the conversation
         if (rootVisualElement != null && conversationScrollView != null)
         {
-            // Even if there's no history, we should still set up the scroll view
-            if (conversationHistory.Count > 0)
-            {
-                RestoreConversationHistory();
-            }
+            // Restore the current session
+            RestoreCurrentSession();
             
             // Always scroll to bottom when window is enabled (after compilation)
             EditorApplication.delayCall += ScrollToBottom;
@@ -1458,7 +1487,8 @@ public class ChatbotEditorWindow : EditorWindow
     // Override OnDisable to save any state before the window is disabled
     private void OnDisable()
     {
-        // Unity will automatically serialize the fields marked with [SerializeField]
+        // Save the current session state
+        SaveCurrentSessionState();
         
         // Unregister from compilation events
         CompilationPipeline.compilationStarted -= OnCompilationStarted;
@@ -1654,5 +1684,177 @@ public class ChatbotEditorWindow : EditorWindow
         lastLoadedScenePath = "";
         
         AddMessageToHistory("System", "Created a new scene with default game objects.");
+    }
+
+    private void OnSessionChanged(ChangeEvent<string> evt)
+    {
+        // Find the index of the selected session
+        int newIndex = chatSessions.FindIndex(s => s.Name == evt.newValue);
+        if (newIndex >= 0 && newIndex < chatSessions.Count)
+        {
+            // Save current session state
+            SaveCurrentSessionState();
+            
+            // Switch to the new session
+            currentSessionIndex = newIndex;
+            
+            // Restore the selected session
+            RestoreCurrentSession();
+        }
+    }
+
+    private void OnNewChatClicked()
+    {
+        // Save current session state
+        SaveCurrentSessionState();
+        
+        // Create a new chat session
+        int newChatNumber = chatSessions.Count + 1;
+        var newSession = new ChatSession($"Chat {newChatNumber}");
+        chatSessions.Add(newSession);
+        
+        // Update the session selector
+        var sessionNames = chatSessions.Select(s => s.Name).ToList();
+        sessionSelector.choices = sessionNames;
+        
+        // Switch to the new session
+        currentSessionIndex = chatSessions.Count - 1;
+        sessionSelector.index = currentSessionIndex;
+        
+        // Clear the conversation view and restore (which will be empty for a new chat)
+        RestoreCurrentSession();
+        
+        // Add a welcome message
+        AddMessageToHistory("System", $"Started new chat session: {newSession.Name}");
+    }
+
+    private void SaveCurrentSessionState()
+    {
+        if (currentSessionIndex >= 0 && currentSessionIndex < chatSessions.Count)
+        {
+            var currentSession = chatSessions[currentSessionIndex];
+            
+            // Update the session with current state
+            currentSession.LastLoadedScriptPath = lastLoadedScriptPath;
+            currentSession.LastLoadedScriptContent = lastLoadedScriptContent;
+            currentSession.LastLoadedScenePath = lastLoadedScenePath;
+            currentSession.IsSceneLoaded = isSceneLoaded;
+            
+            // Messages are already saved as they're added
+        }
+    }
+
+    // Add a method to rename the current chat session
+    private void RenameCurrentSession(string newName)
+    {
+        if (currentSessionIndex >= 0 && currentSessionIndex < chatSessions.Count)
+        {
+            chatSessions[currentSessionIndex].Name = newName;
+            
+            // Update the session selector
+            var sessionNames = chatSessions.Select(s => s.Name).ToList();
+            sessionSelector.choices = sessionNames;
+            sessionSelector.index = currentSessionIndex;
+            
+            AddMessageToHistory("System", $"Renamed session to: {newName}");
+        }
+    }
+
+    // Add a method to delete the current chat session
+    private void DeleteCurrentSession()
+    {
+        if (chatSessions.Count <= 1)
+        {
+            // Don't delete the last session, just clear it
+            ClearConversationHistory();
+            return;
+        }
+        
+        if (currentSessionIndex >= 0 && currentSessionIndex < chatSessions.Count)
+        {
+            // Remove the current session
+            chatSessions.RemoveAt(currentSessionIndex);
+            
+            // Adjust the current index if needed
+            if (currentSessionIndex >= chatSessions.Count)
+            {
+                currentSessionIndex = chatSessions.Count - 1;
+            }
+            
+            // Update the session selector
+            var sessionNames = chatSessions.Select(s => s.Name).ToList();
+            sessionSelector.choices = sessionNames;
+            sessionSelector.index = currentSessionIndex;
+            
+            // Restore the new current session
+            RestoreCurrentSession();
+            
+            AddMessageToHistory("System", "Chat session deleted");
+        }
+    }
+
+    // Helper method to restore messages without adding them to history again
+    private void AddMessageToHistoryWithoutSaving(string sender, string message)
+    {
+        // Create a container for the message
+        var messageContainer = new VisualElement
+        {
+            style =
+            {
+                marginBottom = 8,
+                paddingLeft = 4,
+                paddingRight = 4
+            }
+        };
+
+        // Add sender name with bold styling
+        var senderLabel = new Label
+        {
+            style =
+            {
+                unityFontStyleAndWeight = FontStyle.Bold,
+                marginBottom = 2
+            },
+            text = sender + ":"
+        };
+        messageContainer.Add(senderLabel);
+
+        // Process message for markdown if it's from the AI
+        if (sender == "XeleR")
+        {
+            // Create a content container for the message
+            var contentContainer = new VisualElement
+            {
+                style =
+                {
+                    marginLeft = 4,
+                    marginRight = 4
+                }
+            };
+            
+            // Use the markdown renderer to format the message
+            var formattedContent = MarkdownRenderer.RenderMarkdown(message);
+            contentContainer.Add(formattedContent);
+            messageContainer.Add(contentContainer);
+            
+            // Process code blocks separately
+            ProcessCodeBlocksInMessage(message);
+        }
+        else
+        {
+            // For non-AI messages, just use a simple label
+            var contentLabel = new Label
+            {
+                style =
+                {
+                    whiteSpace = WhiteSpace.Normal,
+                    marginLeft = 4
+                },
+                text = message
+            };
+            messageContainer.Add(contentLabel);
+        }
+
+        conversationScrollView.Add(messageContainer);
     }
 }

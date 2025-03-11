@@ -18,11 +18,11 @@ public class GripperDemoManualInput : MonoBehaviour
     {
         if (input > 0)
         {
-            return BigHandState.MovingDown; // Was originally MovingUp
+            return BigHandState.MovingUp; // Swapped to Moving Up when positive input
         }
         else if (input < 0)
         {
-            return BigHandState.MovingUp; // Was originally MovingDown
+            return BigHandState.MovingDown; // Swapped to Moving Down when negative input
         }
         else
         {
