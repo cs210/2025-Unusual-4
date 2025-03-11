@@ -41,3 +41,5 @@ Library/ScriptAssemblies/OpenAI.pdb
 *.meta
 *.dll
 *.pdb
+
+ApiKeys/  
