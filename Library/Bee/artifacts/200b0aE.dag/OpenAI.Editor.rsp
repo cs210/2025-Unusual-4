@@ -346,9 +346,9 @@
 -r:"Library/Bee/artifacts/200b0aE.dag/Utilities.Rest.ref.dll"
 -analyzer:"/Applications/Unity/Hub/Editor/2022.3.11f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll"
 -analyzer:"/Applications/Unity/Hub/Editor/2022.3.11f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
-"Library/PackageCache/com.openai.unity@8.6.2/Editor/AssemblyInfo.cs"
-"Library/PackageCache/com.openai.unity@8.6.2/Editor/OpenAIConfigurationInspector.cs"
-"Library/PackageCache/com.openai.unity@8.6.2/Editor/OpenAIDashboard.cs"
+"Library/PackageCache/com.openai.unity@8.6.3/Editor/AssemblyInfo.cs"
+"Library/PackageCache/com.openai.unity@8.6.3/Editor/OpenAIConfigurationInspector.cs"
+"Library/PackageCache/com.openai.unity@8.6.3/Editor/OpenAIDashboard.cs"
 -langversion:9.0
 
 /deterministic
