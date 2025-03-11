@@ -6,9 +6,17 @@
 [Bb]uilds/
 [Ll]ogs/
 
-# Exclude OpenAI configuration files
-Assets/Resources/OpenAIConfiguration.json
-Assets/Scripts/Chatbot.cs
+# Ignore OpenAI configuration asset and its meta file
+Assets/Resources/OpenAIConfiguration.asset
+Assets/Resources/OpenAIConfiguration.asset.meta
+
+# Ignore all OpenAI Unity package cache files
+Library/PackageCache/com.openai.unity*
+Library/ScriptAssemblies/OpenAI.Editor.dll
+Library/ScriptAssemblies/OpenAI.Editor.pdb
+Library/ScriptAssemblies/OpenAI.dll
+Library/ScriptAssemblies/OpenAI.pdb
+
 
 # User-specific files
 *.csproj
