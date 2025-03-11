@@ -45,3 +45,5 @@ Assets/AssetStoreTools*
 
 # Crashlytics generated file
 crashlytics-build.properties
+
+Library/

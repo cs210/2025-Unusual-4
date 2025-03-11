@@ -77,6 +77,10 @@ public class ChatbotEditorWindow : EditorWindow
     [SerializeField] private List<ChatSession> chatSessions = new List<ChatSession>();
     [SerializeField] private int currentSessionIndex = 0;
     
+    // Add a key for EditorPrefs to store serialized chat sessions
+    private const string CHAT_SESSIONS_KEY = "ChatbotEditorWindow_ChatSessions";
+    private const string CURRENT_SESSION_INDEX_KEY = "ChatbotEditorWindow_CurrentSessionIndex";
+    
     // Serializable class to store chat messages
     [Serializable]
     private class ChatMessage
@@ -187,6 +191,9 @@ public class ChatbotEditorWindow : EditorWindow
         rootVisualElement.Clear();
         rootVisualElement.style.flexDirection = FlexDirection.Column;
 
+        // Load chat sessions from EditorPrefs
+        LoadChatSessionsFromEditorPrefs();
+
         // Initialize chat sessions if empty
         if (chatSessions.Count == 0)
         {
@@ -206,6 +213,9 @@ public class ChatbotEditorWindow : EditorWindow
                 chatSessions.Add(new ChatSession("Chat 1"));
             }
             currentSessionIndex = 0;
+            
+            // Save the initial state
+            SaveChatSessionsToEditorPrefs();
         }
 
         // Scrollview for conversation
@@ -506,6 +516,9 @@ public class ChatbotEditorWindow : EditorWindow
                 IsFileContent = true,
                 FileName = fileName
             });
+            
+            // Save to EditorPrefs after adding file content
+            SaveChatSessionsToEditorPrefs();
         }
     }
 
@@ -1173,6 +1186,9 @@ public class ChatbotEditorWindow : EditorWindow
                 Content = message,
                 IsFileContent = false
             });
+            
+            // Save to EditorPrefs after adding a message
+            SaveChatSessionsToEditorPrefs();
         }
 
         // Scroll to bottom using the helper method
@@ -1469,6 +1485,9 @@ public class ChatbotEditorWindow : EditorWindow
     // Override OnEnable to ensure we restore state when the window is enabled
     private void OnEnable()
     {
+        // Load chat sessions from EditorPrefs
+        LoadChatSessionsFromEditorPrefs();
+        
         // If we already have a UI built, restore the conversation
         if (rootVisualElement != null && conversationScrollView != null)
         {
@@ -1479,7 +1498,7 @@ public class ChatbotEditorWindow : EditorWindow
             EditorApplication.delayCall += ScrollToBottom;
         }
         
-        // Register for compilation events to scroll to bottom after compilation
+        // Register for compilation events
         CompilationPipeline.compilationStarted += OnCompilationStarted;
         CompilationPipeline.compilationFinished += OnCompilationFinished;
     }
@@ -1487,8 +1506,8 @@ public class ChatbotEditorWindow : EditorWindow
     // Override OnDisable to save any state before the window is disabled
     private void OnDisable()
     {
-        // Save the current session state
-        SaveCurrentSessionState();
+        // Save the current session state and all sessions to EditorPrefs
+        SaveChatSessionsToEditorPrefs();
         
         // Unregister from compilation events
         CompilationPipeline.compilationStarted -= OnCompilationStarted;
@@ -1500,11 +1519,21 @@ public class ChatbotEditorWindow : EditorWindow
 
     private void OnCompilationStarted(object obj)
     {
-        // Nothing to do when compilation starts
+        // Save state before compilation starts
+        SaveChatSessionsToEditorPrefs();
     }
 
     private void OnCompilationFinished(object obj)
     {
+        // Load state after compilation finishes
+        LoadChatSessionsFromEditorPrefs();
+        
+        // Restore UI if needed
+        if (rootVisualElement != null && conversationScrollView != null)
+        {
+            RestoreCurrentSession();
+        }
+        
         // Scroll to bottom after compilation finishes
         EditorApplication.delayCall += ScrollToBottom;
     }
@@ -1700,6 +1729,9 @@ public class ChatbotEditorWindow : EditorWindow
             
             // Restore the selected session
             RestoreCurrentSession();
+            
+            // Save the updated state
+            SaveChatSessionsToEditorPrefs();
         }
     }
 
@@ -1726,6 +1758,9 @@ public class ChatbotEditorWindow : EditorWindow
         
         // Add a welcome message
         AddMessageToHistory("System", $"Started new chat session: {newSession.Name}");
+        
+        // Save the updated state
+        SaveChatSessionsToEditorPrefs();
     }
 
     private void SaveCurrentSessionState()
@@ -1757,6 +1792,9 @@ public class ChatbotEditorWindow : EditorWindow
             sessionSelector.index = currentSessionIndex;
             
             AddMessageToHistory("System", $"Renamed session to: {newName}");
+            
+            // Save the updated state
+            SaveChatSessionsToEditorPrefs();
         }
     }
 
@@ -1790,6 +1828,9 @@ public class ChatbotEditorWindow : EditorWindow
             RestoreCurrentSession();
             
             AddMessageToHistory("System", "Chat session deleted");
+            
+            // Save the updated state
+            SaveChatSessionsToEditorPrefs();
         }
     }
 
@@ -1856,5 +1897,77 @@ public class ChatbotEditorWindow : EditorWindow
         }
 
         conversationScrollView.Add(messageContainer);
+    }
+
+    // Add methods to save and load chat sessions from EditorPrefs
+    private void SaveChatSessionsToEditorPrefs()
+    {
+        try
+        {
+            // Save current session state first
+            SaveCurrentSessionState();
+            
+            // Serialize the chat sessions to JSON
+            string sessionsJson = JsonUtility.ToJson(new ChatSessionsWrapper { Sessions = chatSessions });
+            
+            // Store in EditorPrefs
+            EditorPrefs.SetString(CHAT_SESSIONS_KEY, sessionsJson);
+            EditorPrefs.SetInt(CURRENT_SESSION_INDEX_KEY, currentSessionIndex);
+            
+            // Log success
+            Debug.Log("Chat sessions saved to EditorPrefs");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error saving chat sessions: {ex.Message}");
+        }
+    }
+    
+    private void LoadChatSessionsFromEditorPrefs()
+    {
+        try
+        {
+            // Check if we have saved sessions
+            if (EditorPrefs.HasKey(CHAT_SESSIONS_KEY))
+            {
+                string sessionsJson = EditorPrefs.GetString(CHAT_SESSIONS_KEY);
+                
+                // Deserialize the chat sessions
+                var wrapper = JsonUtility.FromJson<ChatSessionsWrapper>(sessionsJson);
+                if (wrapper != null && wrapper.Sessions != null && wrapper.Sessions.Count > 0)
+                {
+                    chatSessions = wrapper.Sessions;
+                    
+                    // Load current session index
+                    if (EditorPrefs.HasKey(CURRENT_SESSION_INDEX_KEY))
+                    {
+                        currentSessionIndex = EditorPrefs.GetInt(CURRENT_SESSION_INDEX_KEY);
+                        
+                        // Ensure index is valid
+                        if (currentSessionIndex >= chatSessions.Count)
+                        {
+                            currentSessionIndex = chatSessions.Count - 1;
+                        }
+                    }
+                    
+                    Debug.Log($"Loaded {chatSessions.Count} chat sessions from EditorPrefs");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error loading chat sessions: {ex.Message}");
+            
+            // If loading fails, start with a fresh session
+            chatSessions = new List<ChatSession> { new ChatSession("Chat 1") };
+            currentSessionIndex = 0;
+        }
+    }
+    
+    // Wrapper class for serialization
+    [Serializable]
+    private class ChatSessionsWrapper
+    {
+        public List<ChatSession> Sessions;
     }
 }
