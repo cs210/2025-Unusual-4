@@ -19,7 +19,7 @@ public class ChatBot : MonoBehaviour
 {
     [Header("API Configuration")]
     [Tooltip("Your OpenAI API Key. IMPORTANT: Do not check this into source control!")]
-    [SerializeField] protected string apiKey = "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";
+    [SerializeField] protected string apiKey = ""; // fill in
     
     [Tooltip("Load API Key from a local file outside of project (more secure than Inspector)")]
     [SerializeField] private bool loadApiKeyFromFile = true;
