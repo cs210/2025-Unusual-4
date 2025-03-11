@@ -17,6 +17,8 @@ using System;
 
 public class ChatBot : MonoBehaviour
 {
+    private string openAiApiKey = "<openai key>";
+
     [TextArea(2, 20)]
     public string metaprompt_file_name;
 
@@ -51,7 +53,7 @@ public class ChatBot : MonoBehaviour
 
     protected List<Message> ChatHistory = new List<Message>();
 
-    
+
     protected TikToken tokenizer;
 
     public enum TokenManagementOption
@@ -92,13 +94,13 @@ public class ChatBot : MonoBehaviour
     {
         // in this case, the new chat will exceed the model's context length
         // manage token size so that there's enough room for a new chat
-        if (GetNumTokensForHistoryAndNextChat() > context_length) 
+        if (GetNumTokensForHistoryAndNextChat() > context_length)
         {
             ManageMemory();
         }
 
         // send a chat
-        OpenAIClient api = new OpenAIClient();
+        OpenAIClient api = new OpenAIClient(openAiApiKey);
         ChatHistory.Add(new Message(Role.User, input));
         history += "user: \n" + input + "\n\n";
         ChatRequest chatRequest = new ChatRequest(ChatHistory, model_name, temperature: Temperature, maxTokens: MaxTokens);
@@ -118,10 +120,10 @@ public class ChatBot : MonoBehaviour
         history += "\n\n";
     }
 
-   
+
     public virtual async Task SendChat()
     {
-        OpenAIClient api = new OpenAIClient();
+        OpenAIClient api = new OpenAIClient(openAiApiKey);
         int retryDelaySeconds = 60; // The delay in seconds before retrying the request
         int maxRetries = 5; // Maximum number of retries
 
@@ -177,7 +179,7 @@ public class ChatBot : MonoBehaviour
     }
 
 
-public async Task SendChatWithInput(string chat_input)
+    public async Task SendChatWithInput(string chat_input)
     {
         input = chat_input;
         await SendChat();
@@ -221,7 +223,7 @@ public async Task SendChatWithInput(string chat_input)
         else if (token_management_option == TokenManagementOption.FIFO)
         {
             // ChatHistory should always contain the metaprompt, thus the base Count of 1.
-            while (ChatHistory.Count > 1  && GetNumTokensForHistoryAndNextChat() > context_length)
+            while (ChatHistory.Count > 1 && GetNumTokensForHistoryAndNextChat() > context_length)
             {
                 // delete ChatHistory in pairs (user-assistant) from earliest to latest
                 ChatHistory.RemoveAt(1);
@@ -234,7 +236,7 @@ public async Task SendChatWithInput(string chat_input)
     public void DisplayCurrentContext()
     {
         history = "";
-        foreach(Message chatPrompt in ChatHistory)
+        foreach (Message chatPrompt in ChatHistory)
         {
             history += chatPrompt.Role + ":" + chatPrompt.Content + '\n';
         }
