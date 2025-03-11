@@ -13,8 +13,10 @@ public class ChatbotEditorWindow : EditorWindow
     private TextField queryField;
     private Button sendButton;
 
-    // Reference to your PlannerGPT instance.
     public PlannerGPT plannerGPT;
+    
+    // Track if we need to create PlannerGPT
+    private bool needsSceneSetup = false;
 
     // List to hold the session history (for UI display only).
     private List<string> sessionHistory = new List<string>();
@@ -42,19 +44,53 @@ public class ChatbotEditorWindow : EditorWindow
         if (!EditorApplication.isPlaying)
         {
             Debug.LogWarning("PlannerGPT is not available in Edit Mode. Enter Play Mode to test chat functionality.");
+            needsSceneSetup = true;
             return;
         }
 
+        SetupPlannerGPT();
+    }
+
+    private void OnFocus()
+    {
+        // Check again for PlannerGPT when the window gets focus
+        if (EditorApplication.isPlaying && (plannerGPT == null || !plannerGPT))
+        {
+            SetupPlannerGPT();
+        }
+    }
+
+    private void Update()
+    {
+        // Check if we've entered play mode and need to set up the scene
+        if (needsSceneSetup && EditorApplication.isPlaying)
+        {
+            needsSceneSetup = false;
+            SetupPlannerGPT();
+            CreateGUI(); // Refresh the UI when entering play mode
+        }
+    }
+
+    private void SetupPlannerGPT()
+    {
         // Try to find an existing PlannerGPT instance.
+        plannerGPT = GameObject.FindObjectOfType<PlannerGPT>();
         if (plannerGPT == null)
         {
-            plannerGPT = GameObject.FindObjectOfType<PlannerGPT>();
-            if (plannerGPT == null)
+            GameObject plannerGO = new GameObject("PlannerGPTInstance");
+            plannerGPT = plannerGO.AddComponent<PlannerGPT>();
+            Debug.Log("No PlannerGPT found. Created a new instance: " + plannerGPT);
+            
+            // Add a SceneParser component if needed by PlannerGPT
+            if (plannerGO.GetComponent<SceneParser>() == null)
             {
-                GameObject plannerGO = new GameObject("PlannerGPTInstance");
-                plannerGPT = plannerGO.AddComponent<PlannerGPT>();
-                Debug.LogWarning("No PlannerGPT found. Created a new instance.");
+                plannerGO.AddComponent<SceneParser>();
+                Debug.Log("Added SceneParser component to PlannerGPTInstance");
             }
+        }
+        else
+        {
+            Debug.Log("Found existing PlannerGPT instance: " + plannerGPT);
         }
     }
 
@@ -90,6 +126,29 @@ public class ChatbotEditorWindow : EditorWindow
         inputRow.Add(sendButton);
 
         rootVisualElement.Add(inputRow);
+        
+        // Display current status in UI
+        if (!EditorApplication.isPlaying)
+        {
+            AddMessageToHistory("System", "Enter Play Mode to use the chat functionality.");
+        }
+        else if (plannerGPT == null)
+        {
+            AddMessageToHistory("System", "PlannerGPT not assigned. Trying to create one...");
+            SetupPlannerGPT();
+            if (plannerGPT != null)
+            {
+                AddMessageToHistory("System", "PlannerGPT created successfully. Ready to chat!");
+            }
+            else
+            {
+                AddMessageToHistory("System", "Failed to create PlannerGPT. Please check the console for errors.");
+            }
+        }
+        else
+        {
+            AddMessageToHistory("System", "Ready to chat. Type your message and click Send.");
+        }
     }
 
     private async void OnSendButtonClicked()
@@ -107,16 +166,40 @@ public class ChatbotEditorWindow : EditorWindow
         sendButton.SetEnabled(false);
         queryField.SetValueWithoutNotify(string.Empty);
 
+        // Check if we're in play mode
+        if (!EditorApplication.isPlaying)
+        {
+            AddMessageToHistory("System", "Please enter Play Mode to use chat functionality.");
+            queryField.SetEnabled(true);
+            sendButton.SetEnabled(true);
+            return;
+        }
+
+        // Check PlannerGPT reference again
         if (plannerGPT == null)
         {
             Debug.LogError("PlannerGPT reference is not set in ChatbotEditorWindow.");
-            AddMessageToHistory("System", "<error: PlannerGPT not assigned>");
+            SetupPlannerGPT();
+            
+            if (plannerGPT == null)
+            {
+                AddMessageToHistory("System", "<error: PlannerGPT could not be created>");
+                queryField.SetEnabled(true);
+                sendButton.SetEnabled(true);
+                return;
+            }
         }
-        else
+
+        // Send the user input to PlannerGPT for processing.
+        try
         {
-            // Send the user input to PlannerGPT for processing.
             string assistantReply = await plannerGPT.ConverseWithUser(userText);
             AddMessageToHistory("XeleR", assistantReply);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Error while conversing with PlannerGPT: " + ex.Message);
+            AddMessageToHistory("System", "<error: " + ex.Message + ">");
         }
 
         queryField.SetEnabled(true);

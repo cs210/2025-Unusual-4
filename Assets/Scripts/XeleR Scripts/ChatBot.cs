@@ -17,6 +17,17 @@ using System;
 
 public class ChatBot : MonoBehaviour
 {
+    [Header("API Configuration")]
+    [Tooltip("Your OpenAI API Key. IMPORTANT: Do not check this into source control!")]
+    [SerializeField] protected string apiKey = "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";
+    
+    [Tooltip("Load API Key from a local file outside of project (more secure than Inspector)")]
+    [SerializeField] private bool loadApiKeyFromFile = true;
+    
+    [Tooltip("Path to the file containing just the API key (relative to project folder)")]
+    [SerializeField] private string apiKeyFilePath = "../2025-Unusual-4/openapi_key.txt";
+
+    [Header("Prompt Configuration")]
     [TextArea(2, 20)]
     public string metaprompt_file_name;
 
@@ -50,7 +61,6 @@ public class ChatBot : MonoBehaviour
     public double FrequencyPenalty;
 
     protected List<Message> ChatHistory = new List<Message>();
-
     
     protected TikToken tokenizer;
 
@@ -67,6 +77,12 @@ public class ChatBot : MonoBehaviour
         stopValues.Add("/*");
         stopValues.Add("</");
 
+        // Try to load API key from file if needed
+        if (loadApiKeyFromFile)
+        {
+            LoadApiKeyFromFile();
+        }
+
         if (metaprompt_file_name != "")
         {
             LoadMetapromptFromFile();
@@ -78,27 +94,81 @@ public class ChatBot : MonoBehaviour
         tokenizer = TikToken.EncodingForModel(model_name);
     }
 
-    protected void LoadMetapromptFromFile()
+    private void LoadApiKeyFromFile()
     {
-        string path = Path.Combine("Scripts", "MetaPrompt", metaprompt_file_name + ".txt");
-        // Use Application.dataPath to get the absolute path to the Assets folder
-        string fullPath = Path.Combine(Application.dataPath, path);
-        // Use File.ReadAllText to read the file contents
-        metaprompt = File.ReadAllText(fullPath).ToString();
-        // metaprompt = File.ReadAllText(@"Assets\Scripts\MetaPrompt\" + metaprompt_file_name + ".txt").ToString();
+        try
+        {
+            string fullPath = Path.GetFullPath(apiKeyFilePath);
+            Debug.Log($"Looking for API key at: {fullPath}");
+            
+            if (File.Exists(fullPath))
+            {
+                apiKey = File.ReadAllText(fullPath).Trim();
+                Debug.Log("API key loaded successfully");
+            }
+            else
+            {
+                Debug.LogError($"API key file not found at: {fullPath}");
+                
+                // Create an empty file as a placeholder r
+                try
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+                    File.WriteAllText(fullPath, "YOUR_OPENAI_API_KEY_HERE");
+                    Debug.Log($"Created empty API key file at: {fullPath}");
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Failed to create API key file: {ex.Message}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error loading API key from file: {ex.Message}");
+        }
     }
+
+    protected void LoadMetapromptFromFile()
+{
+    if (string.IsNullOrEmpty(metaprompt_file_name))
+    {
+        Debug.LogWarning("No metaprompt file name specified");
+        return;
+    }
+    string path = Path.Combine("Scripts", "XeleR Scripts", "MetaPrompt", metaprompt_file_name + ".txt");
+    string fullPath = Path.Combine(Application.dataPath, path);
+    Debug.Log("Looking for metaprompt at: " + fullPath);
+    if (File.Exists(fullPath))
+    {
+        metaprompt = File.ReadAllText(fullPath);
+        Debug.Log("Loaded metaprompt from: " + fullPath);
+    }
+    else
+    {
+        Debug.LogError("Metaprompt file not found at: " + fullPath);
+    }
+}
 
     public virtual async Task SendChatOld()
     {
-        // in this case, the new chat will exceed the model's context length
-        // manage token size so that there's enough room for a new chat
+        // Check for API key
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            string errorMessage = "Error: OpenAI API key is missing. Please set your API key.";
+            Debug.LogError(errorMessage);
+            output = errorMessage;
+            history += "assistant: \n" + errorMessage + "\n\n";
+            return;
+        }
+        
         if (GetNumTokensForHistoryAndNextChat() > context_length) 
         {
             ManageMemory();
         }
 
         // send a chat
-        OpenAIClient api = new OpenAIClient();
+        OpenAIClient api = new OpenAIClient(apiKey);
         ChatHistory.Add(new Message(Role.User, input));
         history += "user: \n" + input + "\n\n";
         ChatRequest chatRequest = new ChatRequest(ChatHistory, model_name, temperature: Temperature, maxTokens: MaxTokens);
@@ -106,22 +176,42 @@ public class ChatBot : MonoBehaviour
         history += "assistant: \n";
         output = "";
 
-        // wait for the response
-        await api.ChatEndpoint.StreamCompletionAsync(chatRequest, result =>
+        try 
         {
-            output += result.FirstChoice.ToString();
-            fullResult += result.FirstChoice.ToString();
-            history += result.FirstChoice.ToString();
-        });
+            // wait for the response
+            await api.ChatEndpoint.StreamCompletionAsync(chatRequest, result =>
+            {
+                output += result.FirstChoice.ToString();
+                fullResult += result.FirstChoice.ToString();
+                history += result.FirstChoice.ToString();
+            });
 
-        ChatHistory.Add(new Message(Role.Assistant, fullResult));
-        history += "\n\n";
+            ChatHistory.Add(new Message(Role.Assistant, fullResult));
+            history += "\n\n";
+        }
+        catch (Exception ex)
+        {
+            string errorMessage = $"Error: {ex.Message}";
+            Debug.LogError(errorMessage);
+            output = errorMessage;
+            history += errorMessage + "\n\n";
+        }
     }
 
    
     public virtual async Task SendChat()
     {
-        OpenAIClient api = new OpenAIClient();
+        // Check for API key
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            string errorMessage = "Error: OpenAI API key is missing. Please set your API key.";
+            Debug.LogError(errorMessage);
+            output = errorMessage;
+            history += "assistant: \n" + errorMessage + "\n\n";
+            return;
+        }
+        
+        OpenAIClient api = new OpenAIClient(apiKey);
         int retryDelaySeconds = 60; // The delay in seconds before retrying the request
         int maxRetries = 5; // Maximum number of retries
 
@@ -164,7 +254,10 @@ public class ChatBot : MonoBehaviour
                 else
                 {
                     // Handle other exceptions
-                    Debug.LogError($"An error occurred: {ex.Message}");
+                    string errorMessage = $"An error occurred: {ex.Message}";
+                    Debug.LogError(errorMessage);
+                    output = errorMessage;
+                    history += errorMessage + "\n\n";
                     break; // Break out of the loop on other types of exceptions
                 }
             }
@@ -172,12 +265,15 @@ public class ChatBot : MonoBehaviour
 
         if (retries >= maxRetries)
         {
-            Debug.LogError("Failed to get a response from GPT-4 after several retries.");
+            string errorMessage = "Failed to get a response from GPT-4 after several retries.";
+            Debug.LogError(errorMessage);
+            output = errorMessage;
+            history += errorMessage + "\n\n";
         }
     }
 
 
-public async Task SendChatWithInput(string chat_input)
+    public async Task SendChatWithInput(string chat_input)
     {
         input = chat_input;
         await SendChat();
@@ -318,7 +414,4 @@ public async Task SendChatWithInput(string chat_input)
         // Return the new list
         return result;
     }
-
-
-
 }

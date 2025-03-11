@@ -1,42 +1,3 @@
-/*
- * PlannerGPT.cs
- *
- * This script defines the PlannerGPT class that extends the ChatBot class to manage an interactive conversation
- * with the user for planning Unity scenes using OpenAI's GPT-4 API. It performs several key functions:
- *
- * 1. Initialization and Prompt Loading:
- *    - The script attempts to load a dedicated planning prompt from a file ("PlannerGPT.txt") located in a specific
- *      directory. If the file is not found, it falls back to a default, hardcoded prompt.
- *    - The prompt instructs the assistant to gather detailed user requirements and generate a comprehensive plan
- *      for constructing a Unity scene.
- *
- * 2. Conversation Handling:
- *    - It maintains an internal conversation history (stored as a list of messages and as a concatenated string 'history')
- *      to preserve context across multiple exchanges.
- *    - Each new user input and assistant response is appended to this history.
- *    - When sending a new request to GPT-4, the entire conversation context is built and prepended as a system message,
- *      ensuring that the assistant has full context for its responses.
- *
- * 3. Streaming GPT-4 Responses:
- *    - The class constructs a chat request using the full conversation context and sends it to the GPT-4 API.
- *    - The assistant's response is streamed in chunks, with each chunk appended to the conversation history and
- *      displayed in real time on the chat UI.
- *
- * 4. Scene Processing Trigger:
- *    - The script monitors the conversation history for the marker "[Conversation finished]". When detected,
- *      and only once per session (ensured by a flag), it automatically prompts GPT-4 for the final plan.
- *    - Subsequently, it calls a SceneParser component to parse the current Unity scene hierarchy, producing a compact
- *      JSON representation of the scene.
- *    - This parsed scene JSON is then appended to the conversation history so that it is displayed on the chat UI.
- *
- * 5. UI Updates:
- *    - TextMeshPro UI components are used to display user inputs, assistant responses, and the final parsed scene JSON.
- *    - The UpdateHistoryUI() method updates the UI element to reflect the latest conversation history.
- *
-  * This script is designed for runtime use in Unity's Play Mode and integrates with UI components like TMP_InputField
- * and TMP_Text to facilitate interactive user input and conversation display.
- */
-
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -54,11 +15,9 @@ public class PlannerGPT : ChatBot
     public TMP_Text output_TMP;         // For current reply
     public TMP_Text historyText;        // For displaying full conversation history
 
-
-    // References to scene processing components (assign via Inspector)
+    // References to scene processing components
     public SceneParser sceneParser;
     private bool sceneProcessed = false; // Flag to ensure processing happens only once.
-
 
     [TextArea(10, 30)]
     public string plannerPrompt = @"Your goal is to discuss with the user what they want and to make a plan for their request after gathering good information.
@@ -73,31 +32,73 @@ public class PlannerGPT : ChatBot
 
     protected override void Awake()
     {
+        Debug.Log("[PlannerGPT] Awake");
+        
+        // Initialize base ChatBot
         base.Awake();
+        
         // Attempt to load the planner prompt from file.
-        string filePath = Path.Combine(Application.dataPath, "Scripts", "XeleR Scripts", "MetaPrompt", "PlannerGPT.txt");
-        if (File.Exists(filePath))
-        {
-            string loadedPrompt = File.ReadAllText(filePath);
-            SetMetapromptAndClearHistory(loadedPrompt);
-            Debug.Log("Planner prompt loaded from file: " + filePath);
-        }
-        else
-        {
-            Debug.LogError("Planner prompt file not found at: " + filePath + ". Using fallback prompt.");
-            SetMetapromptAndClearHistory(plannerPrompt);
-        }
-
-        // Try to find an existing SceneParser in the scene
-        SceneParser sceneParser = FindObjectOfType<SceneParser>();
-        if (sceneParser == null)
-        {
-            GameObject parserGO = new GameObject("SceneParser");
-            sceneParser = parserGO.AddComponent<SceneParser>();
-            Debug.Log("SceneParser was not found. Created new SceneParser GameObject.");
-        }
-
+        TryLoadPlannerPrompt();
+        
+        // Set up SceneParser reference
+        SetupSceneParser();
     }
+
+    private void Start()
+    {
+        Debug.Log("[PlannerGPT] Start");
+    }
+
+    private void TryLoadPlannerPrompt()
+    {
+        // Try multiple potential paths
+        string[] potentialPaths = new string[]
+        {
+            Path.Combine(Application.dataPath, "Scripts", "XeleR Scripts", "MetaPrompt", "PlannerGPT.txt"),
+            Path.Combine(Application.dataPath, "Scripts", "MetaPrompt", "PlannerGPT.txt"),
+            Path.Combine(Application.dataPath, "XeleR Scripts", "MetaPrompt", "PlannerGPT.txt"),
+            Path.Combine(Application.dataPath, "MetaPrompt", "PlannerGPT.txt")
+        };
+
+        foreach (string filePath in potentialPaths)
+        {
+            if (File.Exists(filePath))
+            {
+                string loadedPrompt = File.ReadAllText(filePath);
+                SetMetapromptAndClearHistory(loadedPrompt);
+                Debug.Log("[PlannerGPT] Planner prompt loaded from file: " + filePath);
+                return;
+            }
+        }
+
+        // If we get here, no file was found
+        Debug.LogWarning("[PlannerGPT] Planner prompt file not found in any of the expected locations. Using fallback prompt.");
+        SetMetapromptAndClearHistory(plannerPrompt);
+    }
+
+    private void SetupSceneParser()
+    {
+        // Use the existing SceneParser if available
+        if (sceneParser != null)
+        {
+            Debug.Log("[PlannerGPT] Using existing SceneParser reference: " + sceneParser);
+            return;
+        }
+        
+        // Try to find an existing SceneParser in the scene
+        sceneParser = FindObjectOfType<SceneParser>();
+        if (sceneParser != null)
+        {
+            Debug.Log("[PlannerGPT] Found existing SceneParser: " + sceneParser);
+            return;
+        }
+        
+        // Create a new SceneParser if none exists
+        GameObject parserGO = new GameObject("SceneParser");
+        sceneParser = parserGO.AddComponent<SceneParser>();
+        Debug.Log("[PlannerGPT] Created new SceneParser GameObject.");
+    }
+
     private string BuildFullContext()
     {
         string context = "";
@@ -112,6 +113,25 @@ public class PlannerGPT : ChatBot
     // then builds a new prompt by prepending the full context as a system message.
     public async Task<string> ConverseWithUser(string input_str)
     {
+        Debug.Log("[PlannerGPT] ConverseWithUser called with input: " + input_str);
+        
+        // Check for API key
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            string errorMessage = "Error: OpenAI API key is missing. Please set your API key.";
+            Debug.LogError("[PlannerGPT] " + errorMessage);
+            history += "Assistant: " + errorMessage + "\n\n";
+            UpdateHistoryUI();
+            return errorMessage;
+        }
+        
+        if (ChatHistory == null)
+        {
+            Debug.LogError("[PlannerGPT] ChatHistory is null! Reinitializing...");
+            ChatHistory = new List<Message>();
+            ChatHistory.Add(new Message(Role.System, plannerPrompt));
+        }
+        
         ChatHistory.Add(new Message(Role.User, input_str));
         history += "User: " + input_str + "\n\n";
         UpdateHistoryUI();
@@ -122,30 +142,40 @@ public class PlannerGPT : ChatBot
             new Message(Role.System, fullContext)
         };
 
-        promptMessages.AddRange(ChatHistory);
-
-        ChatRequest request = new ChatRequest(promptMessages, Model.GPT4, temperature: Temperature, maxTokens: MaxTokens);
         string fullResult = "";
         history += "Assistant: \n";
         if (output_TMP != null)
             output_TMP.text = "";
-        OpenAIClient api = new OpenAIClient();
-        await api.ChatEndpoint.StreamCompletionAsync(request, result =>
+        
+        try
         {
-              if(result.FirstChoice != null && result.FirstChoice.Message != null)
-              {
-                  string chunk = result.FirstChoice.Message.Content?.ToString();
-                  if (!string.IsNullOrEmpty(chunk))
-                  {
-                      fullResult += chunk;
-                      history += chunk;
-                      if (output_TMP != null)
-                          output_TMP.text += chunk;
-                      UpdateHistoryUI();
-                  }
-              }
-          });
-
+            OpenAIClient api = new OpenAIClient(apiKey);
+            ChatRequest request = new ChatRequest(promptMessages, Model.GPT4, temperature: Temperature, maxTokens: MaxTokens);
+            
+            await api.ChatEndpoint.StreamCompletionAsync(request, result =>
+            {
+                if(result.FirstChoice != null && result.FirstChoice.Message != null)
+                {
+                    string chunk = result.FirstChoice.Message.Content?.ToString();
+                    if (!string.IsNullOrEmpty(chunk))
+                    {
+                        fullResult += chunk;
+                        history += chunk;
+                        if (output_TMP != null)
+                            output_TMP.text += chunk;
+                        UpdateHistoryUI();
+                    }
+                }
+            });
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("[PlannerGPT] Error during API call: " + ex.Message);
+            string errorMessage = "Error: " + ex.Message;
+            fullResult = errorMessage;
+            history += errorMessage;
+            UpdateHistoryUI();
+        }
 
         ChatHistory.Add(new Message(Role.Assistant, fullResult));
         history += "\n\n";
@@ -180,18 +210,16 @@ public class PlannerGPT : ChatBot
                 Debug.Log("[Add Parsed Scene Output]Updated History: " + history);
 
                 UpdateHistoryUI();
-
             }
             else
             {
                 Debug.LogWarning("[PlannerGPT] SceneParser reference not set.");
             }
-
         }
 
         return fullResult;
-
     }
+    
     private void UpdateHistoryUI()
     {
         if (historyText != null)
