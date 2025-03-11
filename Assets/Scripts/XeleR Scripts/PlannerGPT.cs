@@ -36,6 +36,12 @@ public class PlannerGPT : ChatBot
     public TMP_Text output_TMP;         // For current reply
     public TMP_Text historyText;        // For displaying full conversation history
 
+
+    // References to scene processing components (assign via Inspector)
+    public SceneParser sceneParser;
+    private bool sceneProcessed = false; // Flag to ensure processing happens only once.
+
+
     [TextArea(10, 30)]
     public string plannerPrompt = @"Your goal is to discuss with the user what they want and to make a plan for their request after gathering good information.
     The user will ask to make a scene in Unity.
@@ -63,6 +69,16 @@ public class PlannerGPT : ChatBot
             Debug.LogError("Planner prompt file not found at: " + filePath + ". Using fallback prompt.");
             SetMetapromptAndClearHistory(plannerPrompt);
         }
+
+        // Try to find an existing SceneParser in the scene
+        SceneParser sceneParser = FindObjectOfType<SceneParser>();
+        if (sceneParser == null)
+        {
+            GameObject parserGO = new GameObject("SceneParser");
+            sceneParser = parserGO.AddComponent<SceneParser>();
+            Debug.Log("SceneParser was not found. Created new SceneParser GameObject.");
+        }
+
     }
     private string BuildFullContext()
     {
@@ -118,12 +134,45 @@ public class PlannerGPT : ChatBot
         UpdateHistoryUI();
 
         // If conversation is finished, e.g., output equals "[Conversation finished]"
-        if (fullResult.Trim() == "[Conversation finished]")
+        // When conversation is finished, call scene processing.
+        if (!sceneProcessed && history.Contains("[Conversation finished]"))
         {
-            await ConverseWithUser("Present the final plan.");
+            sceneProcessed = true;
+            Debug.Log("[PlannerGPT] Finished processing scene." + sceneProcessed);
+            Debug.Log("[PlannerGPT] Detected Finished Conversation");
+            
+            // Remove the marker from the history so it doesn't trigger again.
+            history = history.Replace("[Conversation finished]", "");
+
+            // Present the final plan.
+            string finalPlan = await ConverseWithUser("Present the final plan.");
+            Debug.Log("[PlannerGPT] Final Plan: " + finalPlan);
+            Debug.Log("[PlannerGPT] SceneParser reference: " + sceneParser);
+
+            // Call SceneParser if references are set.
+            if (sceneParser != null)
+            {
+                Debug.Log("[PlannerGPT] Calling SceneParser to parse scene hierarchy.");
+                sceneParser.ParseSceneHierarchy();  // Parse scene hierarchy synchronously.
+                string sceneJson = sceneParser.scene_parsing_compact;
+                Debug.Log("[PlannerGPT] Scene JSON obtained:\n" + sceneJson);
+
+                // Append the parsed scene JSON to the chat UI.
+                history += "\nThis is the Parsed Scene JSON:\n" + sceneJson + "\n\n";
+                Debug.Log("[Add Parsed Scene Output]Updated History: " + history);
+
+                UpdateHistoryUI();
+
+            }
+            else
+            {
+                Debug.LogWarning("[PlannerGPT] SceneParser reference not set.");
+            }
+
         }
 
         return fullResult;
+
     }
     private void UpdateHistoryUI()
     {

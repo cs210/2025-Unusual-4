@@ -565,6 +565,8 @@ MonoBehaviour:
   input_TMP: {fileID: 0}
   output_TMP: {fileID: 0}
   historyText: {fileID: 0}
+  sceneParser: {fileID: 1466704510}
+  sceneExtractor: {fileID: 0}
   plannerPrompt: "Your goal is to discuss with the user what they want and to make
     a plan for their request after gathering good information.\nThe user will ask
     to make a scene in Unity.\n\n- You should pay attention to the user's requests
