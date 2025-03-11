@@ -3,9 +3,13 @@ using UnityEngine;
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Text;
+using System.Security.Cryptography;
 
-// This class handles loading and saving API keys from a local file
-public class ApiKeyManager
+/// <summary>
+/// Manages API keys for the chatbot
+/// </summary>
+public static class ApiKeyManager
 {
     // File path for the keys file (placed outside of Assets to avoid being part of the build)
     private static readonly string KEYS_DIRECTORY = Path.Combine(Directory.GetParent(Application.dataPath).FullName, "ApiKeys");
@@ -15,8 +19,13 @@ public class ApiKeyManager
     private static Dictionary<string, string> apiKeys = new Dictionary<string, string>();
     
     // Key names for consistency
-    public const string OPENAI_KEY = "OPENAI_API_KEY";
-    public const string CLAUDE_KEY = "CLAUDE_API_KEY";
+    public const string OPENAI_KEY = "OpenAI_API_Key";
+    public const string CLAUDE_KEY = "Claude_API_Key";
+    
+    private static string keyFilePath = Path.Combine(Application.dataPath, "Editor", "api_keys.dat");
+    
+    // Encryption key (this is just a simple obfuscation, not true security)
+    private static readonly string EncryptionKey = "XeleR_Unity_Chatbot_Key";
     
     // Initialize and load keys
     static ApiKeyManager()
@@ -24,21 +33,32 @@ public class ApiKeyManager
         LoadKeys();
     }
     
-    // Get a specific API key
-    public static string GetKey(string keyName, string defaultValue = "")
+    /// <summary>
+    /// Gets an API key from EditorPrefs
+    /// </summary>
+    public static string GetKey(string keyName)
     {
-        if (apiKeys.TryGetValue(keyName, out string value))
-        {
-            return value;
-        }
-        return defaultValue;
+        string encryptedKey = EditorPrefs.GetString(keyName, "");
+        
+        if (string.IsNullOrEmpty(encryptedKey))
+            return "";
+            
+        return Decrypt(encryptedKey);
     }
     
-    // Set a specific API key
+    /// <summary>
+    /// Sets an API key in EditorPrefs
+    /// </summary>
     public static void SetKey(string keyName, string value)
     {
-        apiKeys[keyName] = value;
-        SaveKeys();
+        if (string.IsNullOrEmpty(value))
+        {
+            EditorPrefs.DeleteKey(keyName);
+            return;
+        }
+        
+        string encryptedKey = Encrypt(value);
+        EditorPrefs.SetString(keyName, encryptedKey);
     }
     
     // Load all keys from the file
@@ -108,6 +128,59 @@ public class ApiKeyManager
         catch (Exception ex)
         {
             Debug.LogError($"Error saving API keys: {ex.Message}");
+        }
+    }
+    
+    /// <summary>
+    /// Simple encryption for API keys (not truly secure, just basic obfuscation)
+    /// </summary>
+    private static string Encrypt(string text)
+    {
+        try
+        {
+            byte[] textBytes = Encoding.UTF8.GetBytes(text);
+            byte[] keyBytes = Encoding.UTF8.GetBytes(EncryptionKey);
+            
+            // Create a simple XOR cipher
+            byte[] result = new byte[textBytes.Length];
+            for (int i = 0; i < textBytes.Length; i++)
+            {
+                result[i] = (byte)(textBytes[i] ^ keyBytes[i % keyBytes.Length]);
+            }
+            
+            // Convert to Base64 for storage
+            return Convert.ToBase64String(result);
+        }
+        catch (Exception ex)
+        {
+            UnityEngine.Debug.LogError($"Error encrypting API key: {ex.Message}");
+            return "";
+        }
+    }
+    
+    /// <summary>
+    /// Simple decryption for API keys
+    /// </summary>
+    private static string Decrypt(string encryptedText)
+    {
+        try
+        {
+            byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
+            byte[] keyBytes = Encoding.UTF8.GetBytes(EncryptionKey);
+            
+            // Reverse the XOR cipher
+            byte[] result = new byte[encryptedBytes.Length];
+            for (int i = 0; i < encryptedBytes.Length; i++)
+            {
+                result[i] = (byte)(encryptedBytes[i] ^ keyBytes[i % keyBytes.Length]);
+            }
+            
+            return Encoding.UTF8.GetString(result);
+        }
+        catch (Exception ex)
+        {
+            UnityEngine.Debug.LogError($"Error decrypting API key: {ex.Message}");
+            return "";
         }
     }
 }

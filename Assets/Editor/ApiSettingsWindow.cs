@@ -1,105 +1,96 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 // Modified API Settings Window to use the key manager
 public class ApiSettingsWindow : EditorWindow
 {
+    private TextField openAiKeyField;
+    private TextField claudeKeyField;
     private ChatbotEditorWindow parentWindow;
-    private string openAiKey;
-    private string claudeKey;
-    private bool showOpenAiKey = false;
+    
+    // These fields are used to toggle visibility of API keys
     private bool showClaudeKey = false;
+    
     private Vector2 scrollPosition;
 
-    public void Initialize(ChatbotEditorWindow parent, string currentOpenAiKey, string currentClaudeKey)
+    public void Initialize(ChatbotEditorWindow parent, string openAiKey, string claudeKey)
     {
         parentWindow = parent;
-        openAiKey = currentOpenAiKey;
-        claudeKey = currentClaudeKey;
         titleContent = new GUIContent("API Settings");
-        minSize = new Vector2(350, 180);
+        
+        // Create UI
+        var root = rootVisualElement;
+        
+        // Fix: Use proper padding syntax for UIElements
+        root.style.paddingLeft = 10;
+        root.style.paddingRight = 10;
+        root.style.paddingTop = 10;
+        root.style.paddingBottom = 10;
+        
+        // Title
+        var titleLabel = new Label("API Key Settings");
+        titleLabel.style.fontSize = 16;
+        titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+        titleLabel.style.marginBottom = 10;
+        root.Add(titleLabel);
+        
+        // OpenAI Key
+        var openAiContainer = new VisualElement();
+        openAiContainer.style.marginBottom = 10;
+        
+        var openAiLabel = new Label("OpenAI API Key:");
+        openAiContainer.Add(openAiLabel);
+        
+        openAiKeyField = new TextField();
+        openAiKeyField.style.width = Length.Percent(100);
+        openAiKeyField.value = openAiKey;
+        openAiKeyField.isPasswordField = true; // Always hide by default for security
+        openAiContainer.Add(openAiKeyField);
+        
+        root.Add(openAiContainer);
+        
+        // Claude Key
+        var claudeContainer = new VisualElement();
+        claudeContainer.style.marginBottom = 10;
+        
+        var claudeLabel = new Label("Claude API Key:");
+        claudeContainer.Add(claudeLabel);
+        
+        claudeKeyField = new TextField();
+        claudeKeyField.style.width = Length.Percent(100);
+        claudeKeyField.value = claudeKey;
+        claudeKeyField.isPasswordField = true; // Always hide by default for security
+        claudeContainer.Add(claudeKeyField);
+        
+        root.Add(claudeContainer);
+        
+        // Buttons
+        var buttonContainer = new VisualElement();
+        buttonContainer.style.flexDirection = FlexDirection.Row;
+        buttonContainer.style.justifyContent = Justify.SpaceBetween;
+        
+        var saveButton = new Button(SaveKeys) { text = "Save" };
+        saveButton.style.width = 80;
+        buttonContainer.Add(saveButton);
+        
+        var cancelButton = new Button(Close) { text = "Cancel" };
+        cancelButton.style.width = 80;
+        buttonContainer.Add(cancelButton);
+        
+        root.Add(buttonContainer);
     }
-
-    void OnGUI()
+    
+    private void SaveKeys()
     {
-        // Add draggable window title bar at the top
-        GUI.Box(new Rect(0, 0, position.width, 20), "");
-        GUI.Label(new Rect(10, 3, position.width - 20, 20), "API Settings");
-
-        // Make the whole window scrollable
-        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-
-        EditorGUILayout.Space(25); // Space after the title bar
-
-        EditorGUILayout.LabelField("API Keys", EditorStyles.boldLabel);
+        // Update the parent window with the new keys
+        parentWindow.SetApiKeys(openAiKeyField.value, claudeKeyField.value);
         
-        EditorGUILayout.Space();
+        // Show a confirmation
+        Debug.Log("API keys saved successfully");
         
-        EditorGUILayout.HelpBox("API keys are stored in a file outside of your project's Assets folder. Add ApiKeys/ to your .gitignore file to prevent them from being committed.", MessageType.Info);
-        
-        EditorGUILayout.Space();
-
-        // OpenAI API Key
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("OpenAI API Key:", GUILayout.Width(120));
-        
-        // Toggle to show/hide the key
-        showOpenAiKey = EditorGUILayout.ToggleLeft("Show", showOpenAiKey, GUILayout.Width(60));
-        
-        // If showing, display as normal text field, otherwise mask with password field
-        if (showOpenAiKey)
-            openAiKey = EditorGUILayout.TextField(openAiKey);
-        else
-            openAiKey = EditorGUILayout.PasswordField(openAiKey);
-            
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.Space();
-
-        // Claude API Key
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Claude API Key:", GUILayout.Width(120));
-        
-        // Toggle to show/hide the key
-        showClaudeKey = EditorGUILayout.ToggleLeft("Show", showClaudeKey, GUILayout.Width(60));
-        
-        // If showing, display as normal text field, otherwise mask with password field
-        if (showClaudeKey)
-            claudeKey = EditorGUILayout.TextField(claudeKey);
-        else
-            claudeKey = EditorGUILayout.PasswordField(claudeKey);
-            
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.Space(20);
-
-        // Buttons at the bottom
-        EditorGUILayout.BeginHorizontal();
-        
-        // Cancel button
-        if (GUILayout.Button("Cancel", GUILayout.Width(100)))
-        {
-            this.Close();
-        }
-        
-        GUILayout.FlexibleSpace();
-        
-        // Save button
-        if (GUILayout.Button("Save", GUILayout.Width(100)))
-        {
-            // Save to key manager instead of directly to parent window
-            ApiKeyManager.SetKey(ApiKeyManager.OPENAI_KEY, openAiKey);
-            ApiKeyManager.SetKey(ApiKeyManager.CLAUDE_KEY, claudeKey);
-            
-            // Update parent window with new keys
-            parentWindow.SetApiKeys(openAiKey, claudeKey);
-            
-            this.Close();
-        }
-        
-        EditorGUILayout.EndHorizontal();
-        
-        EditorGUILayout.EndScrollView();
+        // Close the window
+        Close();
     }
 
     // This makes the window draggable by allowing click+drag anywhere

@@ -10,8 +10,65 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using UnityEditor.Compilation;
 
+[InitializeOnLoad]
 public class ChatbotEditorWindow : EditorWindow
 {
+    // Static constructor that will be called when Unity starts or scripts are recompiled
+    static ChatbotEditorWindow()
+    {
+        // Instead of doing work here, register for the first editor update
+        EditorApplication.delayCall += OnFirstEditorUpdate;
+    }
+    
+    // This method will be called once after Unity is fully initialized
+    private static void OnFirstEditorUpdate()
+    {
+        // Clear any cached state about open windows
+        EditorPrefs.DeleteKey("ChatbotEditorWindowOpen");
+        
+        // Use a delayed call to ensure Unity is fully initialized
+        EditorApplication.delayCall += ForceOpenWindow;
+        
+        // Also subscribe to the projectOpened event to ensure it opens on project launch
+        EditorApplication.projectWindowItemOnGUI += OnProjectWindowItemGUI;
+    }
+    
+    // This is a one-time check that runs when the project window is first drawn
+    private static bool hasOpenedOnLaunch = false;
+    private static void OnProjectWindowItemGUI(string guid, Rect selectionRect)
+    {
+        if (!hasOpenedOnLaunch)
+        {
+            hasOpenedOnLaunch = true;
+            // Unsubscribe to prevent this from running again
+            EditorApplication.projectWindowItemOnGUI -= OnProjectWindowItemGUI;
+            // Open the window with a slight delay to ensure Unity is fully initialized
+            EditorApplication.delayCall += ForceOpenWindow;
+        }
+    }
+    
+    // Force the window to open, regardless of any cached state
+    private static void ForceOpenWindow()
+    {
+        // Close any existing instances first
+        var existingWindows = Resources.FindObjectsOfTypeAll<ChatbotEditorWindow>();
+        foreach (var window in existingWindows)
+        {
+            window.Close();
+        }
+        
+        // Create a fresh window instance
+        var newWindow = CreateWindow<ChatbotEditorWindow>("Chat v0");
+        newWindow.Show();
+        newWindow.Focus();
+        
+        // Log that we're forcing the window open
+        Debug.LogWarning("ChatbotEditorWindow: Forcing window to open");
+        
+        // Set a flag in EditorPrefs to indicate the window is open
+        EditorPrefs.SetBool("ChatbotEditorWindowOpen", true);
+    }
+    
     // Add serialization for conversation history
     [SerializeField] private List<ChatMessage> conversationHistory = new List<ChatMessage>();
     
@@ -53,18 +110,27 @@ public class ChatbotEditorWindow : EditorWindow
 
     private const string PLACEHOLDER_TEXT = "Type your message...";
     private const string SCRIPTS_FOLDER = "Assets/Scripts";
+    private const string SCENES_FOLDER = "Assets/Scenes";
 
     private ScrollView conversationScrollView;
     private TextField queryField;
     private Button sendButton;
     private Button browseScriptsButton;
+    private Button browseScenesButton;
     private PopupField<ModelInfo> modelSelector;
 
-    // Add these fields to store the last loaded script information
+    // Add these fields to store the last loaded script and scene information
     [SerializeField] private string lastLoadedScriptPath;
     [SerializeField] private string lastLoadedScriptContent;
+    [SerializeField] private string lastLoadedScenePath;
+    [SerializeField] private bool isSceneLoaded = false;
 
-    [MenuItem("Window/Chatbox")]
+    private Button analyzeSceneButton;
+    private Button spatialAnalysisButton;
+    private Toggle includeSceneContextToggle;
+    private bool includeSceneContext = false;
+
+    [MenuItem("Window/Chatbox %i")]
     public static void ShowWindow()
     {
         // This overload attempts to dock it next to the Inspector
@@ -120,6 +186,12 @@ public class ChatbotEditorWindow : EditorWindow
         browseScriptsButton.style.height = 22; // Fixed height
         toolbar.Add(browseScriptsButton);
 
+        // Browse scenes button
+        browseScenesButton = new Button(OnBrowseScenesClicked) { text = "Browse Scenes" };
+        browseScenesButton.style.height = 22; // Fixed height
+        browseScenesButton.style.marginLeft = 4;
+        toolbar.Add(browseScenesButton);
+
         // Model selection dropdown
         var modelContainer = new VisualElement
         {
@@ -144,6 +216,49 @@ public class ChatbotEditorWindow : EditorWindow
         modelContainer.Add(modelSelector);
 
         toolbar.Add(modelContainer);
+
+        // Add scene analysis buttons to the toolbar
+        analyzeSceneButton = new Button(OnAnalyzeSceneClicked) { text = "Analyze Scene" };
+        analyzeSceneButton.style.height = 22; // Fixed height
+        toolbar.Add(analyzeSceneButton);
+        
+        spatialAnalysisButton = new Button(OnSpatialAnalysisClicked) { text = "Spatial Analysis" };
+        spatialAnalysisButton.style.height = 22; // Fixed height
+        toolbar.Add(spatialAnalysisButton);
+        
+        // Add a separator
+        var separator = new VisualElement();
+        separator.style.width = 1;
+        separator.style.height = 22;
+        separator.style.backgroundColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+        separator.style.marginLeft = 8;
+        separator.style.marginRight = 8;
+        toolbar.Add(separator);
+
+        // Add toggle for including scene context in all queries - make it more prominent
+        includeSceneContextToggle = new Toggle("Scene Context");
+        includeSceneContextToggle.value = includeSceneContext;
+        includeSceneContextToggle.style.height = 22;
+        includeSceneContextToggle.style.marginLeft = 4;
+        includeSceneContextToggle.style.backgroundColor = new Color(0.2f, 0.3f, 0.4f, 0.2f);
+        includeSceneContextToggle.style.paddingLeft = 4;
+        includeSceneContextToggle.style.paddingRight = 4;
+        includeSceneContextToggle.style.borderTopWidth = 1;
+        includeSceneContextToggle.style.borderBottomWidth = 1;
+        includeSceneContextToggle.style.borderLeftWidth = 1;
+        includeSceneContextToggle.style.borderRightWidth = 1;
+        includeSceneContextToggle.style.borderTopColor = new Color(0.3f, 0.3f, 0.3f);
+        includeSceneContextToggle.style.borderBottomColor = new Color(0.3f, 0.3f, 0.3f);
+        includeSceneContextToggle.style.borderLeftColor = new Color(0.3f, 0.3f, 0.3f);
+        includeSceneContextToggle.style.borderRightColor = new Color(0.3f, 0.3f, 0.3f);
+        includeSceneContextToggle.RegisterValueChangedCallback(evt => {
+            includeSceneContext = evt.newValue;
+            if (evt.newValue)
+                AddMessageToHistory("System", "Scene context will be included in your queries.");
+            else
+                AddMessageToHistory("System", "Scene context disabled.");
+        });
+        toolbar.Add(includeSceneContextToggle);
 
         rootVisualElement.Add(toolbar);
 
@@ -376,14 +491,25 @@ public class ChatbotEditorWindow : EditorWindow
         var selectedModel = modelSelector.value;
         string provider = selectedModel.Provider;
         
+        // Include scene context if the toggle is enabled
+        string contextEnhancedPrompt = userText;
+        if (includeSceneContext)
+        {
+            string sceneContext = SceneAnalysisIntegration.GetSceneStructureSummary();
+            contextEnhancedPrompt = $"[Scene Context]\n{sceneContext}\n\n[User Query]\n{userText}";
+            
+            // Add a system message to show the user we're including scene context
+            AddMessageToHistory("System", "Including scene context in this query.");
+        }
+        
         // Send to the appropriate API based on the selected model's provider
         if (provider == "OpenAI")
         {
-            SendQueryToOpenAI(userText, selectedModel.Name, OnResponseReceived);
+            SendQueryToOpenAI(contextEnhancedPrompt, selectedModel.Name, OnResponseReceived);
         }
         else if (provider == "Claude")
         {
-            SendQueryToClaude(userText, selectedModel.Name, OnResponseReceived);
+            SendQueryToClaude(contextEnhancedPrompt, selectedModel.Name, OnResponseReceived);
         }
     }
 
@@ -433,6 +559,214 @@ public class ChatbotEditorWindow : EditorWindow
                 }
             }
         }
+        
+        // Add scene edit processing
+        ProcessSceneEdits(assistantReply);
+    }
+
+    private void ProcessSceneEdits(string assistantReply)
+    {
+        // Only process scene edits if a scene is loaded
+        if (!isSceneLoaded) return;
+        
+        // Pattern to match scene edit instructions
+        // Format: ```scene:ObjectPath/Component/Property=Value```
+        var sceneEditPattern = new Regex(@"```scene:([^\n]+)```");
+        var matches = sceneEditPattern.Matches(assistantReply);
+        
+        if (matches.Count > 0)
+        {
+            bool sceneModified = false;
+            
+            foreach (Match match in matches)
+            {
+                if (match.Groups.Count >= 2)
+                {
+                    string editInstruction = match.Groups[1].Value.Trim();
+                    try
+                    {
+                        bool success = ApplySceneEdit(editInstruction);
+                        if (success) sceneModified = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"Error applying scene edit: {ex.Message}");
+                        AddMessageToHistory("System", $"Error applying scene edit: {ex.Message}");
+                    }
+                }
+            }
+            
+            if (sceneModified)
+            {
+                // Mark the scene as dirty so Unity knows it needs to be saved
+                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(
+                    UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
+                
+                AddMessageToHistory("System", "Scene modifications applied. Remember to save your scene.");
+            }
+        }
+    }
+
+    private bool ApplySceneEdit(string editInstruction)
+    {
+        // Parse the edit instruction
+        // Format: ObjectPath/Component/Property=Value
+        // Example: Main Camera/Camera/fieldOfView=60
+        
+        string[] parts = editInstruction.Split('=');
+        if (parts.Length != 2)
+        {
+            AddMessageToHistory("System", $"Invalid scene edit format: {editInstruction}");
+            return false;
+        }
+        
+        string path = parts[0];
+        string value = parts[1];
+        
+        string[] pathParts = path.Split('/');
+        if (pathParts.Length < 2)
+        {
+            AddMessageToHistory("System", $"Invalid object path: {path}");
+            return false;
+        }
+        
+        // The first part is the GameObject path
+        string objectPath = pathParts[0];
+        for (int i = 1; i < pathParts.Length - 1; i++)
+        {
+            objectPath += "/" + pathParts[i];
+        }
+        
+        // The last part is the property name
+        string propertyName = pathParts[pathParts.Length - 1];
+        
+        // The second-to-last part is the component name
+        string componentName = pathParts[pathParts.Length - 2];
+        
+        // Find the GameObject
+        GameObject targetObject = GameObject.Find(objectPath);
+        if (targetObject == null)
+        {
+            AddMessageToHistory("System", $"GameObject not found: {objectPath}");
+            return false;
+        }
+        
+        // Find the component
+        Component targetComponent = targetObject.GetComponent(componentName);
+        if (targetComponent == null)
+        {
+            AddMessageToHistory("System", $"Component not found: {componentName} on {objectPath}");
+            return false;
+        }
+        
+        // Set the property value using reflection
+        try
+        {
+            var property = targetComponent.GetType().GetProperty(propertyName);
+            if (property != null)
+            {
+                // Convert the value to the appropriate type
+                object convertedValue = ConvertValue(value, property.PropertyType);
+                property.SetValue(targetComponent, convertedValue);
+                AddMessageToHistory("System", $"Set {objectPath}/{componentName}/{propertyName} = {value}");
+                return true;
+            }
+            
+            var field = targetComponent.GetType().GetField(propertyName);
+            if (field != null)
+            {
+                // Convert the value to the appropriate type
+                object convertedValue = ConvertValue(value, field.FieldType);
+                field.SetValue(targetComponent, convertedValue);
+                AddMessageToHistory("System", $"Set {objectPath}/{componentName}/{propertyName} = {value}");
+                return true;
+            }
+            
+            AddMessageToHistory("System", $"Property or field not found: {propertyName} on {componentName}");
+            return false;
+        }
+        catch (Exception ex)
+        {
+            AddMessageToHistory("System", $"Error setting property: {ex.Message}");
+            return false;
+        }
+    }
+
+    private object ConvertValue(string value, Type targetType)
+    {
+        // Handle common Unity types
+        if (targetType == typeof(float))
+        {
+            return float.Parse(value);
+        }
+        else if (targetType == typeof(int))
+        {
+            return int.Parse(value);
+        }
+        else if (targetType == typeof(bool))
+        {
+            return bool.Parse(value);
+        }
+        else if (targetType == typeof(string))
+        {
+            return value;
+        }
+        else if (targetType == typeof(Vector3))
+        {
+            // Format: (x,y,z)
+            value = value.Trim('(', ')');
+            string[] components = value.Split(',');
+            if (components.Length == 3)
+            {
+                return new Vector3(
+                    float.Parse(components[0]),
+                    float.Parse(components[1]),
+                    float.Parse(components[2])
+                );
+            }
+        }
+        else if (targetType == typeof(Vector2))
+        {
+            // Format: (x,y)
+            value = value.Trim('(', ')');
+            string[] components = value.Split(',');
+            if (components.Length == 2)
+            {
+                return new Vector2(
+                    float.Parse(components[0]),
+                    float.Parse(components[1])
+                );
+            }
+        }
+        else if (targetType == typeof(Color))
+        {
+            // Format: (r,g,b,a) or (r,g,b)
+            value = value.Trim('(', ')');
+            string[] components = value.Split(',');
+            if (components.Length >= 3)
+            {
+                if (components.Length == 4)
+                {
+                    return new Color(
+                        float.Parse(components[0]),
+                        float.Parse(components[1]),
+                        float.Parse(components[2]),
+                        float.Parse(components[3])
+                    );
+                }
+                else
+                {
+                    return new Color(
+                        float.Parse(components[0]),
+                        float.Parse(components[1]),
+                        float.Parse(components[2])
+                    );
+                }
+            }
+        }
+        
+        // For other types, try a general conversion
+        return Convert.ChangeType(value, targetType);
     }
 
     private void ApplyEditToFile(string filePath, string newContent)
@@ -480,7 +814,7 @@ public class ChatbotEditorWindow : EditorWindow
     {
         const string url = "https://api.openai.com/v1/chat/completions";
         
-        // Get API key from manager instead of using the field directly
+        // Get API key from manager
         string apiKey = ApiKeyManager.GetKey(ApiKeyManager.OPENAI_KEY);
         if (string.IsNullOrEmpty(apiKey))
         {
@@ -491,13 +825,29 @@ public class ChatbotEditorWindow : EditorWindow
         // Properly escape the user message to avoid JSON formatting issues
         string escapedMessage = EscapeJson(userMessage);
         
-        // Add script context if available
+        // Load scene analyzer metaprompt if available
         string systemPrompt = "You are a Unity development assistant that can help with code. When suggesting code changes, use the format ```csharp:Assets/Scripts/FileName.cs\\n// code here\\n``` so the changes can be automatically applied.";
         
+        string sceneAnalyzerPrompt = SceneAnalysisIntegration.LoadMetaprompt("SceneAnalyzer_RequestAware");
+        if (!string.IsNullOrEmpty(sceneAnalyzerPrompt))
+        {
+            systemPrompt += "\n\n" + sceneAnalyzerPrompt;
+        }
+        
+        // Add script context if available
         string contextMessage = "";
         if (!string.IsNullOrEmpty(lastLoadedScriptPath) && !string.IsNullOrEmpty(lastLoadedScriptContent))
         {
             contextMessage = $"I'm working with this file: {lastLoadedScriptPath}\\n```csharp\\n{EscapeJson(lastLoadedScriptContent)}\\n```\\n\\nMy question is: ";
+        }
+        
+        // Add scene context if available
+        if (isSceneLoaded && !string.IsNullOrEmpty(lastLoadedScenePath))
+        {
+            string sceneName = Path.GetFileName(lastLoadedScenePath);
+            string sceneContext = SceneAnalysisIntegration.GetSceneStructureSummary();
+            
+            contextMessage += $"I'm working with the Unity scene: {sceneName}\n{sceneContext}\n\nMy question is: ";
         }
         
         // Simplify the prompt to reduce potential formatting issues
@@ -569,7 +919,7 @@ public class ChatbotEditorWindow : EditorWindow
     {
         const string url = "https://api.anthropic.com/v1/messages";
         
-        // Get API key from manager instead of using the field directly
+        // Get API key from manager
         string apiKey = ApiKeyManager.GetKey(ApiKeyManager.CLAUDE_KEY);
         if (string.IsNullOrEmpty(apiKey))
         {
@@ -580,13 +930,29 @@ public class ChatbotEditorWindow : EditorWindow
         // Properly escape the user message to avoid JSON formatting issues
         string escapedMessage = EscapeJson(userMessage);
         
-        // Add script context if available
+        // Load scene analyzer metaprompt if available
         string systemPrompt = "You are a Unity development assistant that can help with code. When suggesting code changes, use the format ```csharp:Assets/Scripts/FileName.cs\\n// code here\\n``` so the changes can be automatically applied.";
         
+        string sceneAnalyzerPrompt = SceneAnalysisIntegration.LoadMetaprompt("SceneAnalyzer_RequestAware");
+        if (!string.IsNullOrEmpty(sceneAnalyzerPrompt))
+        {
+            systemPrompt += "\n\n" + sceneAnalyzerPrompt;
+        }
+        
+        // Add script context if available
         string contextMessage = "";
         if (!string.IsNullOrEmpty(lastLoadedScriptPath) && !string.IsNullOrEmpty(lastLoadedScriptContent))
         {
             contextMessage = $"I'm working with this file: {lastLoadedScriptPath}\\n```csharp\\n{EscapeJson(lastLoadedScriptContent)}\\n```\\n\\nMy question is: ";
+        }
+        
+        // Add scene context if available
+        if (isSceneLoaded && !string.IsNullOrEmpty(lastLoadedScenePath))
+        {
+            string sceneName = Path.GetFileName(lastLoadedScenePath);
+            string sceneContext = SceneAnalysisIntegration.GetSceneStructureSummary();
+            
+            contextMessage += $"I'm working with the Unity scene: {sceneName}\n{sceneContext}\n\nMy question is: ";
         }
         
         // Construct Claude API request
@@ -684,10 +1050,22 @@ public class ChatbotEditorWindow : EditorWindow
         // Process message for markdown if it's from the AI
         if (sender == "XeleR")
         {
-            var formattedContent = CreateMarkdownFormattedContent(message);
-            messageContainer.Add(formattedContent);
+            // Create a content container for the message
+            var contentContainer = new VisualElement
+            {
+                style =
+                {
+                    marginLeft = 4,
+                    marginRight = 4
+                }
+            };
             
-            // Process code blocks separately
+            // Use the markdown renderer to format the message
+            var formattedContent = MarkdownRenderer.RenderMarkdown(message);
+            contentContainer.Add(formattedContent);
+            messageContainer.Add(contentContainer);
+            
+            // Process code blocks separately (these will be added directly to the conversation)
             ProcessCodeBlocksInMessage(message);
         }
         else
@@ -717,197 +1095,6 @@ public class ChatbotEditorWindow : EditorWindow
 
         // Scroll to bottom using the helper method
         EditorApplication.delayCall += ScrollToBottom;
-    }
-
-    // Create formatted content with markdown-like styling
-    private VisualElement CreateMarkdownFormattedContent(string message)
-    {
-        var container = new VisualElement();
-        
-        // Remove code blocks first to process them separately
-        string textWithoutCodeBlocks = RemoveCodeBlocks(message);
-        
-        // Split by newlines to process paragraph by paragraph
-        string[] paragraphs = textWithoutCodeBlocks.Split(new[] { "\n\n", "\r\n\r\n" }, StringSplitOptions.None);
-        
-        foreach (var paragraph in paragraphs)
-        {
-            if (string.IsNullOrWhiteSpace(paragraph)) continue;
-            
-            string trimmedParagraph = paragraph.Trim();
-            
-            // Check for headers
-            if (trimmedParagraph.StartsWith("# "))
-            {
-                AddHeader(container, trimmedParagraph.Substring(2), 18, FontStyle.Bold);
-            }
-            else if (trimmedParagraph.StartsWith("## "))
-            {
-                AddHeader(container, trimmedParagraph.Substring(3), 16, FontStyle.Bold);
-            }
-            else if (trimmedParagraph.StartsWith("### "))
-            {
-                AddHeader(container, trimmedParagraph.Substring(4), 14, FontStyle.Bold);
-            }
-            // Check for bullet lists
-            else if (trimmedParagraph.StartsWith("- ") || trimmedParagraph.StartsWith("* "))
-            {
-                AddBulletList(container, trimmedParagraph);
-            }
-            // Check for numbered lists
-            else if (Regex.IsMatch(trimmedParagraph, @"^\d+\.\s"))
-            {
-                AddNumberedList(container, trimmedParagraph);
-            }
-            // Regular paragraph
-            else
-            {
-                AddFormattedParagraph(container, trimmedParagraph);
-            }
-        }
-        
-        return container;
-    }
-
-    private string RemoveCodeBlocks(string message)
-    {
-        // Remove code blocks with file paths
-        string withoutCodeBlocks = Regex.Replace(message, @"```(?:csharp|cs):([^\n]+)\n([\s\S]*?)```", "");
-        
-        // Remove regular code blocks
-        withoutCodeBlocks = Regex.Replace(withoutCodeBlocks, @"```(?:csharp|cs)?\n([\s\S]*?)```", "");
-        
-        return withoutCodeBlocks;
-    }
-
-    private void AddHeader(VisualElement container, string text, int fontSize, FontStyle style)
-    {
-        var header = new Label
-        {
-            style =
-            {
-                fontSize = fontSize,
-                unityFontStyleAndWeight = style,
-                marginTop = 4,
-                marginBottom = 4,
-                color = new Color(0.9f, 0.9f, 0.9f)
-            },
-            text = text
-        };
-        container.Add(header);
-    }
-
-    private void AddBulletList(VisualElement container, string paragraph)
-    {
-        string[] items = paragraph.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-        
-        foreach (var item in items)
-        {
-            string trimmedItem = item.Trim();
-            if (trimmedItem.StartsWith("- ") || trimmedItem.StartsWith("* "))
-            {
-                string bulletText = trimmedItem.Substring(2);
-                
-                var bulletContainer = new VisualElement
-                {
-                    style =
-                    {
-                        flexDirection = FlexDirection.Row,
-                        marginLeft = 8,
-                        marginBottom = 2
-                    }
-                };
-                
-                var bullet = new Label
-                {
-                    style = { marginRight = 4 },
-                    text = "•"
-                };
-                
-                var bulletContent = new Label
-                {
-                    style = { whiteSpace = WhiteSpace.Normal, flexGrow = 1 },
-                    text = FormatInlineMarkdown(bulletText)
-                };
-                
-                bulletContainer.Add(bullet);
-                bulletContainer.Add(bulletContent);
-                container.Add(bulletContainer);
-            }
-        }
-    }
-
-    private void AddNumberedList(VisualElement container, string paragraph)
-    {
-        string[] items = paragraph.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-        
-        foreach (var item in items)
-        {
-            string trimmedItem = item.Trim();
-            Match match = Regex.Match(trimmedItem, @"^(\d+)\.(.*)$");
-            
-            if (match.Success)
-            {
-                string number = match.Groups[1].Value;
-                string content = match.Groups[2].Value.Trim();
-                
-                var numberContainer = new VisualElement
-                {
-                    style =
-                    {
-                        flexDirection = FlexDirection.Row,
-                        marginLeft = 8,
-                        marginBottom = 2
-                    }
-                };
-                
-                var numberLabel = new Label
-                {
-                    style = { marginRight = 4, minWidth = 20 },
-                    text = number + "."
-                };
-                
-                var numberContent = new Label
-                {
-                    style = { whiteSpace = WhiteSpace.Normal, flexGrow = 1 },
-                    text = FormatInlineMarkdown(content)
-                };
-                
-                numberContainer.Add(numberLabel);
-                numberContainer.Add(numberContent);
-                container.Add(numberContainer);
-            }
-        }
-    }
-
-    private void AddFormattedParagraph(VisualElement container, string paragraph)
-    {
-        var formattedText = new Label
-        {
-            style =
-            {
-                whiteSpace = WhiteSpace.Normal,
-                marginBottom = 4,
-                marginLeft = 4
-            },
-            text = FormatInlineMarkdown(paragraph)
-        };
-        
-        container.Add(formattedText);
-    }
-
-    private string FormatInlineMarkdown(string text)
-    {
-        // Replace **text** with <b>text</b> for bold
-        text = Regex.Replace(text, @"\*\*(.*?)\*\*", "<b>$1</b>");
-        
-        // Replace *text* or _text_ with <i>text</i> for italic
-        text = Regex.Replace(text, @"\*(.*?)\*|_(.*?)_", "<i>$1$2</i>");
-        
-        // Replace `text` with <color=#AADDFF>text</color> for inline code
-        text = Regex.Replace(text, @"`(.*?)`", "<color=#AADDFF>$1</color>");
-        
-        return text;
     }
 
     // Process code blocks in AI responses for better display
@@ -1184,8 +1371,20 @@ public class ChatbotEditorWindow : EditorWindow
         // Process message for markdown if it's from the AI
         if (sender == "XeleR")
         {
-            var formattedContent = CreateMarkdownFormattedContent(message);
-            messageContainer.Add(formattedContent);
+            // Create a content container for the message
+            var contentContainer = new VisualElement
+            {
+                style =
+                {
+                    marginLeft = 4,
+                    marginRight = 4
+                }
+            };
+            
+            // Use the markdown renderer to format the message
+            var formattedContent = MarkdownRenderer.RenderMarkdown(message);
+            contentContainer.Add(formattedContent);
+            messageContainer.Add(contentContainer);
             
             // Process code blocks separately
             ProcessCodeBlocksInMessage(message);
@@ -1264,6 +1463,9 @@ public class ChatbotEditorWindow : EditorWindow
         // Unregister from compilation events
         CompilationPipeline.compilationStarted -= OnCompilationStarted;
         CompilationPipeline.compilationFinished -= OnCompilationFinished;
+        
+        // Clean up scene analysis components
+        SceneAnalysisIntegration.Cleanup();
     }
 
     private void OnCompilationStarted(object obj)
@@ -1275,5 +1477,182 @@ public class ChatbotEditorWindow : EditorWindow
     {
         // Scroll to bottom after compilation finishes
         EditorApplication.delayCall += ScrollToBottom;
+    }
+
+    private void OnAnalyzeSceneClicked()
+    {
+        string sceneStructure = SceneAnalysisIntegration.GetSceneStructureSummary();
+        AddMessageToHistory("You", "Analyze the current scene structure");
+        AddMessageToHistory("System", sceneStructure);
+    }
+
+    private void OnSpatialAnalysisClicked()
+    {
+        string spatialInfo = SceneAnalysisIntegration.GetSpatialInformation();
+        AddMessageToHistory("You", "Perform spatial analysis on the scene");
+        AddMessageToHistory("System", spatialInfo);
+    }
+
+    // Add a method to handle scene context in queries
+    private string AddSceneContextToQuery(string query)
+    {
+        if (!includeSceneContext)
+            return query;
+        
+        string sceneContext = SceneAnalysisIntegration.GetSceneStructureSummary();
+        return $"[Scene Context]\n{sceneContext}\n\n[User Query]\n{query}";
+    }
+
+    private void OnBrowseScenesClicked()
+    {
+        // Create a dropdown menu with scene files
+        var menu = new GenericMenu();
+        
+        // Ensure the Scenes folder exists
+        if (!Directory.Exists(SCENES_FOLDER))
+        {
+            Directory.CreateDirectory(SCENES_FOLDER);
+            AssetDatabase.Refresh();
+        }
+        
+        // Get all Unity scene files in the Scenes folder
+        string[] sceneFiles = Directory.GetFiles(SCENES_FOLDER, "*.unity", SearchOption.AllDirectories);
+        
+        foreach (string filePath in sceneFiles)
+        {
+            string relativePath = filePath.Replace("\\", "/"); // Normalize path for Unity
+            menu.AddItem(new GUIContent(relativePath), false, () => LoadSceneFile(relativePath));
+        }
+        
+        menu.ShowAsContext();
+    }
+
+    private void LoadSceneFile(string scenePath)
+    {
+        try
+        {
+            // Check if there are unsaved changes in the current scene
+            if (UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().isDirty)
+            {
+                if (!EditorUtility.DisplayDialog("Unsaved Changes", 
+                    "The current scene has unsaved changes. Do you want to proceed and lose those changes?", 
+                    "Yes", "No"))
+                {
+                    return;
+                }
+            }
+            
+            // Load the scene
+            UnityEditor.SceneManagement.EditorSceneManager.OpenScene(scenePath, UnityEditor.SceneManagement.OpenSceneMode.Single);
+            string sceneName = Path.GetFileName(scenePath);
+            
+            // Add the scene info to the conversation
+            AddMessageToHistory("You", $"Open scene {sceneName}");
+            AddMessageToHistory("System", $"Scene {sceneName} loaded successfully.");
+            
+            // Store the scene path for context in the next API call
+            lastLoadedScenePath = scenePath;
+            isSceneLoaded = true;
+            
+            // Optionally, ask the AI about the scene
+            string prompt = $"I've opened the scene {sceneName}. Can you analyze this scene and suggest improvements?";
+            queryField.SetValueWithoutNotify(prompt);
+            queryField.RemoveFromClassList("placeholder-text");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error loading scene file: {ex.Message}");
+            AddMessageToHistory("System", $"Error loading scene: {ex.Message}");
+        }
+    }
+
+    // Add a method to create a new GameObject in the scene
+    private GameObject CreateGameObject(string name, Vector3 position)
+    {
+        if (!isSceneLoaded)
+        {
+            AddMessageToHistory("System", "No scene is currently loaded.");
+            return null;
+        }
+        
+        GameObject newObject = new GameObject(name);
+        newObject.transform.position = position;
+        
+        AddMessageToHistory("System", $"Created new GameObject '{name}' at position {position}");
+        
+        // Mark the scene as dirty
+        UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(
+            UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
+        
+        return newObject;
+    }
+
+    // Add a method to save the current scene
+    private void SaveCurrentScene()
+    {
+        if (!isSceneLoaded)
+        {
+            AddMessageToHistory("System", "No scene is currently loaded.");
+            return;
+        }
+        
+        var currentScene = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+        
+        if (string.IsNullOrEmpty(currentScene.path))
+        {
+            // This is a new scene that hasn't been saved yet
+            string newPath = EditorUtility.SaveFilePanel(
+                "Save Scene",
+                SCENES_FOLDER,
+                "NewScene.unity",
+                "unity");
+                
+            if (string.IsNullOrEmpty(newPath))
+            {
+                // User cancelled the save dialog
+                return;
+            }
+            
+            // Convert to a project-relative path
+            if (newPath.StartsWith(Application.dataPath))
+            {
+                newPath = "Assets" + newPath.Substring(Application.dataPath.Length);
+            }
+            
+            UnityEditor.SceneManagement.EditorSceneManager.SaveScene(currentScene, newPath);
+            lastLoadedScenePath = newPath;
+        }
+        else
+        {
+            // Save the existing scene
+            UnityEditor.SceneManagement.EditorSceneManager.SaveScene(currentScene);
+        }
+        
+        AddMessageToHistory("System", $"Scene saved to {currentScene.path}");
+    }
+
+    // Add a method to create a new scene
+    private void CreateNewScene()
+    {
+        // Check if there are unsaved changes in the current scene
+        if (UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().isDirty)
+        {
+            if (!EditorUtility.DisplayDialog("Unsaved Changes", 
+                "The current scene has unsaved changes. Do you want to proceed and lose those changes?", 
+                "Yes", "No"))
+            {
+                return;
+            }
+        }
+        
+        // Create a new empty scene
+        UnityEditor.SceneManagement.EditorSceneManager.NewScene(
+            UnityEditor.SceneManagement.NewSceneSetup.DefaultGameObjects,
+            UnityEditor.SceneManagement.NewSceneMode.Single);
+        
+        isSceneLoaded = true;
+        lastLoadedScenePath = "";
+        
+        AddMessageToHistory("System", "Created a new scene with default game objects.");
     }
 }

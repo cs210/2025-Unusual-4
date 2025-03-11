@@ -345,7 +345,10 @@
 -analyzer:"/Applications/Unity/Hub/Editor/2022.3.11f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/Editor/ApiKeyManager.cs"
 "Assets/Editor/ApiSettingsWindow.cs"
+"Assets/Editor/ChatbotAutoOpen.cs"
 "Assets/Editor/ChatbotEditorWindow.cs"
+"Assets/Editor/MarkdownRenderer.cs"
+"Assets/Editor/SceneAnalysisIntegration.cs"
 -langversion:9.0
 
 /deterministic
