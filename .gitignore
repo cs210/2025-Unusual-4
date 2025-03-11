@@ -6,6 +6,10 @@
 [Bb]uilds/
 [Ll]ogs/
 
+# Exclude OpenAI configuration files
+Assets/Resources/OpenAIConfiguration.json
+Assets/Scripts/Chatbot.cs
+
 # User-specific files
 *.csproj
 *.unityproj

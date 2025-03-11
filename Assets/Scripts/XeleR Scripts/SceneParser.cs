@@ -121,6 +121,9 @@ public class SceneParser: MonoBehaviour
 
         ParseSceneHierarchy();
 
+        // parses scene based on the user_request.
+        Debug.Log("[Scene Parser] Parsing scene based on user request... : " + user_request);
+        Debug.Log("[Scene Parser] Scene JSON: " + scene_parsing_compact);
         if (mode == SceneAnalyzerMode.request_aware || mode == SceneAnalyzerMode.two_stages)
         {
             chatbot.input = "Request: " + user_request + '\n' + "Scene JSON: " + scene_parsing_compact;
@@ -139,7 +142,7 @@ public class SceneParser: MonoBehaviour
         if (mode == SceneAnalyzerMode.two_stages)
         {
             chatbot.output = GetSecondStageOutput();
-            Debug.Log("Second Stage Output: " + chatbot.output);
+            Debug.Log("[Scene Parser] Second Stage Output: " + chatbot.output);
         }
     }
 

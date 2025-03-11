@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638772368640000000
-    m_Hash: 1596546084
+      ticks: 638773088080000000
+    m_Hash: 320169423
   m_LockFileStatus:
     m_FilePath: /Users/seongheelee/Desktop/2025-Unusual-4/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638772368640000000
-    m_Hash: 3117770039
+      ticks: 638773088080000000
+    m_Hash: 3860068203
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -22,12 +22,12 @@ m_LocalPackages:
 m_ProjectPath: /Users/seongheelee/Desktop/2025-Unusual-4/Packages
 m_EditorVersion: 2022.3.11f1 (d00248457e15)
 m_ResolvedPackages:
-- packageId: com.openai.unity@8.6.2
+- packageId: com.openai.unity@8.6.3
   testable: 0
   isDirectDependency: 1
-  version: 8.6.2
+  version: 8.6.3
   source: 1
-  resolvedPath: /Users/seongheelee/Desktop/2025-Unusual-4/Library/PackageCache/com.openai.unity@8.6.2
+  resolvedPath: /Users/seongheelee/Desktop/2025-Unusual-4/Library/PackageCache/com.openai.unity@8.6.3
   assetPath: Packages/com.openai.unity
   name: com.openai.unity
   displayName: OpenAI
@@ -385,7 +385,7 @@ m_ResolvedPackages:
     configSource: 4
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638770029520220000
+  datePublishedTicks: 638771496773610000
   documentationUrl: https://github.com/RageAgainstThePixel/com.openai.unity#documentation
   hasRepository: 1
   repository:
