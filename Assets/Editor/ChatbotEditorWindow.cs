@@ -339,13 +339,12 @@ public class ChatbotEditorWindow : EditorWindow
         };
 
         // Add chat session selector
-        sessionContainer = new VisualElement
+        var sessionContainer = new VisualElement
         {
             style =
             {
                 flexDirection = FlexDirection.Row,
-                flexWrap = Wrap.Wrap, // Add this to allow wrapping if there are many options
-                minHeight = 22,
+                height = 22,
                 marginRight = 8
             }
         };
@@ -366,113 +365,18 @@ public class ChatbotEditorWindow : EditorWindow
         newChatButton.style.height = 22;
         sessionContainer.Add(newChatButton);
 
-        // Add the @ context button for file browsing
-        contextMenuButton = new Button(OnContextMenuButtonClicked) { text = "@ Context" };
-        contextMenuButton.style.height = 22;
-        contextMenuButton.style.width = 80;
-        contextMenuButton.style.backgroundColor = new Color(0.2f, 0.4f, 0.6f);
-        contextMenuButton.style.color = Color.white;
-        contextMenuButton.style.borderTopLeftRadius = 4;
-        contextMenuButton.style.borderTopRightRadius = 4;
-        contextMenuButton.style.borderBottomLeftRadius = 4;
-        contextMenuButton.style.borderBottomRightRadius = 4;
-        contextMenuButton.style.marginLeft = 4; // Small margin to separate from the + button
-        sessionContainer.Add(contextMenuButton); // Add to the sessionContainer, right after the newChatButton
-
-        // Add a single Scene Analysis button
-        var sceneAnalysisButton = new Button(OnSceneAnalysisClicked) { text = "Scene Analysis" };
-        sceneAnalysisButton.style.height = 22;
-        sceneAnalysisButton.style.marginLeft = 4;
-        sceneAnalysisButton.style.paddingLeft = 8;
-        sceneAnalysisButton.style.paddingRight = 8;
-        sceneAnalysisButton.style.backgroundColor = new Color(0.3f, 0.5f, 0.3f); // Green for scene analysis
-        sceneAnalysisButton.style.color = Color.white;
-        sceneAnalysisButton.style.borderTopLeftRadius = 4;
-        sceneAnalysisButton.style.borderTopRightRadius = 4;
-        sceneAnalysisButton.style.borderBottomLeftRadius = 4;
-        sceneAnalysisButton.style.borderBottomRightRadius = 4;
-        sceneAnalysisButton.style.borderTopWidth = 1;
-        sceneAnalysisButton.style.borderBottomWidth = 1;
-        sceneAnalysisButton.style.borderLeftWidth = 1;
-        sceneAnalysisButton.style.borderRightWidth = 1;
-        sceneAnalysisButton.style.borderTopColor = new Color(0.4f, 0.4f, 0.4f);
-        sceneAnalysisButton.style.borderBottomColor = new Color(0.4f, 0.4f, 0.4f);
-        sceneAnalysisButton.style.borderLeftColor = new Color(0.4f, 0.4f, 0.4f);
-        sceneAnalysisButton.style.borderRightColor = new Color(0.4f, 0.4f, 0.4f);
-        sessionContainer.Add(sceneAnalysisButton);
-
-        // Add Scene Context toggle with a visible box
-        var contextContainer = new VisualElement
-        {
-            style =
-            {
-                flexDirection = FlexDirection.Row,
-                alignItems = Align.Center,
-                marginLeft = 8
-            }
-        };
-
-        includeSceneContextToggle = new Toggle
-        {
-            value = includeSceneContext
-        };
-        
-        // Style the toggle to ensure the box is visible
-        includeSceneContextToggle.style.marginRight = 4;
-        
-        // Make the checkmark box more visible
-        var toggleCheckmark = includeSceneContextToggle.Q(className: "unity-toggle__checkmark");
-        if (toggleCheckmark != null)
-        {
-            toggleCheckmark.style.width = 16;
-            toggleCheckmark.style.height = 16;
-            toggleCheckmark.style.backgroundColor = new Color(0.2f, 0.2f, 0.2f);
-            toggleCheckmark.style.borderTopWidth = 1;
-            toggleCheckmark.style.borderBottomWidth = 1;
-            toggleCheckmark.style.borderLeftWidth = 1;
-            toggleCheckmark.style.borderRightWidth = 1;
-            toggleCheckmark.style.borderTopColor = new Color(0.5f, 0.5f, 0.5f);
-            toggleCheckmark.style.borderBottomColor = new Color(0.5f, 0.5f, 0.5f);
-            toggleCheckmark.style.borderLeftColor = new Color(0.5f, 0.5f, 0.5f);
-            toggleCheckmark.style.borderRightColor = new Color(0.5f, 0.5f, 0.5f);
-        }
-        
-        includeSceneContextToggle.RegisterValueChangedCallback(evt => {
-            includeSceneContext = evt.newValue;
-            if (includeSceneContext)
-                AddMessageToHistory("System", "Your current scene's context will be included in your queries.");
-            else
-                AddMessageToHistory("System", "Scene context disabled.");
-        });
-        
-        contextContainer.Add(includeSceneContextToggle);
-        
-        var contextLabel = new Label("Quick Context");
-        contextLabel.style.marginTop = 2; // Align with the toggle
-        contextContainer.Add(contextLabel);
-
-        // Add the context container to the session container
-        sessionContainer.Add(contextContainer);
-
-        // Create the context menu dropdown (initially hidden)
-        contextMenuDropdown = new VisualElement();
-        contextMenuDropdown.style.position = Position.Absolute;
-        contextMenuDropdown.style.backgroundColor = new Color(0.2f, 0.2f, 0.2f, 0.95f);
-        contextMenuDropdown.style.borderTopWidth = 1;
-        contextMenuDropdown.style.borderBottomWidth = 1;
-        contextMenuDropdown.style.borderLeftWidth = 1;
-        contextMenuDropdown.style.borderRightWidth = 1;
-        contextMenuDropdown.style.borderTopColor = new Color(0.3f, 0.3f, 0.3f);
-        contextMenuDropdown.style.borderBottomColor = new Color(0.3f, 0.3f, 0.3f);
-        contextMenuDropdown.style.borderLeftColor = new Color(0.3f, 0.3f, 0.3f);
-        contextMenuDropdown.style.borderRightColor = new Color(0.3f, 0.3f, 0.3f);
-        contextMenuDropdown.style.paddingTop = 5;
-        contextMenuDropdown.style.paddingBottom = 5;
-        contextMenuDropdown.style.display = DisplayStyle.None; // Hidden by default
-        contextMenuDropdown.pickingMode = PickingMode.Position;
-        rootVisualElement.Add(contextMenuDropdown);
-
         toolbar.Add(sessionContainer);
+
+        // Browse scripts button
+        browseScriptsButton = new Button(OnBrowseScriptsClicked) { text = "Browse Scripts" };
+        browseScriptsButton.style.height = 22; // Fixed height
+        toolbar.Add(browseScriptsButton);
+
+        // Browse scenes button
+        browseScenesButton = new Button(OnBrowseScenesClicked) { text = "Browse Scenes" };
+        browseScenesButton.style.height = 22; // Fixed height
+        browseScenesButton.style.marginLeft = 4;
+        toolbar.Add(browseScenesButton);
 
         // Model selection dropdown
         var modelContainer = new VisualElement
@@ -496,6 +400,7 @@ public class ChatbotEditorWindow : EditorWindow
         modelSelector.style.height = 22; // Fixed height
         modelSelector.RegisterValueChangedCallback(OnModelChanged);
         modelContainer.Add(modelSelector);
+
         toolbar.Add(modelContainer);
 
         // Add scene analysis buttons to the toolbar
@@ -626,9 +531,6 @@ public class ChatbotEditorWindow : EditorWindow
         
         // Ensure we scroll to the bottom after restoring history
         EditorApplication.delayCall += ScrollToBottom;
-
-        // After adding all the buttons to sessionContainer, update the selected files display
-        UpdateSelectedFilesDisplay();
     }
 
     private void OnModelChanged(ChangeEvent<ModelInfo> evt)
@@ -690,15 +592,6 @@ public class ChatbotEditorWindow : EditorWindow
         {
             string fileContent = File.ReadAllText(filePath);
             string fileName = Path.GetFileName(filePath);
-            
-            // Add the file path to the selected files array if not already in the array
-            if (Array.IndexOf(selectedFiles, filePath) < 0) {
-                Array.Resize(ref selectedFiles, selectedFiles.Length + 1);
-                selectedFiles[selectedFiles.Length - 1] = filePath;
-            }
-            
-            // Update the display of selected files
-            UpdateSelectedFilesDisplay();
             
             // Add the file content to the conversation
             AddMessageToHistory("You", $"Show me the contents of {fileName}");
@@ -805,81 +698,15 @@ public class ChatbotEditorWindow : EditorWindow
         var selectedModel = modelSelector.value;
         string provider = selectedModel.Provider;
         
-        // Build context from selected files
-        string filesContext = "";
-        if (selectedFiles.Length > 0)
-        {
-            StringBuilder contextBuilder = new StringBuilder();
-            contextBuilder.AppendLine("[Selected Files Context]");
-            
-            foreach (string filePath in selectedFiles)
-            {
-                if (filePath.EndsWith(".unity"))
-                {
-                    // Load the scene if it's not already loaded
-                    if (lastLoadedScenePath != filePath)
-                    {
-                        contextBuilder.AppendLine($"Scene: {Path.GetFileName(filePath)}");
-                        contextBuilder.AppendLine("[Scene Structure]");
-                        contextBuilder.AppendLine(SceneAnalysisIntegration.GetSceneStructureSummary());
-                        contextBuilder.AppendLine("[Spatial Information]");
-                        contextBuilder.AppendLine(SceneAnalysisIntegration.GetSpatialInformation());
-                    }
-                    else if (isSceneLoaded)
-                    {
-                        contextBuilder.AppendLine($"Scene: {Path.GetFileName(filePath)}");
-                        contextBuilder.AppendLine("[Scene Structure]");
-                        contextBuilder.AppendLine(SceneAnalysisIntegration.GetSceneStructureSummary());
-                        contextBuilder.AppendLine("[Spatial Information]");
-                        contextBuilder.AppendLine(SceneAnalysisIntegration.GetSpatialInformation());
-                    }
-                }
-                else if (filePath.EndsWith(".cs")) // Script file
-                {
-                    try
-                    {
-                        string fileContent = File.ReadAllText(filePath);
-                        contextBuilder.AppendLine($"Script: {Path.GetFileName(filePath)}");
-                        contextBuilder.AppendLine("```csharp");
-                        contextBuilder.AppendLine(fileContent);
-                        contextBuilder.AppendLine("```");
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogError($"Error reading file {filePath}: {ex.Message}");
-                    }
-                }
-            }
-            
-            filesContext = contextBuilder.ToString();
-        }
-        
         // Include scene context if the toggle is enabled
         string contextEnhancedPrompt = userText;
-        if (includeSceneContext) {
-            string sceneStructure = SceneAnalysisIntegration.GetSceneStructureSummary();
-            string spatialInfo = SceneAnalysisIntegration.GetSpatialInformation();
-            
-            // Combine both types of information
-            string combinedContext = $"[Scene Context]\n{sceneStructure}\n\n[Spatial Information]\n{spatialInfo}";
-            
-            // Add files context if available
-            if (!string.IsNullOrEmpty(filesContext)) {
-                contextEnhancedPrompt = $"{filesContext}\n\n{combinedContext}\n\n[User Query]\n{userText}";
-            }
-            else
-            {
-                contextEnhancedPrompt = $"{combinedContext}\n\n[User Query]\n{userText}";
-            }
-                
-            // Add a system message to show the user we're including scene context
-            AddMessageToHistory("System", "Including current scene context, spatial analysis, and selected files in this query.");
-        }
-        else if (!string.IsNullOrEmpty(filesContext))
+        if (includeSceneContext)
         {
-            // Only include files context
-            contextEnhancedPrompt = $"{filesContext}\n\n[User Query]\n{userText}";
-            AddMessageToHistory("System", "Including selected files in this query.");
+            string sceneContext = SceneAnalysisIntegration.GetSceneStructureSummary();
+            contextEnhancedPrompt = $"[Scene Context]\n{sceneContext}\n\n[User Query]\n{userText}";
+            
+            // Add a system message to show the user we're including scene context
+            AddMessageToHistory("System", "Including scene context in this query.");
         }
         
         // Send to the appropriate API based on the selected model's provider
@@ -1975,32 +1802,18 @@ public class ChatbotEditorWindow : EditorWindow
         EditorApplication.delayCall += ScrollToBottom;
     }
 
-    // Combined scene analysis method
-    private void OnSceneAnalysisClicked()
+    private void OnAnalyzeSceneClicked()
     {
-        // Create a dropdown menu with scene analysis options
-        var menu = new GenericMenu();
-        
-        menu.AddItem(new GUIContent("Scene Structure"), false, () => {
-            string sceneStructure = SceneAnalysisIntegration.GetSceneStructureSummary();
-            AddMessageToHistory("You", "Analyze the current scene structure");
-            AddMessageToHistory("System", sceneStructure);
-        });
-        
-        menu.AddItem(new GUIContent("Spatial Analysis"), false, () => {
-            string spatialInfo = SceneAnalysisIntegration.GetSpatialInformation();
-            AddMessageToHistory("You", "Perform spatial analysis on the scene");
-            AddMessageToHistory("System", spatialInfo);
-        });
-        
-        menu.AddItem(new GUIContent("Complete Analysis"), false, () => {
-            string sceneStructure = SceneAnalysisIntegration.GetSceneStructureSummary();
-            string spatialInfo = SceneAnalysisIntegration.GetSpatialInformation();
-            AddMessageToHistory("You", "Perform complete scene analysis");
-            AddMessageToHistory("System", "Scene Structure:\n" + sceneStructure + "\n\nSpatial Analysis:\n" + spatialInfo);
-        });
-        
-        menu.ShowAsContext();
+        string sceneStructure = SceneAnalysisIntegration.GetSceneStructureSummary();
+        AddMessageToHistory("You", "Analyze the current scene structure");
+        AddMessageToHistory("System", sceneStructure);
+    }
+
+    private void OnSpatialAnalysisClicked()
+    {
+        string spatialInfo = SceneAnalysisIntegration.GetSpatialInformation();
+        AddMessageToHistory("You", "Perform spatial analysis on the scene");
+        AddMessageToHistory("System", spatialInfo);
     }
 
     // Add a method to handle scene context in queries
@@ -2051,15 +1864,6 @@ public class ChatbotEditorWindow : EditorWindow
                     return;
                 }
             }
-            
-            // Add the scene path to the selected files array if not already in the array
-            if (Array.IndexOf(selectedFiles, scenePath) < 0) {
-                Array.Resize(ref selectedFiles, selectedFiles.Length + 1);
-                selectedFiles[selectedFiles.Length - 1] = scenePath;
-            }
-
-            // Update the display of selected files
-            UpdateSelectedFilesDisplay();
             
             // Load the scene
             UnityEditor.SceneManagement.EditorSceneManager.OpenScene(scenePath, UnityEditor.SceneManagement.OpenSceneMode.Single);
