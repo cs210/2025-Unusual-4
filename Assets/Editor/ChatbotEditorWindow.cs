@@ -170,16 +170,10 @@ public class ChatbotEditorWindow : EditorWindow
     private Button spatialAnalysisButton;
     private Toggle includeSceneContextToggle;
     private bool includeSceneContext = false;
-
-    // Add this as a class member
-    private Button contextMenuButton;
-    private VisualElement contextMenuDropdown;
-    private bool isContextMenuOpen = false;
-
-    private string[] selectedFiles = new string[0];
-
-    // Add a reference to the sessionContainer
-    private VisualElement sessionContainer;
+    
+    // Add field to store prompt buttons
+    private List<Button> promptSuggestionButtons = new List<Button>();
+    private VisualElement promptSuggestionsContainer;
 
     [MenuItem("Window/Chatbox %i")]
     public static void ShowWindow()
@@ -419,6 +413,55 @@ public class ChatbotEditorWindow : EditorWindow
         modelContainer.Add(modelSelector);
         toolbar.Add(modelContainer);
 
+        // Add scene analysis buttons to the toolbar
+        analyzeSceneButton = new Button(OnAnalyzeSceneClicked) { text = "Analyze Scene" };
+        analyzeSceneButton.style.height = 22; // Fixed height
+        toolbar.Add(analyzeSceneButton);
+        
+        spatialAnalysisButton = new Button(OnSpatialAnalysisClicked) { text = "Spatial Analysis" };
+        spatialAnalysisButton.style.height = 22; // Fixed height
+        toolbar.Add(spatialAnalysisButton);
+        
+        // Add a separator
+        var separator = new VisualElement();
+        separator.style.width = 1;
+        separator.style.height = 22;
+        separator.style.backgroundColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+        separator.style.marginLeft = 8;
+        separator.style.marginRight = 8;
+        toolbar.Add(separator);
+
+        // Add toggle for including scene context in all queries - make it more prominent
+        includeSceneContextToggle = new Toggle("Scene Context");
+        includeSceneContextToggle.value = includeSceneContext;
+        includeSceneContextToggle.style.height = 22;
+        includeSceneContextToggle.style.marginLeft = 4;
+        includeSceneContextToggle.style.backgroundColor = new Color(0.2f, 0.3f, 0.4f, 0.2f);
+        includeSceneContextToggle.style.paddingLeft = 4;
+        includeSceneContextToggle.style.paddingRight = 4;
+        includeSceneContextToggle.style.borderTopWidth = 1;
+        includeSceneContextToggle.style.borderBottomWidth = 1;
+        includeSceneContextToggle.style.borderLeftWidth = 1;
+        includeSceneContextToggle.style.borderRightWidth = 1;
+        includeSceneContextToggle.style.borderTopColor = new Color(0.3f, 0.3f, 0.3f);
+        includeSceneContextToggle.style.borderBottomColor = new Color(0.3f, 0.3f, 0.3f);
+        includeSceneContextToggle.style.borderLeftColor = new Color(0.3f, 0.3f, 0.3f);
+        includeSceneContextToggle.style.borderRightColor = new Color(0.3f, 0.3f, 0.3f);
+        includeSceneContextToggle.RegisterValueChangedCallback(evt => {
+            includeSceneContext = evt.newValue;
+            if (evt.newValue)
+            {
+                AddMessageToHistory("System", "Scene context will be included in your queries.");
+                ShowPromptSuggestions();
+            }
+            else
+            {
+                AddMessageToHistory("System", "Scene context disabled.");
+                HidePromptSuggestions();
+            }
+        });
+        toolbar.Add(includeSceneContextToggle);
+
         rootVisualElement.Add(toolbar);
 
         // Settings button for API keys
@@ -489,6 +532,12 @@ public class ChatbotEditorWindow : EditorWindow
 
         // Restore conversation history from the current session
         RestoreCurrentSession();
+        
+        // Show prompt suggestions if scene context is enabled
+        if (includeSceneContext)
+        {
+            ShowPromptSuggestions();
+        }
         
         // Ensure we scroll to the bottom after restoring history
         EditorApplication.delayCall += ScrollToBottom;
@@ -657,6 +706,9 @@ public class ChatbotEditorWindow : EditorWindow
         var userText = queryField.value?.Trim();
         if (string.IsNullOrEmpty(userText)) return;
 
+        // Learn from user query
+        LearnFromUserQuery(userText);
+
         AddMessageToHistory("You", userText);
 
         // Temporarily disable input
@@ -753,6 +805,12 @@ public class ChatbotEditorWindow : EditorWindow
         else if (provider == "Claude")
         {
             SendQueryToClaude(contextEnhancedPrompt, selectedModel.Name, OnResponseReceived);
+        }
+
+        // Show new prompt suggestions if scene context is enabled
+        if (includeSceneContext)
+        {
+            ShowPromptSuggestions();
         }
     }
 
@@ -939,8 +997,7 @@ public class ChatbotEditorWindow : EditorWindow
     {
         // Handle common Unity types
         if (targetType == typeof(float))
-        {
-            return float.Parse(value);
+        {return float.Parse(value);
         }
         else if (targetType == typeof(int))
         {
@@ -2145,215 +2202,172 @@ public class ChatbotEditorWindow : EditorWindow
         public List<ChatSession> Sessions;
     }
 
-    // Add this method to handle the button click
-    private void OnContextMenuButtonClicked()
+    // Methods for prompt recommendations
+    private void ShowPromptSuggestions()
     {
-        if (isContextMenuOpen)
+        // Clear any existing suggestion buttons
+        ClearPromptSuggestions();
+        
+        // Get scene info for context-aware suggestions (optional)
+        string sceneInfo = null;
+        if (isSceneLoaded)
         {
-            CloseContextMenu();
-        }
-        else
-        {
-            OpenContextMenu();
-        }
-    }
-
-    private void OpenContextMenu()
-    {
-        // Position the dropdown above the @ button
-        var buttonRect = contextMenuButton.worldBound;
-        
-        // Calculate the height of the dropdown based on the number of items
-        // Each item is 24px high plus margins (4px total), and we have padding (10px total)
-        float dropdownHeight = (2 * (24 + 4)) + 10; // Only 2 items now: Browse Scripts and Browse Scenes
-        
-        // Add additional offset to position it higher
-        float additionalOffset = 24;
-        
-        contextMenuDropdown.style.left = buttonRect.x;
-        contextMenuDropdown.style.top = buttonRect.y - dropdownHeight - additionalOffset;
-        contextMenuDropdown.style.width = 200;
-        
-        // Clear existing items
-        contextMenuDropdown.Clear();
-        
-        // Add only the file browsing options
-        AddContextMenuItem("Browse Scripts", OnBrowseScriptsClicked);
-        AddContextMenuItem("Browse Scenes", OnBrowseScenesClicked);
-        
-        // Show the dropdown
-        contextMenuDropdown.style.display = DisplayStyle.Flex;
-        isContextMenuOpen = true;
-        
-        // Add a click event handler to the root to close the menu when clicking outside
-        rootVisualElement.RegisterCallback<MouseDownEvent>(OnClickOutsideContextMenu);
-    }
-
-    private void CloseContextMenu()
-    {
-        contextMenuDropdown.style.display = DisplayStyle.None;
-        isContextMenuOpen = false;
-        rootVisualElement.UnregisterCallback<MouseDownEvent>(OnClickOutsideContextMenu);
-    }
-
-    private void OnClickOutsideContextMenu(MouseDownEvent evt)
-    {
-        // Check if the click is outside the dropdown
-        if (!contextMenuDropdown.worldBound.Contains(evt.mousePosition))
-        {
-            CloseContextMenu();
-        }
-    }
-
-    // Modify the AddContextMenuItem method to update the display after tracking clicks
-    private void AddContextMenuItem(string label, Action clickAction)
-    {
-        var item = new Button(() => {
-            // Just execute the original action without tracking menu clicks
-            clickAction();
-        }) { text = label };
-        
-        item.style.height = 24;
-        item.style.width = 190;
-        item.style.marginLeft = 5;
-        item.style.marginRight = 5;
-        item.style.marginTop = 2;
-        item.style.marginBottom = 2;
-        item.style.backgroundColor = new Color(0.25f, 0.25f, 0.25f);
-        
-        contextMenuDropdown.Add(item);
-    }
-
-    // Modify the UpdateSelectedFilesDisplay method to add close buttons to each file box
-    private void UpdateSelectedFilesDisplay()
-    {
-        // First, clear any existing option boxes
-        var existingBoxes = sessionContainer.Query(className: "selected-file-box").ToList();
-        foreach (var box in existingBoxes)
-        {
-            sessionContainer.Remove(box);
+            sceneInfo = SceneAnalysisIntegration.GetSceneStructureSummary();
         }
         
-        // Display all selected files
-        for (int i = 0; i < selectedFiles.Length; i++)
-        {
-            string filePath = selectedFiles[i];
-            string fileName = Path.GetFileName(filePath);
-            bool isScene = filePath.EndsWith(".unity");
-            
-            var fileBox = new VisualElement();
-            fileBox.AddToClassList("selected-file-box");
-            fileBox.style.flexDirection = FlexDirection.Row; // Make it horizontal to fit the close button
-            
-            // Use different colors for scripts vs scenes
-            if (isScene)
-                fileBox.style.backgroundColor = new Color(0.5f, 0.3f, 0.7f); // Purple for scenes
-            else
-                fileBox.style.backgroundColor = new Color(0.3f, 0.5f, 0.7f); // Blue for scripts
-            
-            fileBox.style.borderTopLeftRadius = 3;
-            fileBox.style.borderTopRightRadius = 3;
-            fileBox.style.borderBottomLeftRadius = 3;
-            fileBox.style.borderBottomRightRadius = 3;
-            fileBox.style.paddingLeft = 4;
-            fileBox.style.paddingRight = 2; // Reduced right padding to fit close button
-            fileBox.style.paddingTop = 2;
-            fileBox.style.paddingBottom = 2;
-            fileBox.style.marginLeft = 4;
-            fileBox.style.height = 18;
-            
-            // Create a container for the file name label
-            var labelContainer = new VisualElement();
-            labelContainer.style.flexGrow = 1; // Take up available space
-            
-            // Make the file box clickable to reload the file
-            int index = i; // Capture the index for the click handler
-            labelContainer.RegisterCallback<ClickEvent>((evt) => {
-                if (isScene)
-                    LoadSceneFile(selectedFiles[index]);
-                else
-                    LoadScriptFile(selectedFiles[index]);
-            });
-            
-            var fileLabel = new Label(fileName);
-            fileLabel.style.fontSize = 10;
-            fileLabel.style.color = Color.white;
-            fileLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
-            
-            labelContainer.Add(fileLabel);
-            fileBox.Add(labelContainer);
-            
-            // Add a close button
-            var closeButton = new Button(() => RemoveSelectedFile(index)) { text = "×" };
-            closeButton.AddToClassList("file-close-button");
-            closeButton.style.width = 14;
-            closeButton.style.height = 14;
-            closeButton.style.fontSize = 10;
-            closeButton.style.paddingLeft = 0;
-            closeButton.style.paddingRight = 0;
-            closeButton.style.paddingTop = 0;
-            closeButton.style.paddingBottom = 0;
-            closeButton.style.marginLeft = 2;
-            closeButton.style.marginRight = 0;
-            closeButton.style.marginTop = 0;
-            closeButton.style.marginBottom = 0;
-            closeButton.style.backgroundColor = new Color(0.7f, 0.3f, 0.3f); // Red for close button
-            closeButton.style.color = Color.white;
-            closeButton.style.borderTopLeftRadius = 2;
-            closeButton.style.borderTopRightRadius = 2;
-            closeButton.style.borderBottomLeftRadius = 2;
-            closeButton.style.borderBottomRightRadius = 2;
-            
-            fileBox.Add(closeButton);
-            sessionContainer.Add(fileBox);
-        }
-    }
-
-    // Add a method to remove a file from the selectedFiles array
-    private void RemoveSelectedFile(int index)
-    {
-        if (index < 0 || index >= selectedFiles.Length)
+        // Get recommendations
+        var recommendations = PromptRecommender.GetRecommendedPrompts(sceneInfo, 3);
+        
+        if (recommendations.Count == 0)
             return;
-        
-        // Create a new array without the selected file
-        string[] newSelectedFiles = new string[selectedFiles.Length - 1];
-        
-        // Copy all elements except the one at the specified index
-        for (int i = 0, j = 0; i < selectedFiles.Length; i++)
+            
+        // Create container if it doesn't exist
+        if (promptSuggestionsContainer == null)
         {
-            if (i != index)
+            promptSuggestionsContainer = new VisualElement
             {
-                newSelectedFiles[j++] = selectedFiles[i];
+                style =
+                {
+                    marginLeft = 10,
+                    marginRight = 10,
+                    marginTop = 5,
+                    marginBottom = 10,
+                    paddingTop = 5,
+                    paddingBottom = 5,
+                    paddingLeft = 5,
+                    paddingRight = 5,
+                    backgroundColor = new Color(0.2f, 0.2f, 0.3f, 0.2f),
+                    borderTopWidth = 1,
+                    borderBottomWidth = 1,
+                    borderLeftWidth = 1,
+                    borderRightWidth = 1,
+                    borderTopColor = new Color(0.3f, 0.3f, 0.4f),
+                    borderBottomColor = new Color(0.3f, 0.3f, 0.4f),
+                    borderLeftColor = new Color(0.3f, 0.3f, 0.4f),
+                    borderRightColor = new Color(0.3f, 0.3f, 0.4f),
+                    borderTopLeftRadius = 3,
+                    borderTopRightRadius = 3,
+                    borderBottomLeftRadius = 3,
+                    borderBottomRightRadius = 3
+                }
+            };
+            
+            var title = new Label("Try these prompts:");
+            title.style.unityFontStyleAndWeight = FontStyle.Bold;
+            title.style.marginBottom = 5;
+            promptSuggestionsContainer.Add(title);
+            
+            // Insert after the conversation but before the input field
+            rootVisualElement.Insert(rootVisualElement.IndexOf(conversationScrollView) + 1, promptSuggestionsContainer);
+        }
+        
+        // Add prompt suggestion buttons
+        foreach (var prompt in recommendations)
+        {
+            var button = new Button(() => SelectPrompt(prompt))
+            {
+                text = prompt,
+                style =
+                {
+                    marginBottom = 3,
+                    height = 24,
+                    borderTopLeftRadius = 2,
+                    borderTopRightRadius = 2,
+                    borderBottomLeftRadius = 2,
+                    borderBottomRightRadius = 2,
+                    backgroundColor = new Color(0.25f, 0.25f, 0.3f)
+                }
+            };
+            
+            promptSuggestionsContainer.Add(button);
+            promptSuggestionButtons.Add(button);
+        }
+    }
+
+    private void SelectPrompt(string prompt)
+    {
+        // Set the query field to the selected prompt
+        queryField.SetValueWithoutNotify(prompt);
+        queryField.RemoveFromClassList("placeholder-text");
+        
+        // Mark this prompt as used to avoid repetition
+        PromptRecommender.MarkPromptAsUsed(prompt);
+        
+        // Remove the suggestions
+        ClearPromptSuggestions();
+        
+        // Focus the query field so the user can modify if desired
+        queryField.Focus();
+    }
+
+    private void HidePromptSuggestions()
+    {
+        ClearPromptSuggestions();
+        
+        if (promptSuggestionsContainer != null)
+        {
+            promptSuggestionsContainer.RemoveFromHierarchy();
+            promptSuggestionsContainer = null;
+        }
+    }
+
+    private void ClearPromptSuggestions()
+    {
+        // Clear existing buttons
+        foreach (var button in promptSuggestionButtons)
+        {
+            if (button.parent != null)
+                button.RemoveFromHierarchy();
+        }
+        
+        promptSuggestionButtons.Clear();
+        
+        if (promptSuggestionsContainer != null)
+        {
+            // Keep only the title
+            while (promptSuggestionsContainer.childCount > 1)
+            {
+                promptSuggestionsContainer.RemoveAt(1);
             }
         }
-        
-        // Update the array
-        selectedFiles = newSelectedFiles;
-        
-        // Update the UI
-        UpdateSelectedFilesDisplay();
     }
-
-    // Helper method to standardize button styling
-    private void StyleButton(Button button)
+    
+    private void LearnFromUserQuery(string query)
     {
-        button.style.height = 22;
-        button.style.marginRight = 4;
-        button.style.paddingLeft = 8;
-        button.style.paddingRight = 8;
-        button.style.backgroundColor = new Color(0.25f, 0.25f, 0.25f);
-        button.style.color = Color.white;
-        button.style.borderTopLeftRadius = 4;
-        button.style.borderTopRightRadius = 4;
-        button.style.borderBottomLeftRadius = 4;
-        button.style.borderBottomRightRadius = 4;
-        button.style.borderTopWidth = 1;
-        button.style.borderBottomWidth = 1;
-        button.style.borderLeftWidth = 1;
-        button.style.borderRightWidth = 1;
-        button.style.borderTopColor = new Color(0.4f, 0.4f, 0.4f);
-        button.style.borderBottomColor = new Color(0.4f, 0.4f, 0.4f);
-        button.style.borderLeftColor = new Color(0.4f, 0.4f, 0.4f);
-        button.style.borderRightColor = new Color(0.4f, 0.4f, 0.4f);
+        // Simple implementation to learn from user patterns
+        // Only consider queries that seem to be about scene analysis
+        if (query.ToLower().Contains("scene") || 
+            query.ToLower().Contains("object") || 
+            query.ToLower().Contains("gameobject") ||
+            query.ToLower().Contains("component") ||
+            query.ToLower().Contains("hierarchy"))
+        {
+            // Determine which category this might belong to
+            string category = "SceneStructure";
+            
+            if (query.ToLower().Contains("position") || 
+                query.ToLower().Contains("spatial") || 
+                query.ToLower().Contains("collision") ||
+                query.ToLower().Contains("layout"))
+            {
+                category = "ObjectRelationships";
+            }
+            else if (query.ToLower().Contains("component") || 
+                    query.ToLower().Contains("script") || 
+                    query.ToLower().Contains("behavior"))
+            {
+                category = "ComponentAnalysis";
+            }
+            else if (query.ToLower().Contains("optimize") || 
+                    query.ToLower().Contains("performance") || 
+                    query.ToLower().Contains("improve") ||
+                    query.ToLower().Contains("bottleneck"))
+            {
+                category = "SceneOptimization";
+            }
+            
+            // Add to recommender system
+            PromptRecommender.AddPrompt(category, query);
+        }
     }
 }
