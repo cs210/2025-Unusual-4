@@ -57,16 +57,27 @@ public class ChatbotEditorWindow : EditorWindow
         {
             window.Close();
         }
-        
-        // Create a fresh window instance
-        var newWindow = CreateWindow<ChatbotEditorWindow>("Chat v0");
+
+        // Create a fresh window instance, docked next to the Inspector if possible
+        var editorAssembly = typeof(UnityEditor.Editor).Assembly;
+        var inspectorType = editorAssembly.GetType("UnityEditor.InspectorWindow");
+
+        ChatbotEditorWindow newWindow;
+        if (inspectorType == null)
+        {
+            // If Inspector isn't found at all, just open normally
+            newWindow = GetWindow<ChatbotEditorWindow>("Chat x0", true);
+        }
+        else
+        {
+            // Attempt to dock next to the Inspector
+            newWindow = GetWindow<ChatbotEditorWindow>("Chat x0", true, inspectorType);
+        }
+
         newWindow.Show();
         newWindow.Focus();
-        
-        // Log that we're forcing the window open
+
         Debug.LogWarning("ChatbotEditorWindow: Forcing window to open");
-        
-        // Set a flag in EditorPrefs to indicate the window is open
         EditorPrefs.SetBool("ChatbotEditorWindowOpen", true);
     }
     
