@@ -1055,6 +1055,23 @@ public class ChatbotEditorWindow : EditorWindow
 
     private async void SendQueryToOpenAI(string userMessage, string model, Action<string, string> onResponse)
     {
+        // Check if the user is asking for more examples
+        if (userMessage.ToLower().Contains("more example") || 
+            userMessage.ToLower().Contains("more prompt") || 
+            userMessage.ToLower().Contains("give example") ||
+            userMessage.ToLower().Contains("show example"))
+        {
+            // Get more example prompts
+            List<string> moreExamples = PromptRecommender.GetRandomPrompts(3);
+            string examplesMessage = "Here are some more example prompts you can try:\n\n" +
+                                     $"• {moreExamples[0]}\n" +
+                                     $"• {moreExamples[1]}\n" +
+                                     $"• {moreExamples[2]}";
+            
+            onResponse?.Invoke(examplesMessage, "OpenAI");
+            return;
+        }
+
         const string url = "https://api.openai.com/v1/chat/completions";
         
         // Get API key from manager
@@ -1160,6 +1177,23 @@ public class ChatbotEditorWindow : EditorWindow
 
     private async void SendQueryToClaude(string userMessage, string model, Action<string, string> onResponse)
     {
+        // Check if the user is asking for more examples
+        if (userMessage.ToLower().Contains("more example") || 
+            userMessage.ToLower().Contains("more prompt") || 
+            userMessage.ToLower().Contains("give example") ||
+            userMessage.ToLower().Contains("show example"))
+        {
+            // Get more example prompts
+            List<string> moreExamples = PromptRecommender.GetRandomPrompts(3);
+            string examplesMessage = "Here are some more example prompts you can try:\n\n" +
+                                     $"• {moreExamples[0]}\n" +
+                                     $"• {moreExamples[1]}\n" +
+                                     $"• {moreExamples[2]}";
+            
+            onResponse?.Invoke(examplesMessage, "Claude");
+            return;
+        }
+
         const string url = "https://api.anthropic.com/v1/messages";
         
         // Get API key from manager
@@ -1604,6 +1638,12 @@ public class ChatbotEditorWindow : EditorWindow
                 }
             }
             
+            // If this is a new session with no messages, add the welcome message
+            if (currentSession.Messages.Count == 0)
+            {
+                AddWelcomeMessage();
+            }
+            
             // Scroll to bottom
             EditorApplication.delayCall += ScrollToBottom;
         }
@@ -1928,13 +1968,18 @@ public class ChatbotEditorWindow : EditorWindow
         sessionSelector.index = currentSessionIndex;
         
         // Clear the conversation view and restore (which will be empty for a new chat)
+        // We'll let RestoreCurrentSession handle adding the welcome message
         RestoreCurrentSession();
-        
-        // Add a welcome message
-        AddMessageToHistory("System", $"Started new chat session: {newSession.Name}");
         
         // Save the updated state
         SaveChatSessionsToEditorPrefs();
+    }
+
+    // Add a method to display the welcome message with example prompts
+    private void AddWelcomeMessage()
+    {
+        string welcomeMessage = PromptRecommender.GetWelcomeMessage();
+        AddMessageToHistory("XeleR", welcomeMessage);
     }
 
     private void SaveCurrentSessionState()
