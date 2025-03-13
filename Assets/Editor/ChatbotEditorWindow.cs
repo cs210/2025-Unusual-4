@@ -170,6 +170,10 @@ public class ChatbotEditorWindow : EditorWindow
     private Button spatialAnalysisButton;
     private Toggle includeSceneContextToggle;
     private bool includeSceneContext = false;
+    
+    // Add field to store prompt buttons
+    private List<Button> promptSuggestionButtons = new List<Button>();
+    private VisualElement promptSuggestionsContainer;
 
     [MenuItem("Window/Chatbox %i")]
     public static void ShowWindow()
@@ -351,9 +355,15 @@ public class ChatbotEditorWindow : EditorWindow
         includeSceneContextToggle.RegisterValueChangedCallback(evt => {
             includeSceneContext = evt.newValue;
             if (evt.newValue)
+            {
                 AddMessageToHistory("System", "Scene context will be included in your queries.");
+                ShowPromptSuggestions();
+            }
             else
+            {
                 AddMessageToHistory("System", "Scene context disabled.");
+                HidePromptSuggestions();
+            }
         });
         toolbar.Add(includeSceneContextToggle);
 
@@ -427,6 +437,12 @@ public class ChatbotEditorWindow : EditorWindow
 
         // Restore conversation history from the current session
         RestoreCurrentSession();
+        
+        // Show prompt suggestions if scene context is enabled
+        if (includeSceneContext)
+        {
+            ShowPromptSuggestions();
+        }
         
         // Ensure we scroll to the bottom after restoring history
         EditorApplication.delayCall += ScrollToBottom;
@@ -583,6 +599,9 @@ public class ChatbotEditorWindow : EditorWindow
         var userText = queryField.value?.Trim();
         if (string.IsNullOrEmpty(userText)) return;
 
+        // Learn from user query
+        LearnFromUserQuery(userText);
+
         AddMessageToHistory("You", userText);
 
         // Temporarily disable input
@@ -613,6 +632,12 @@ public class ChatbotEditorWindow : EditorWindow
         else if (provider == "Claude")
         {
             SendQueryToClaude(contextEnhancedPrompt, selectedModel.Name, OnResponseReceived);
+        }
+
+        // Show new prompt suggestions if scene context is enabled
+        if (includeSceneContext)
+        {
+            ShowPromptSuggestions();
         }
     }
 
@@ -799,8 +824,7 @@ public class ChatbotEditorWindow : EditorWindow
     {
         // Handle common Unity types
         if (targetType == typeof(float))
-        {
-            return float.Parse(value);
+        {return float.Parse(value);
         }
         else if (targetType == typeof(int))
         {
@@ -1980,5 +2004,174 @@ public class ChatbotEditorWindow : EditorWindow
     private class ChatSessionsWrapper
     {
         public List<ChatSession> Sessions;
+    }
+
+    // Methods for prompt recommendations
+    private void ShowPromptSuggestions()
+    {
+        // Clear any existing suggestion buttons
+        ClearPromptSuggestions();
+        
+        // Get scene info for context-aware suggestions (optional)
+        string sceneInfo = null;
+        if (isSceneLoaded)
+        {
+            sceneInfo = SceneAnalysisIntegration.GetSceneStructureSummary();
+        }
+        
+        // Get recommendations
+        var recommendations = PromptRecommender.GetRecommendedPrompts(sceneInfo, 3);
+        
+        if (recommendations.Count == 0)
+            return;
+            
+        // Create container if it doesn't exist
+        if (promptSuggestionsContainer == null)
+        {
+            promptSuggestionsContainer = new VisualElement
+            {
+                style =
+                {
+                    marginLeft = 10,
+                    marginRight = 10,
+                    marginTop = 5,
+                    marginBottom = 10,
+                    paddingTop = 5,
+                    paddingBottom = 5,
+                    paddingLeft = 5,
+                    paddingRight = 5,
+                    backgroundColor = new Color(0.2f, 0.2f, 0.3f, 0.2f),
+                    borderTopWidth = 1,
+                    borderBottomWidth = 1,
+                    borderLeftWidth = 1,
+                    borderRightWidth = 1,
+                    borderTopColor = new Color(0.3f, 0.3f, 0.4f),
+                    borderBottomColor = new Color(0.3f, 0.3f, 0.4f),
+                    borderLeftColor = new Color(0.3f, 0.3f, 0.4f),
+                    borderRightColor = new Color(0.3f, 0.3f, 0.4f),
+                    borderTopLeftRadius = 3,
+                    borderTopRightRadius = 3,
+                    borderBottomLeftRadius = 3,
+                    borderBottomRightRadius = 3
+                }
+            };
+            
+            var title = new Label("Try these prompts:");
+            title.style.unityFontStyleAndWeight = FontStyle.Bold;
+            title.style.marginBottom = 5;
+            promptSuggestionsContainer.Add(title);
+            
+            // Insert after the conversation but before the input field
+            rootVisualElement.Insert(rootVisualElement.IndexOf(conversationScrollView) + 1, promptSuggestionsContainer);
+        }
+        
+        // Add prompt suggestion buttons
+        foreach (var prompt in recommendations)
+        {
+            var button = new Button(() => SelectPrompt(prompt))
+            {
+                text = prompt,
+                style =
+                {
+                    marginBottom = 3,
+                    height = 24,
+                    borderTopLeftRadius = 2,
+                    borderTopRightRadius = 2,
+                    borderBottomLeftRadius = 2,
+                    borderBottomRightRadius = 2,
+                    backgroundColor = new Color(0.25f, 0.25f, 0.3f)
+                }
+            };
+            
+            promptSuggestionsContainer.Add(button);
+            promptSuggestionButtons.Add(button);
+        }
+    }
+
+    private void SelectPrompt(string prompt)
+    {
+        // Set the query field to the selected prompt
+        queryField.SetValueWithoutNotify(prompt);
+        queryField.RemoveFromClassList("placeholder-text");
+        
+        // Mark this prompt as used to avoid repetition
+        PromptRecommender.MarkPromptAsUsed(prompt);
+        
+        // Remove the suggestions
+        ClearPromptSuggestions();
+        
+        // Focus the query field so the user can modify if desired
+        queryField.Focus();
+    }
+
+    private void HidePromptSuggestions()
+    {
+        ClearPromptSuggestions();
+        
+        if (promptSuggestionsContainer != null)
+        {
+            promptSuggestionsContainer.RemoveFromHierarchy();
+            promptSuggestionsContainer = null;
+        }
+    }
+
+    private void ClearPromptSuggestions()
+    {
+        // Clear existing buttons
+        foreach (var button in promptSuggestionButtons)
+        {
+            if (button.parent != null)
+                button.RemoveFromHierarchy();
+        }
+        
+        promptSuggestionButtons.Clear();
+        
+        if (promptSuggestionsContainer != null)
+        {
+            // Keep only the title
+            while (promptSuggestionsContainer.childCount > 1)
+            {
+                promptSuggestionsContainer.RemoveAt(1);
+            }
+        }
+    }
+    
+    private void LearnFromUserQuery(string query)
+    {
+        // Simple implementation to learn from user patterns
+        // Only consider queries that seem to be about scene analysis
+        if (query.ToLower().Contains("scene") || 
+            query.ToLower().Contains("object") || 
+            query.ToLower().Contains("gameobject") ||
+            query.ToLower().Contains("component") ||
+            query.ToLower().Contains("hierarchy"))
+        {
+            // Determine which category this might belong to
+            string category = "SceneStructure";
+            
+            if (query.ToLower().Contains("position") || 
+                query.ToLower().Contains("spatial") || 
+                query.ToLower().Contains("collision") ||
+                query.ToLower().Contains("layout"))
+            {
+                category = "ObjectRelationships";
+            }
+            else if (query.ToLower().Contains("component") || 
+                    query.ToLower().Contains("script") || 
+                    query.ToLower().Contains("behavior"))
+            {
+                category = "ComponentAnalysis";
+            }
+            else if (query.ToLower().Contains("optimize") || 
+                    query.ToLower().Contains("performance") || 
+                    query.ToLower().Contains("improve") ||
+                    query.ToLower().Contains("bottleneck"))
+            {
+                category = "SceneOptimization";
+            }
+            
+            // Add to recommender system
+            PromptRecommender.AddPrompt(category, query);
+        }
     }
 }
