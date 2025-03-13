@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PixelRect:
     serializedVersion: 2
-    x: 853
-    y: 274
-    width: 659
-    height: 621
+    x: 628
+    y: 286
+    width: 800
+    height: 573
   m_ShowMode: 0
-  m_Title: Chat v0
+  m_Title: Package Manager
   m_RootView: {fileID: 4}
-  m_MinSize: {x: 100, y: 121}
+  m_MinSize: {x: 800, y: 271}
   m_MaxSize: {x: 4000, y: 4021}
   m_Maximized: 0
 --- !u!114 &2
@@ -38,13 +38,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PixelRect:
     serializedVersion: 2
-    x: 39
+    x: 0
     y: 66
-    width: 1441
-    height: 861
+    width: 1512
+    height: 863
   m_ShowMode: 4
-  m_Title: Console
-  m_RootView: {fileID: 5}
+  m_Title: Chat x0
+  m_RootView: {fileID: 6}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
   m_Maximized: 0
@@ -58,20 +58,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ChatbotEditorWindow
+  m_Name: PackageManagerWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 659
-    height: 621
-  m_MinSize: {x: 100, y: 121}
-  m_MaxSize: {x: 4000, y: 4021}
-  m_ActualView: {fileID: 14}
+    width: 800
+    height: 573
+  m_MinSize: {x: 800, y: 250}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_ActualView: {fileID: 16}
   m_Panes:
-  - {fileID: 14}
+  - {fileID: 16}
   m_Selected: 0
   m_LastSelected: 0
 --- !u!114 &4
@@ -92,13 +92,40 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 659
-    height: 621
-  m_MinSize: {x: 100, y: 121}
+    width: 800
+    height: 573
+  m_MinSize: {x: 800, y: 271}
   m_MaxSize: {x: 4000, y: 4021}
   vertical: 0
-  controlID: 212
+  controlID: 15
 --- !u!114 &5
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: ChatbotEditorWindow
+  m_EditorClassIdentifier: 
+  m_Children: []
+  m_Position:
+    serializedVersion: 2
+    x: 859
+    y: 0
+    width: 653
+    height: 813
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
+  m_ActualView: {fileID: 15}
+  m_Panes:
+  - {fileID: 17}
+  - {fileID: 15}
+  m_Selected: 1
+  m_LastSelected: 0
+--- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,22 +138,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Children:
-  - {fileID: 6}
-  - {fileID: 8}
   - {fileID: 7}
+  - {fileID: 9}
+  - {fileID: 8}
   m_Position:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1441
-    height: 861
+    width: 1512
+    height: 863
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
   m_UseTopView: 1
   m_TopViewHeight: 30
   m_UseBottomView: 1
   m_BottomViewHeight: 20
---- !u!114 &6
+--- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,12 +170,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1441
+    width: 1512
     height: 30
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
   m_LastLoadedLayoutName: 
---- !u!114 &7
+--- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -164,35 +191,11 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 841
-    width: 1441
+    y: 843
+    width: 1512
     height: 20
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
---- !u!114 &8
-MonoBehaviour:
-  m_ObjectHideFlags: 52
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 1
-  m_Script: {fileID: 12010, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Children:
-  - {fileID: 9}
-  m_Position:
-    serializedVersion: 2
-    x: 0
-    y: 30
-    width: 1441
-    height: 811
-  m_MinSize: {x: 200, y: 100}
-  m_MaxSize: {x: 16192, y: 16192}
-  vertical: 0
-  controlID: 61
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -207,17 +210,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Children:
   - {fileID: 10}
-  - {fileID: 13}
+  - {fileID: 5}
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 0
-    width: 1441
-    height: 811
-  m_MinSize: {x: 200, y: 100}
-  m_MaxSize: {x: 16192, y: 16192}
-  vertical: 1
-  controlID: 62
+    y: 30
+    width: 1512
+    height: 813
+  m_MinSize: {x: 300, y: 100}
+  m_MaxSize: {x: 24288, y: 16192}
+  vertical: 0
+  controlID: 20
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -232,18 +235,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Children:
   - {fileID: 11}
-  - {fileID: 12}
+  - {fileID: 14}
   m_Position:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1441
-    height: 391
+    width: 859
+    height: 813
+  m_MinSize: {x: 200, y: 100}
+  m_MaxSize: {x: 16192, y: 16192}
+  vertical: 1
+  controlID: 21
+--- !u!114 &11
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 1
+  m_Script: {fileID: 12010, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Children:
+  - {fileID: 12}
+  - {fileID: 13}
+  m_Position:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 859
+    height: 430.5
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 39
---- !u!114 &11
+  controlID: 22
+--- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -260,16 +288,16 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 356.5
-    height: 391
+    width: 205
+    height: 430.5
   m_MinSize: {x: 201, y: 221}
   m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 16}
+  m_ActualView: {fileID: 19}
   m_Panes:
-  - {fileID: 16}
+  - {fileID: 19}
   m_Selected: 0
   m_LastSelected: 0
---- !u!114 &12
+--- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -284,19 +312,19 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 356.5
+    x: 205
     y: 0
-    width: 1084.5
-    height: 391
-  m_MinSize: {x: 101, y: 121}
-  m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 15}
+    width: 654
+    height: 430.5
+  m_MinSize: {x: 102, y: 121}
+  m_MaxSize: {x: 4002, y: 4021}
+  m_ActualView: {fileID: 18}
   m_Panes:
-  - {fileID: 17}
-  - {fileID: 15}
+  - {fileID: 20}
+  - {fileID: 18}
   m_Selected: 1
   m_LastSelected: 0
---- !u!114 &13
+--- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -306,24 +334,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ConsoleWindow
+  m_Name: ProjectBrowser
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 391
-    width: 1441
-    height: 420
-  m_MinSize: {x: 100, y: 100}
-  m_MaxSize: {x: 4000, y: 4000}
-  m_ActualView: {fileID: 19}
+    y: 430.5
+    width: 859
+    height: 382.5
+  m_MinSize: {x: 231, y: 271}
+  m_MaxSize: {x: 10001, y: 10021}
+  m_ActualView: {fileID: 21}
   m_Panes:
-  - {fileID: 18}
-  - {fileID: 19}
-  m_Selected: 1
-  m_LastSelected: 0
---- !u!114 &14
+  - {fileID: 21}
+  - {fileID: 22}
+  m_Selected: 0
+  m_LastSelected: 1
+--- !u!114 &15
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -338,15 +366,15 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
-    m_Text: Chat v0
+    m_Text: Chat x0
     m_Image: {fileID: 0}
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 853
-    y: 274
-    width: 659
-    height: 600
+    x: 859
+    y: 96
+    width: 652
+    height: 792
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -358,12 +386,2565 @@ MonoBehaviour:
     m_SaveData: []
     m_OverlaysVisible: 1
   conversationHistory: []
+  chatSessions:
+  - Name: Chat 1
+    Messages:
+    - Sender: System
+      Content: Please set up your API keys to continue.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Open scene ArticulationRobot.unity
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Scene ArticulationRobot.unity loaded successfully.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Analyze the current scene structure
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: "# Scene Structure Analysis\nTotal objects in scene: 17\n\n## Hierarchy:\n-
+        Main Camera (Active)\n  * Camera\n  * AudioListener\n- Directional Light
+        (Active)\n  * Light\n- Floor (Active)\n  * MeshFilter\n  * MeshRenderer\n 
+        * MeshCollider\n- UR3 (Active)\n  * MeshFilter\n  * MeshRenderer\n  * MeshCollider\n 
+        * ArticulationBody\n  * RobotController\n  - Base (Active)\n    * MeshFilter\n   
+        * MeshRenderer\n    * MeshCollider\n    * ArticulationBody\n    * ArticulationJointController\n   
+        - Shoulder (Active)\n      * MeshFilter\n      * MeshRenderer\n      * MeshCollider\n     
+        * ArticulationBody\n      * ArticulationJointController\n      - Elbow (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n        * MeshCollider\n        * ArticulationBody\n       
+        * ArticulationJointController\n        - Wrist1 (Active)\n          * MeshFilter\n         
+        * MeshRenderer\n          * MeshCollider\n          * ArticulationBody\n         
+        * ArticulationJointController\n          - Wrist2 (Active)\n            *
+        MeshFilter\n            * MeshRenderer\n            * MeshCollider\n           
+        * ArticulationBody\n            * ArticulationJointController\n           
+        - Wrist3 (Active)\n              * MeshFilter\n              * MeshRenderer\n             
+        * MeshCollider\n              * ArticulationBody\n              * ArticulationJointController\n             
+        - HandE (Active)\n                * MeshFilter\n                * MeshRenderer\n               
+        * Animator\n                * CapsuleCollider\n                * ArticulationBody\n               
+        * ArticulationJointController\n                * PincherController\n               
+        - Bolts (Active)\n                  * MeshFilter\n                  * MeshRenderer\n               
+        - FingerA (Active)\n                  * MeshFilter\n                  * MeshRenderer\n                 
+        * BoxCollider\n                  * ArticulationBody\n                  *
+        PincherFingerController\n                - FingerB (Active)\n                 
+        * MeshFilter\n                  * MeshRenderer\n                  * BoxCollider\n                 
+        * ArticulationBody\n                  * PincherFingerController\n- Table
+        (Active)\n  * MeshFilter\n  * MeshRenderer\n  * Rigidbody\n  * BoxCollider\n-
+        Cube (Active)\n  * MeshFilter\n  * MeshRenderer\n  * BoxCollider\n  * Rigidbody\n-
+        ManualInput (Active)\n  * ArticulationHandManualInput\n  * RobotManualInput\n\n##
+        Cameras:\n- Main Camera: Position (0.00, 1.00, -1.49), Rotation (0.00, 0.00,
+        0.00)\n\n## Lights:\n- Directional Light: Type Directional, Position (0.00,
+        3.00, 0.00)\n"
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Model changed to gpt-4o (OpenAI)
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Write a script that makes the robot arm rotate 90 degrees down. i
+        want it to run automatically when i start the unity project
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Including selected files in this query.
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "To make the robot arm rotate 90 degrees down when the Unity project
+        starts, you'll need to create a script and attach it to the appropriate part
+        of the robot arm that should rotate. Based on your hierarchy, you have components
+        like `Shoulder`, `Elbow`, `Wrist1`, `Wrist2`, etc. Let's assume you want
+        to rotate the `Shoulder` articulation for this example.\n\nHere's a script
+        that rotates the `Shoulder` articulation by 90 degrees around the X-axis:\n\n```csharp:Assets/Scripts/RobotArmRotation.cs\nusing
+        UnityEngine;\n\npublic class RobotArmRotation : MonoBehaviour\n{\n    public
+        ArticulationBody shoulder;\n    private Vector3 initialRotation;\n\n    void
+        Start()\n    {\n        // Store the initial rotation\n        initialRotation
+        = shoulder.transform.localEulerAngles;\n        RotateArmDown();\n    }\n\n   
+        void RotateArmDown()\n    {\n        // Calculate the target rotation (90
+        degrees down around the X-axis)\n        Vector3 targetRotation = initialRotation
+        + new Vector3(90f, 0f, 0f);\n\n        // Convert the target rotation to
+        an articulation body drive target\n        ArticulationDrive shoulderDrive
+        = shoulder.xDrive;\n        shoulderDrive.target = targetRotation.x;\n       
+        shoulder.xDrive = shoulderDrive;\n\n        // Optionally, you might need
+        to do this for other axes if your setup requires it\n    }\n}\n```\n\n###
+        Instructions to Setup the Script:\n\n1. **Create a new C# script:** Name
+        it `RobotArmRotation`.\n2. **Attach the script to any GameObject** in your
+        scene. It can be the `UR3` root or an empty GameObject.\n3. **Assign the
+        Shoulder ArticulationBody:**\n   - Select the GameObject with the `RobotArmRotation`
+        script.\n   - In the Inspector, you'll see a field labeled `Shoulder` of
+        type `ArticulationBody`.\n   - Drag the `Shoulder` GameObject from the Hierarchy
+        into this field to assign it.\n\nWhen you run your scene, the script will
+        automatically rotate the shoulder articulation by 90 degrees down at the
+        start. Adjust the rotation logic if other parts need similar movement."
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Applied changes to Assets/Scripts/RobotArmRotation.cs
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Open scene ArticulationRobot.unity
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Scene ArticulationRobot.unity loaded successfully.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: can you describe this scene?
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Including selected files in this query.
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 'Based on the analysis of the scene "ArticulationRobot.unity", here
+        is a description of the spatial relationships between objects:
+
+
+        1.
+        The scene features a variety of UI elements such as keys for player interactions,
+        game countdowns, game over messages, and buttons for game controls.
+
+
+        2.
+        The kitchen environment includes counters for various ingredients like meat,
+        bread, tomato, cabbage, and cheese blocks. Each counter has associated visuals
+        and is positioned in different areas of the kitchen.
+
+
+        3. There are
+        interactive gameplay elements like chopping boards, knives, trash bins, frying
+        pans, stoves, and sizzling particle effects for cooking activities.
+
+
+        4.
+        The environment includes walls, cubes, and a floor to define the boundaries
+        of the scene.
+
+
+        5. The DeliveryArrow indicates a direction for delivery,
+        and it is positioned near other counters, walls, and objects in the scene.
+
+
+        6.
+        The spatial positioning of objects such as the DeliveryCounter, PlatesCounter,
+        ClearCounters, CuttingCounter, and StoveCounters show the layout of the kitchen
+        area and the relationships between different gameplay elements.
+
+
+        7.
+        The central area of the scene contains counters for various food ingredients,
+        while the outer areas feature interactive elements like stoves and trash
+        bins.
+
+
+        8. The scene has a functional DeliveryManager, MusicManager,
+        SoundManager, and KitchenGameManager for managing gameplay and sound effects.
+
+
+        Overall,
+        the scene is structured to represent a virtual kitchen environment with interactive
+        elements for cooking and delivery tasks.'
+      IsFileContent: 0
+      FileName: 
+    LastLoadedScriptPath: 
+    LastLoadedScriptContent: 
+    LastLoadedScenePath: Assets/Scenes/ArticulationRobot.unity
+    IsSceneLoaded: 1
+  - Name: Chat 2
+    Messages:
+    - Sender: System
+      Content: 'Started new chat session: Chat 2'
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: Hello! How can I assist you today?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Open scene ArticulationRobot.unity
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Scene ArticulationRobot.unity loaded successfully.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Can you write a script that lets the robot arm rotate 90 degrees down?
+        i want it to work automatically when i start the unity project
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Including selected files in this query.
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "To rotate the robot arm down by 90 degrees automatically when starting
+        the Unity project, you can create a script that rotates the arm upon initialization.
+        You can use the `ArticulationBody` component to rotate the specific parts
+        of the arm.\n\nHere's a script that you can attach to the `UR3` object in
+        your scene:\n\n```csharp:Assets/Scripts/RobotArmRotation.cs\nusing UnityEngine;\n\npublic
+        class RobotArmRotation : MonoBehaviour\n{\n    public ArticulationBody shoulder;\n   
+        public ArticulationBody elbow;\n    public ArticulationBody wrist1;\n   
+        public ArticulationBody wrist2;\n    public ArticulationBody wrist3;\n\n   
+        void Start()\n    {\n        RotateArmDown();\n    }\n\n    void RotateArticulationBody(ArticulationBody
+        body, float targetPosition)\n    {\n        body.jointPosition = targetPosition;\n   
+        }\n\n    void RotateArmDown()\n    {\n        RotateArticulationBody(shoulder,
+        90f);\n        RotateArticulationBody(elbow, 90f);\n        RotateArticulationBody(wrist1,
+        90f);\n        RotateArticulationBody(wrist2, 90f);\n        RotateArticulationBody(wrist3,
+        90f);\n    }\n}\n```\n\nMake sure to assign the `ArticulationBody` components
+        of the shoulder, elbow, wrist1, wrist2, and wrist3 to the corresponding fields
+        in the script component attached to the `UR3` object. This script will rotate
+        the robot arm parts to a 90-degree downward position when the Unity project
+        starts."
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Applied changes to Assets/Scripts/RobotArmRotation.cs
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: can you attach the script
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Including selected files in this query.
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "```csharp:Assets/Scripts/ArticulationRobotAnalyzer.cs\nusing UnityEngine;\n\npublic
+        class ArticulationRobotAnalyzer : MonoBehaviour\n{\n    void Start()\n   
+        {\n        AnalyzeSpatialRelationships();\n    }\n\n    void AnalyzeSpatialRelationships()\n   
+        {\n        // Add spatial analysis logic here based on the provided object
+        positions and bounds\n        // For example, you can compare positions to
+        find relative distances between objects\n    }\n}\n```"
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Applied changes to Assets/Scripts/ArticulationRobotAnalyzer.cs
+      IsFileContent: 0
+      FileName: 
+    LastLoadedScriptPath: 
+    LastLoadedScriptContent: 
+    LastLoadedScenePath: Assets/Scenes/ArticulationRobot.unity
+    IsSceneLoaded: 1
+  - Name: Chat 3
+    Messages:
+    - Sender: System
+      Content: 'Started new chat session: Chat 3'
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Model changed to gpt-4o (OpenAI)
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Open scene ArticulationRobot.unity
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Scene ArticulationRobot.unity loaded successfully.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: write a script that makes my robot rotate 90 degrees automatically
+        when i start the game
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Including selected files in this query.
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "To make your robot rotate 90 degrees automatically when you start
+        the game, you can create a script that adjusts the rotation of the robot
+        at the beginning of the scene. Assuming the root of your robot hierarchy
+        is the \"UR3\" object, you can attach the script to it to manipulate its
+        rotation.\n\nHere's a simple script to achieve this:\n\n```csharp:Assets/Scripts/RobotAutoRotate.cs\nusing
+        UnityEngine;\n\npublic class RobotAutoRotate : MonoBehaviour\n{\n    void
+        Start()\n    {\n        // Rotate the robot 90 degrees around the Y-axis\n       
+        transform.Rotate(0, 90, 0);\n    }\n}\n```\n\nTo use this script, follow
+        these steps:\n\n1. Save the script in your project's `Assets/Scripts` folder
+        as `RobotAutoRotate.cs`.\n2. Attach the `RobotAutoRotate` script to the \"UR3\"
+        GameObject in your scene hierarchy by selecting the \"UR3\" object and dragging
+        the script onto it or by using the \"Add Component\" button in the Inspector
+        window.\n\nWhen you run the scene, the script will rotate the robot 90 degrees
+        about the Y-axis automatically on game start."
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Applied changes to Assets/Scripts/RobotAutoRotate.cs
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Do you want to attach the script RobotAutoRotate.cs to a GameObject?
+        (yes/no)
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Model changed to gpt-4o (OpenAI)
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: yes
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "It seems like you've shared the scene structure of your Unity project,
+        specifically the setup for an articulation robot. However, your question
+        is incomplete or not clear. Let me give you a brief analysis of your scene
+        based on the provided structure:\n\n### Scene Analysis\n\n- **Main Camera**:
+        Positioned at (0.00, 1.00, -1.49) with no rotation. It's set to view the
+        scene from slightly above and behind, which is probably good for seeing the
+        whole robot in action.\n  \n- **Directional Light**: Positioned at (0.00,
+        3.00, 0.00), it casts light in a fixed direction similar to sunlight. Its
+        higher position ensures even lighting, which is good for scenes with complex
+        objects like robots.\n\n- **Floor**: Equipped with a MeshRenderer and a MeshCollider,
+        it serves as the ground for the robot. The collider ensures that physical
+        simulations can interact with it.\n\n- **UR3 and Components**: \n  - The
+        UR3 and its segmented components (Base, Shoulder, Elbow, etc.) incorporate
+        articulation bodies and joint controllers, which are essential for simulating
+        robotic arm movements and joints.\n  - The HandE includes an animator and
+        a capsule collider, suggesting some form of animated behavior and collision
+        handling.\n  \n- **Gripper Components (FingerA, FingerB, and HandE)**: These
+        include specific controllers like the PincherController and PincherFingerController,
+        indicating functions for handling object gripping tasks.\n\n- **Additional
+        Objects**:\n  - **Table**: Acts as a standalone, interactable platform for
+        testing or showcasing objects, supported by a Rigidbody and BoxCollider to
+        ensure physics interactions.\n  - **Cube**: Appears to be a test object,
+        using BoxCollider and Rigidbody. It likely serves for interaction testing
+        with the robot arms or grippers.\n  - **ManualInput**: Handles input from
+        users affecting the robot's articulation, useful for manual testing or controlling
+        the robot.\n\nIf you have specific questions or need assistance with any
+        part of the scene, such as coding or designing specific interactions, feel
+        free to specify, and I'll be happy to help!"
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: write a script that makes my robot rotate 90 degrees automatically
+        when i start the game
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "To rotate the robot automatically by 90 degrees when the game starts,
+        you can create a script and attach it to the robot GameObject. Here's a script
+        that rotates the robot by 90 degrees around the Y-axis:\n\nCreate a new C#
+        script called `RobotAutoRotate.cs` and add the following code:\n\n```csharp:Assets/Scripts/RobotAutoRotate.cs\nusing
+        UnityEngine;\n\npublic class RobotAutoRotate : MonoBehaviour\n{\n    void
+        Start()\n    {\n        // Rotate the robot by 90 degrees around the Y-axis\n       
+        transform.Rotate(new Vector3(0, 90, 0));\n    }\n}\n```\n\nAttach this script
+        to your `UR3` GameObject in the scene (the GameObject representing your robot).
+        When you start the game, the robot will automatically rotate by 90 degrees
+        around the Y-axis.\n\nThis script uses the `Start` method which is called
+        when the script is initialized, in this case, when the game starts. The `transform.Rotate`
+        function is used to rotate the robot around the Y-axis by 90 degrees.\n\nLet
+        me know if you need any more help!"
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Applied changes to Assets/Scripts/RobotAutoRotate.cs
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Do you want to attach the script RobotAutoRotate.cs to a GameObject?
+        (yes/no)
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: yes
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: It seems like you just provided the structure and details of the objects
+        in the Unity scene "ArticulationRobot.unity". However, your question seems
+        to be missing. Could you please provide more context or clarify your question
+        so I can assist you better?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: write a script to rotate the robot arm by 90 degrees down automatically
+        when i start the project
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "You can achieve this by rotating the respective GameObjects that
+        make up the robot arm in your scene. Here's a script that you can use to
+        rotate the robot arm by 90 degrees down when the project starts:\n\n```csharp\n//Assets/Scripts/RobotArmRotator.cs\nusing
+        UnityEngine;\n\npublic class RobotArmRotator : MonoBehaviour\n{\n    public
+        Transform shoulder; // Assign the Shoulder GameObject in the Inspector\n   
+        public Transform elbow; // Assign the Elbow GameObject in the Inspector\n   
+        public Transform wrist1; // Assign the Wrist1 GameObject in the Inspector\n   
+        public Transform wrist2; // Assign the Wrist2 GameObject in the Inspector\n   
+        public Transform wrist3; // Assign the Wrist3 GameObject in the Inspector\n\n   
+        void Start()\n    {\n        // Rotate the robot arm by 90 degrees down\n       
+        shoulder.Rotate(Vector3.right * 90);\n        elbow.Rotate(Vector3.right
+        * 90);\n        wrist1.Rotate(Vector3.right * 90);\n        wrist2.Rotate(Vector3.right
+        * 90);\n        wrist3.Rotate(Vector3.right * 90);\n    }\n}\n```\n\nMake
+        sure to attach this script to a GameObject in your scene. Assign the respective
+        shoulder, elbow, wrist1, wrist2, and wrist3 GameObjects to the script component
+        in the Inspector.\n\nThis script will rotate the specified parts of the robot
+        arm by 90 degrees down when the project starts."
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: write a script to rotate the robot arm by 90 degrees down automatically
+        when i start the project
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "To rotate the robot arm by 90 degrees downwards automatically when
+        the project starts, you can create a script that rotates the appropriate
+        GameObjects in the scene. Here's how you can achieve this:\n\n```csharp:Assets/Scripts/RobotRotation.cs\nusing
+        System.Collections;\nusing UnityEngine;\n\npublic class RobotRotation : MonoBehaviour\n{\n   
+        public GameObject shoulder;\n    public GameObject elbow;\n    public GameObject
+        wrist1;\n    public GameObject wrist2;\n    public GameObject wrist3;\n   
+        \n    void Start()\n    {\n        RotatePiece(shoulder, new Vector3(0, 0,
+        -90));\n        RotatePiece(elbow, new Vector3(0, 0, -90));\n        RotatePiece(wrist1,
+        new Vector3(0, 0, -90));\n        RotatePiece(wrist2, new Vector3(0, 0, -90));\n       
+        RotatePiece(wrist3, new Vector3(0, 0, -90));\n    }\n\n    void RotatePiece(GameObject
+        piece, Vector3 rotation)\n    {\n        piece.transform.Rotate(rotation);\n   
+        }\n}\n```\n\nIn this script, you need to drag and drop the respective GameObjects
+        (`shoulder`, `elbow`, `wrist1`, `wrist2`, `wrist3`) from your scene hierarchy
+        to the script component fields in the Inspector.\n\nThis script will rotate
+        the specified pieces (shoulder, elbow, wrist1, wrist2, wrist3) by -90 degrees
+        around their z-axis when the project starts.\n\nAdditionally, you can attach
+        this script to a GameObject in your scene like the Robot itself or an empty
+        GameObject for organizational purposes."
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Applied changes to Assets/Scripts/RobotRotation.cs
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: can you attach the script to a game object?
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 'It seems like you have a variety of game objects in your scene, each
+        with different components such as MeshFilter, MeshRenderer, MeshCollider,
+        ArticulationBody, Animator, Rigidbody, BoxCollider, CapsuleCollider, etc.
+
+
+        To
+        attach a script to a game object, you need to create a new script file first
+        that defines the behavior you want to add to the game object. Once you have
+        the script, you can attach it to any game object in the scene through the
+        Unity Editor.
+
+
+        Here''s a general guide on how to attach a script
+        to a game object in Unity:
+
+
+        1. Create a new script file by going
+        to the Unity Editor, then navigate to Assets > Create > C# Script. Rename
+        the script to something meaningful (e.g., MyScript).
+
+
+        2. Write the
+        desired behavior in the script. For example, if you want the game object
+        to rotate, you can write a simple rotation behavior in the script.
+
+
+        3.
+        Save the script and make sure there are no compilation errors.
+
+
+        4.
+        To attach the script to a game object, find the game object in the Hierarchy
+        window that you want to attach the script to.
+
+
+        5. Drag and drop
+        the script file (MyScript.cs) from the Project window onto the game object
+        in the Hierarchy window. You should see the script component added to the
+        game object in the Inspector window.
+
+
+        6. You can now configure the
+        script properties in the Inspector window for the selected game object.
+
+
+        If
+        you have a specific script in mind that you want to attach to a particular
+        game object, please let me know the script''s purpose, and I can help you
+        with further guidance.
+
+
+        Do you have a specific script in mind that
+        you would like to attach to one of the game objects in your scene?'
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: yes, the new RobotRotation.cs script you created
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: It looks like you want to ask a question about the new `RobotRotation.cs`
+        script in the Unity scene `ArticulationRobot.unity`, but the question is
+        incomplete. Could you please provide more details or clarify your question
+        so that I can assist you better?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: can you attach it to the game object UR3?
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 'Based on the scene structure analysis you provided, it seems like
+        you want to attach the Directional Light to the game object named UR3 in
+        your scene. To achieve this, you can make the Directional Light a child of
+        the UR3 game object. This way, the light will move with the UR3 robot.
+
+
+        Here''s
+        how you can do it programmatically:
+
+
+        ```csharp:ArticulationRobot.cs
+
+        //
+        Find the UR3 game object
+
+        GameObject ur3 = GameObject.Find("UR3");
+
+
+        //
+        Find the Directional Light game object
+
+        GameObject directionalLight
+        = GameObject.Find("Directional Light");
+
+
+        // Make the Directional
+        Light a child of the UR3 game object
+
+        directionalLight.transform.parent
+        = ur3.transform;
+
+        ```
+
+
+        This code will find both the UR3
+        game object and the Directional Light game object in your scene, and then
+        it will set the UR3 game object as the parent of the Directional Light, resulting
+        in the light being attached to the UR3 robot.'
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Applied changes to ArticulationRobot.cs
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: write a script to rotate the robot arm by 90 degrees
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "To rotate the robot arm by 90 degrees, you can create a script that
+        modifies the rotation of the appropriate GameObject containing the arm parts.
+        Let's assume you want to rotate the 'Shoulder' object which represents the
+        shoulder joint of the robot arm. Here's a script that you can attach to an
+        empty GameObject in the scene to control the rotation:\n\n```csharp\n// Assets/Scripts/RobotArmRotation.cs\nusing
+        UnityEngine;\n\npublic class RobotArmRotation : MonoBehaviour\n{\n    public
+        GameObject shoulderObject; // Assign the 'Shoulder' object in the Inspector\n\n   
+        void Start()\n    {\n        if (shoulderObject == null)\n        {\n           
+        Debug.LogError(\"Shoulder object not assigned! Please assign the 'Shoulder'
+        object in the Inspector.\");\n        }\n    }\n\n    void Update()\n   
+        {\n        // Rotate the shoulder by 90 degrees around the y-axis when the
+        script is enabled\n        shoulderObject.transform.Rotate(new Vector3(0,
+        90, 0) * Time.deltaTime);\n    }\n}\n```\n\nIn the script above, we assume
+        you have a GameObject representing the 'Shoulder' of the robot arm in the
+        scene hierarchy. Attach this script to an empty GameObject in the scene and
+        assign the 'Shoulder' GameObject to the 'shoulderObject' field in the Inspector.
+        This script rotates the 'Shoulder' GameObject by 90 degrees around the y-axis
+        continuously in every frame update.\n\nMake sure the script is attached to
+        a GameObject in the scene and the 'shoulderObject' field is assigned properly
+        in the Inspector for it to work correctly.\n\nLet me know if you need further
+        assistance or if you want to rotate a different part of the robot arm!"
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: write script to rotate the robot arm 90 degrees
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "To rotate the robot arm in the scene by 90 degrees, you can create
+        a script that rotates the arm GameObject by 90 degrees around the desired
+        axis. Considering that the robot arm is composed of different articulated
+        GameObjects, you will need to apply the rotation to each joint of the arm
+        individually.\n\nHere is a script that rotates the robot arm by 90 degrees
+        around the Y-axis:\n\n```csharp:Assets/Scripts/RobotRotation.cs\nusing UnityEngine;\n\npublic
+        class RobotRotation : MonoBehaviour\n{\n    public Transform[] joints; //
+        Array to store the joints of the robot arm\n\n    void Start()\n    {\n       
+        RotateArm();\n    }\n\n    void RotateArm()\n    {\n        foreach(Transform
+        joint in joints)\n        {\n            joint.Rotate(Vector3.up, 90f); //
+        Rotate each joint by 90 degrees around the Y-axis\n        }\n    }\n}\n```\n\nI
+        noticed that your robot arm is composed of multiple articulated bodies with
+        ArticulationBody components. To rotate each joint, you will need the reference
+        to each joint's Transform in the script.\n\n### Instructions for use:\n1.
+        Create an empty GameObject in the Unity Editor.\n2. Attach the `RobotRotation`
+        script to the empty GameObject.\n3. Assign each joint's Transform to the
+        `joints` array in the script through the Unity Editor.\n\nAfter following
+        these steps, when you run the scene, the robot arm should rotate its joints
+        by 90 degrees around the Y-axis.\n\nFeel free to adjust the rotation value
+        or axis to suit your specific requirements."
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Applied changes to Assets/Scripts/RobotRotation.cs
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Do you want to attach the script RobotRotation.cs to a GameObject?
+        (yes/no)
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: yes
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 'It seems like you may have accidentally typed "My question is: yes"
+        at the end of your scene analysis. If you have any specific questions or
+        need assistance with anything related to the Unity scene or code, feel free
+        to ask!'
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: can you write a script to rotate the robot arm 90 degrees?
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "To rotate the robot arm by 90 degrees, you can create a script that
+        rotates the necessary parts of the robot arm. Here's an example script that
+        rotates the \"Shoulder\" part of the robot arm by 90 degrees around the Y-axis:\n\n```csharp\nAssets/Scripts/RobotRotationScript.cs\nusing
+        UnityEngine;\n\npublic class RobotRotationScript : MonoBehaviour\n{\n   
+        public Transform shoulderTransform; // Assign the Shoulder GameObject's Transform
+        in the Inspector\n\n    void Start()\n    {\n        // Rotate the shoulder
+        by 90 degrees around the Y-axis\n        shoulderTransform.Rotate(new Vector3(0,
+        90, 0));\n    }\n}\n```\n\nYou can create an empty GameObject in the scene,
+        attach this script to it, and then assign the \"Shoulder\" GameObject's Transform
+        to the \"shoulderTransform\" field in the script's Inspector. When you run
+        the scene, the shoulder part of the robot arm will rotate by 90 degrees around
+        the Y-axis.\n\nLet me know if you need help with anything else!"
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: can you write a script to rotate the robot arm 90 degrees?
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "To rotate the robot arm by 90 degrees, you can create a script that
+        rotates the relevant parts of the robot arm. Here's a simple script that
+        rotates the \"Shoulder,\" \"Elbow,\" \"Wrist1,\" \"Wrist2,\" and \"Wrist3\"
+        objects by 90 degrees around the y-axis:\n\n```csharp:Assets/Scripts/RobotArmRotation.cs\nusing
+        UnityEngine;\n\npublic class RobotArmRotation : MonoBehaviour\n{\n    public
+        GameObject shoulder;\n    public GameObject elbow;\n    public GameObject
+        wrist1;\n    public GameObject wrist2;\n    public GameObject wrist3;\n\n   
+        void Start()\n    {\n        RotateArmParts();\n    }\n\n    void RotateArmParts()\n   
+        {\n        RotatePart(shoulder);\n        RotatePart(elbow);\n        RotatePart(wrist1);\n       
+        RotatePart(wrist2);\n        RotatePart(wrist3);\n    }\n\n    void RotatePart(GameObject
+        part)\n    {\n        if (part != null)\n        {\n            part.transform.Rotate(new
+        Vector3(0, 90, 0));\n        }\n    }\n}\n```\n\nTo use this script, create
+        an empty GameObject in your scene and attach the script to it. Then, drag
+        and drop the corresponding game objects (Shoulder, Elbow, Wrist1, Wrist2,
+        Wrist3) from your scene hierarchy into the script component fields in the
+        Inspector.\n\nThis script will rotate the specified parts of the robot arm
+        by 90 degrees around the y-axis when the scene starts."
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Applied changes to Assets/Scripts/RobotArmRotation.cs
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Do you want to attach the script RobotArmRotation.cs to a GameObject?
+        (yes/no)
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: yes
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: It looks like you provided a detailed analysis of the Unity scene
+        structure including the hierarchy, components, spatial relationships, cameras,
+        lights, and positions. However, your question seems to be just "yes". If
+        you have any specific inquiries or need assistance with anything related
+        to the scene structure analysis or Unity development, feel free to ask!
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: can you write a script to rotate the robot arm 90 degrees automatically
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "To rotate the robot arm 90 degrees automatically, you can create
+        a script that rotates the necessary joints by a specified amount. This script
+        can be attached to a GameObject in your scene that controls the rotation
+        of the arm joints. Here's a basic script that rotates the arm joints by 90
+        degrees:\n\n```csharp\n// Assets/Scripts/RobotRotationController.cs\nusing
+        System.Collections;\nusing System.Collections.Generic;\nusing UnityEngine;\n\npublic
+        class RobotRotationController : MonoBehaviour\n{\n    public Transform[]
+        jointsToRotate; // Array to hold the joints you want to rotate\n\n    void
+        Start()\n    {\n        // Rotate each joint in the array by 90 degrees\n       
+        foreach(Transform joint in jointsToRotate)\n        {\n            joint.Rotate(Vector3.up,
+        90f); // You can adjust the axis and angle of rotation as needed\n       
+        }\n    }\n}\n\n```\n\nTo use this script, follow these steps:\n\n1. Attach
+        the script to an empty GameObject in your scene.\n2. Assign the joints of
+        the robot arm that you want to rotate to the `jointsToRotate` array in the
+        Inspector.\n3. Adjust the rotation axis and angle in the script as needed.\n4.
+        When you run the scene, the specified joints will rotate by 90 degrees automatically.\n\nMake
+        sure to adjust the script to fit the specific joints in your robot arm that
+        need to be rotated. If the joints are not children of a single GameObject,
+        you may need to iterate over each individual joint within the script."
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Open scene GameScene.unity
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Scene GameScene.unity loaded successfully.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: can you describe my scene?
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Including selected files in this query.
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "The scene \"GameScene.unity\" consists of a total of 405 objects
+        organized in a hierarchical structure. Here is a summary of the key components
+        in the scene:\n\n- **Cameras**: \n  - Main Camera positioned at (0.75, 21.50,
+        -20.79)\n\n- **Lights**:\n  - Directional Light positioned at (0.00, 3.00,
+        0.00)\n\n- **Players**: \n  - Various components for the player character
+        such as Player, PlayerSounds, PlayerVisual, etc.\n\n- **UI Elements**:\n 
+        - A variety of UI elements like buttons, text, canvases, and countdown timers\n\n-
+        **Counters**: \n  - Includes ClearCounters, CuttingCounters, StoveCounters,
+        PlatesCounter, TrashCounter, etc.\n\n- **Kitchen Objects**:\n  - Objects
+        related to kitchen activities like chopping boards, knives, containers for
+        different food items\n\n- **Environment**:\n  - Walls, cubes, and a floor
+        that define the boundaries of the scene\n\n- **Delivery Manager**:\n  - Components
+        related to managing deliveries and results\n\n- **Audio Managers**:\n  -
+        MusicManager and SoundManager for handling audio in the scene\n\nThe spatial
+        analysis provides positions and sizes of various objects in the scene along
+        with their spatial relationships. Objects like the DeliveryArrow, PlatesCounter,
+        ClearCounters, Walls, and Cubes are mentioned along with their relative positions
+        in the scene.\n\nThe scene has a central area with the floor and various
+        interactive elements placed around it. Walls and cubes define the boundaries
+        of the scene. The Kitchen objects and counters are arranged in specific locations
+        indicating a game or simulation involving kitchen activities and management
+        tasks.\n\nIf you have any specific details or components you would like more
+        information on, feel free to ask!"
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: what do you think this scene does?
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Including selected files in this query.
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 'Based on the spatial relationships between objects in the scene and
+        their components, it appears that this scene represents a kitchen or cooking
+        simulation game. Here are some observations based on the object positions
+        and bounds:
+
+
+        - The presence of objects like CuttingCounter, KitchenCounter,
+        Chopping Board, Knife, Stove, Frying Pan, and various containers suggest
+        cooking-related activities.
+
+        - The DeliveryCounter and DeliveryArrow
+        imply a delivery or order fulfillment mechanic.
+
+        - The PlatesCounter
+        indicates a dish or plate management system.
+
+        - The TrashCounter
+        suggests a waste disposal aspect.
+
+        - Objects like ClearCounter and
+        Counter_solid may be related to item or ingredient management.
+
+        -
+        The inclusion of sound and music managers, game input, and UI elements for
+        interaction further supports the idea of a game environment.
+
+
+        Overall,
+        this scene seems to be a detailed and interactive kitchen simulation game
+        where players can engage in various cooking tasks, manage ingredients, fulfill
+        orders, dispose of waste, and more.'
+      IsFileContent: 0
+      FileName: 
+    LastLoadedScriptPath: 
+    LastLoadedScriptContent: 
+    LastLoadedScenePath: Assets/Scenes/GameScene.unity
+    IsSceneLoaded: 1
+  - Name: Chat 4
+    Messages:
+    - Sender: System
+      Content: 'Started new chat session: Chat 4'
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Open scene ArticulationRobot.unity
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Scene ArticulationRobot.unity loaded successfully.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Analyze the current scene structure
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: "# Scene Structure Analysis\nTotal objects in scene: 405\n\n## Hierarchy:\n-
+        Main Camera (Active)\n  * Camera\n  * AudioListener\n- Directional Light
+        (Active)\n  * Light\n- Global Volume (Active)\n- Floor (Active)\n  * MeshFilter\n 
+        * MeshRenderer\n  * MeshCollider\n- Player (Active)\n  * Player\n  * PlayerSounds\n 
+        - PlayerVisual (Active)\n    * Animator\n    * PlayerAnimator\n    - Head
+        (Active)\n      * MeshFilter\n      * MeshRenderer\n      - Eye_R (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Eye_L (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n    - Body (Active)\n      * MeshFilter\n      * MeshRenderer\n 
+        - KitchenObjectHoldPoint (Active)\n  - PlayerMovingParticles (Active)\n   
+        * ParticleSystem\n    * ParticleSystemRenderer\n- Virtual Camera (Active)\n 
+        - cm (Active)\n- GameInput (Active)\n  * GameInput\n- Canvas (Active)\n 
+        * Canvas\n  * CanvasScaler\n  * GraphicRaycaster\n  - DeliveryManagerUI (Active)\n   
+        * DeliveryManagerUI\n    - Container (Active)\n      * VerticalLayoutGroup\n     
+        - RecipeTemplate (Active)\n        * DeliveryManagerSingleUI\n        - Background
+        (Active)\n          * CanvasRenderer\n          * Image\n        - RecipeNameText
+        (Active)\n          * CanvasRenderer\n          * TextMeshProUGUI\n       
+        - IconContainer (Active)\n          * HorizontalLayoutGroup\n          -
+        IconTemplate (Active)\n            * CanvasRenderer\n            * Image\n     
+        - RecipeTemplate (1) (Active)\n        - Background (Active)\n          *
+        CanvasRenderer\n          * Image\n        - RecipeNameText (Active)\n         
+        * CanvasRenderer\n          * TextMeshProUGUI\n      - RecipeTemplate (2)
+        (Active)\n        - Background (Active)\n          * CanvasRenderer\n         
+        * Image\n        - RecipeNameText (Active)\n          * CanvasRenderer\n         
+        * TextMeshProUGUI\n    - TitleText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n  - GameStartCountdownUI (Active)\n    * GameStartCountdownUI\n   
+        * Animator\n    * CanvasGroup\n    - CountdownText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n  - GamePlayingClockUI (Active)\n    * GamePlayingClockUI\n   
+        - Background (Active)\n      * CanvasRenderer\n      * Image\n      * Outline\n     
+        * Shadow\n    - TimerImage (Active)\n      * CanvasRenderer\n      * Image\n     
+        * Outline\n      * Shadow\n  - GameOverUI (Active)\n    * GameOverUI\n   
+        - Background (Active)\n      * CanvasRenderer\n      * Image\n    - GameOverText
+        (Active)\n      * CanvasRenderer\n      * TextMeshProUGUI\n    - LabelRecipesDeliveredText
+        (Active)\n      * CanvasRenderer\n      * TextMeshProUGUI\n    - RecipesDeliveredText
+        (Active)\n      * CanvasRenderer\n      * TextMeshProUGUI\n  - TutorialUI
+        (Active)\n    * TutorialUI\n    - Background (Active)\n      * CanvasRenderer\n     
+        * Image\n    - Image (Active)\n      * CanvasRenderer\n      * Image\n   
+        - KeyMoveUp (Active)\n      - Background (Active)\n        * CanvasRenderer\n       
+        * Image\n        * Shadow\n        * Outline\n      - KeyMoveUpText (Active)\n       
+        * CanvasRenderer\n        * TextMeshProUGUI\n    - KeyMoveDown (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyMoveDownText (Active)\n        *
+        CanvasRenderer\n        * TextMeshProUGUI\n    - KeyMoveLeft (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyMoveLeftText (Active)\n        *
+        CanvasRenderer\n        * TextMeshProUGUI\n    - KeyMoveRight (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyMoveRightText (Active)\n        *
+        CanvasRenderer\n        * TextMeshProUGUI\n    - KeyGamepadMove (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyGamepadMoveText (Active)\n       
+        * CanvasRenderer\n        * TextMeshProUGUI\n    - KeyInteract (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyInteractText (Active)\n        *
+        CanvasRenderer\n        * TextMeshProUGUI\n    - KeyInteractAlternate (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyInteractAlternateText (Active)\n       
+        * CanvasRenderer\n        * TextMeshProUGUI\n    - KeyPause (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyPauseText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - KeyGamepadInteractAlternate (Active)\n      - Background
+        (Active)\n        * CanvasRenderer\n        * Image\n        * Shadow\n       
+        * Outline\n      - KeyGamepadInteractAlternateText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - KeyGamepadInteract (Active)\n      - Background
+        (Active)\n        * CanvasRenderer\n        * Image\n        * Shadow\n       
+        * Outline\n      - KeyGamepadInteractText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - KeyGamepadPause (Active)\n      - Background (Active)\n       
+        * CanvasRenderer\n        * Image\n        * Shadow\n        * Outline\n     
+        - KeyGamepadPauseText (Active)\n        * CanvasRenderer\n        * TextMeshProUGUI\n 
+        - GamePauseUI (Active)\n    * GamePauseUI\n    - Background (Active)\n     
+        * CanvasRenderer\n      * Image\n    - PausedText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - MainMenuButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      * Outline\n      * Shadow\n      - Text (TMP)
+        (Active)\n        * CanvasRenderer\n        * TextMeshProUGUI\n    - ResumeButton
+        (Active)\n      * CanvasRenderer\n      * Image\n      * Button\n      *
+        Outline\n      * Shadow\n      - Text (TMP) (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - OptionsButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      * Outline\n      * Shadow\n      - Text (TMP)
+        (Active)\n        * CanvasRenderer\n        * TextMeshProUGUI\n  - OptionsUI
+        (Active)\n    * OptionsUI\n    - Image (Active)\n      * CanvasRenderer\n     
+        * Image\n    - OptionsText (Active)\n      * CanvasRenderer\n      * TextMeshProUGUI\n   
+        - SoundEffectsButton (Active)\n      * CanvasRenderer\n      * Image\n     
+        * Button\n      - SoundEffectsButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - MusicButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - MusicButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - CloseButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - CloseButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - MoveUpText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - MoveDownText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - MoveLeftText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - MoveRightText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - InteractText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - InteractAlternateText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - PauseText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - MoveUpButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - MoveUpButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - MoveDownButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - MoveDownButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - MoveLeftButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - MoveLeftButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - MoveRightButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - MoveRightButtonText (Active)\n        *
+        CanvasRenderer\n        * TextMeshProUGUI\n    - InteractButton (Active)\n     
+        * CanvasRenderer\n      * Image\n      * Button\n      - InteractButtonText
+        (Active)\n        * CanvasRenderer\n        * TextMeshProUGUI\n    - InteractAlternateButton
+        (Active)\n      * CanvasRenderer\n      * Image\n      * Button\n      -
+        InteractAlternateButtonText (Active)\n        * CanvasRenderer\n        *
+        TextMeshProUGUI\n    - PauseButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - PauseButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - GamepadInteractButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - GamepadInteractButtonText (Active)\n       
+        * CanvasRenderer\n        * TextMeshProUGUI\n    - GamepadInteractAlternateButton
+        (Active)\n      * CanvasRenderer\n      * Image\n      * Button\n      -
+        GamepadInteractAlternateButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - GamepadPauseButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - GamepadPauseButtonText (Active)\n       
+        * CanvasRenderer\n        * TextMeshProUGUI\n    - PressToRebindKey (Inactive)\n     
+        - Image (Inactive)\n        * CanvasRenderer\n        * Image\n      - Text
+        (TMP) (Inactive)\n        * CanvasRenderer\n        * TextMeshProUGUI\n-
+        EventSystem (Active)\n  * EventSystem\n  * InputSystemUIInputModule\n- Counters
+        (Active)\n  - ClearCounter (2) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (4) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (5) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (6) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (1) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - CuttingCounter (Active)\n    * BoxCollider\n    * CuttingCounter\n   
+        - CounterTopPoint (Active)\n    - CuttingCounter_Visual (Active)\n      *
+        Animator\n      * CuttingCounterVisual\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Chopping Board (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Knife (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n        - Trail (Active)\n          * TrailRenderer\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - KitchenCounter
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n      - Chopping
+        Board (Inactive)\n        * MeshFilter\n        * MeshRenderer\n      - Knife
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n        - Trail
+        (Inactive)\n          * TrailRenderer\n    - ProgressBarUI (Active)\n     
+        * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n      * ProgressBarUI\n     
+        * LookAtCamera\n      - Background (Active)\n        * CanvasRenderer\n       
+        * Image\n        * Outline\n      - Bar (Active)\n        * CanvasRenderer\n       
+        * Image\n  - ContainerCounter_MeatPattyUncooked (Active)\n    * BoxCollider\n   
+        * ContainerCounter\n    - CounterTopPoint (Active)\n    - ContainerCounter_Visual
+        (Active)\n      * Animator\n      * ContainerCounterVisual\n      - Counter_solid
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n      - Counter_hole
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n      - Single door
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n        - ObjectSprite
+        (Active)\n          * SpriteRenderer\n      - Black (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - Counter_solid (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Counter_hole (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Single door (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Black (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - ContainerCounter_Bread
+        (Active)\n    * BoxCollider\n    * ContainerCounter\n    - CounterTopPoint
+        (Active)\n    - ContainerCounter_Visual (Active)\n      * Animator\n     
+        * ContainerCounterVisual\n      - Counter_solid (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Counter_hole (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Single door (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n        - ObjectSprite (Active)\n          * SpriteRenderer\n     
+        - Black (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected
+        (Active)\n      * SelectedCounterVisual\n      - Counter_solid (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Counter_hole (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Single door (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Black (Inactive)\n        *
+        MeshFilter\n        * MeshRenderer\n  - ContainerCounter_Tomato (Active)\n   
+        * BoxCollider\n    * ContainerCounter\n    - CounterTopPoint (Active)\n   
+        - ContainerCounter_Visual (Active)\n      * Animator\n      * ContainerCounterVisual\n     
+        - Counter_solid (Active)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Counter_hole (Active)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Single door (Active)\n        * MeshFilter\n        * MeshRenderer\n       
+        - ObjectSprite (Active)\n          * SpriteRenderer\n      - Black (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - Counter_solid (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Counter_hole (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Single door (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Black (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - ContainerCounter_Cabbage
+        (Active)\n    * BoxCollider\n    * ContainerCounter\n    - CounterTopPoint
+        (Active)\n    - ContainerCounter_Visual (Active)\n      * Animator\n     
+        * ContainerCounterVisual\n      - Counter_solid (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Counter_hole (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Single door (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n        - ObjectSprite (Active)\n          * SpriteRenderer\n     
+        - Black (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected
+        (Active)\n      * SelectedCounterVisual\n      - Counter_solid (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Counter_hole (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Single door (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Black (Inactive)\n        *
+        MeshFilter\n        * MeshRenderer\n  - ContainerCounter_CheeseBlock (Active)\n   
+        * BoxCollider\n    * ContainerCounter\n    - CounterTopPoint (Active)\n   
+        - ContainerCounter_Visual (Active)\n      * Animator\n      * ContainerCounterVisual\n     
+        - Counter_solid (Active)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Counter_hole (Active)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Single door (Active)\n        * MeshFilter\n        * MeshRenderer\n       
+        - ObjectSprite (Active)\n          * SpriteRenderer\n      - Black (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - Counter_solid (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Counter_hole (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Single door (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Black (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - ClearCounter
+        (Active)\n    * BoxCollider\n    * ClearCounter\n    - CounterTopPoint (Active)\n   
+        - ClearCounter_Visual (Active)\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n 
+        - CuttingCounter (1) (Active)\n    * BoxCollider\n    * CuttingCounter\n   
+        - CounterTopPoint (Active)\n    - CuttingCounter_Visual (Active)\n      *
+        Animator\n      * CuttingCounterVisual\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Chopping Board (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Knife (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n        - Trail (Active)\n          * TrailRenderer\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - KitchenCounter
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n      - Chopping
+        Board (Inactive)\n        * MeshFilter\n        * MeshRenderer\n      - Knife
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n        - Trail
+        (Inactive)\n          * TrailRenderer\n    - ProgressBarUI (Active)\n     
+        * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n      * ProgressBarUI\n     
+        * LookAtCamera\n      - Background (Active)\n        * CanvasRenderer\n       
+        * Image\n        * Outline\n      - Bar (Active)\n        * CanvasRenderer\n       
+        * Image\n  - ClearCounter (7) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (8) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (9) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - TrashCounter (Active)\n    * BoxCollider\n    * TrashCounter\n   
+        - CounterTopPoint (Active)\n    - TrashCounter_Visual (Active)\n      - Trash
+        bin (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected
+        (Active)\n      * SelectedCounterVisual\n      - Trash bin (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n  - StoveCounter (Active)\n    * BoxCollider\n   
+        * StoveCounter\n    - CounterTopPoint (Active)\n    - StoveCounter_Visual
+        (Active)\n      * StoveCounterVisual\n      - Counter (Active)\n        *
+        MeshFilter\n        * MeshRenderer\n      - Stove (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Frying Pan (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - SizzlingParticles (Inactive)\n        * ParticleSystem\n       
+        * ParticleSystemRenderer\n      - StoveOnVisual (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n        * MeshCollider\n    - Selected (Active)\n      *
+        SelectedCounterVisual\n      - Counter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Stove (Inactive)\n        * MeshFilter\n        *
+        MeshRenderer\n      - Frying Pan (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n      - SizzlingParticles (Inactive)\n        * ParticleSystem\n       
+        * ParticleSystemRenderer\n      - StoveOnVisual (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n        * MeshCollider\n    - ProgressBarUI (Active)\n     
+        * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n      * ProgressBarUI\n     
+        * LookAtCamera\n      * Animator\n      * StoveBurnFlashingBarUI\n      -
+        Background (Active)\n        * CanvasRenderer\n        * Image\n        *
+        Outline\n      - Bar (Active)\n        * CanvasRenderer\n        * Image\n   
+        - Sound (Active)\n      * AudioSource\n      * StoveCounterSound\n    - StoveBurnWarningUI
+        (Active)\n      * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n     
+        * LookAtCamera\n      * StoveBurnWarningUI\n      * Animator\n      * CanvasGroup\n     
+        - Image (Active)\n        * CanvasRenderer\n        * Image\n  - ClearCounter
+        (11) (Active)\n    * BoxCollider\n    * ClearCounter\n    - CounterTopPoint
+        (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n 
+        - ClearCounter (12) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (13) (Active)\n    * BoxCollider\n    *
+        ClearCounter\n    - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n     
+        - KitchenCounter (Active)\n        * MeshFilter\n        * MeshRenderer\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - KitchenCounter
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - ClearCounter
+        (14) (Active)\n    * BoxCollider\n    * ClearCounter\n    - CounterTopPoint
+        (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n 
+        - ClearCounter (15) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (16) (Active)\n    * BoxCollider\n    *
+        ClearCounter\n    - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n     
+        - KitchenCounter (Active)\n        * MeshFilter\n        * MeshRenderer\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - KitchenCounter
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - ClearCounter
+        (17) (Active)\n    * BoxCollider\n    * ClearCounter\n    - CounterTopPoint
+        (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n 
+        - ClearCounter (18) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (19) (Active)\n    * BoxCollider\n    *
+        ClearCounter\n    - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n     
+        - KitchenCounter (Active)\n        * MeshFilter\n        * MeshRenderer\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - KitchenCounter
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - DeliveryCounter
+        (Active)\n    * BoxCollider\n    * DeliveryCounter\n    - CounterTopPoint
+        (Active)\n    - DeliveryCounter_Visual (Active)\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n   
+        - DeliveryArrow (Active)\n      * MeshFilter\n      * MeshRenderer\n     
+        * MeshCollider\n    - DeliveryResultUI_LookAtCamera (Active)\n      * LookAtCamera\n     
+        - DeliveryResultUI (Active)\n        * Canvas\n        * CanvasScaler\n       
+        * GraphicRaycaster\n        * DeliveryResultUI\n        * Animator\n       
+        * CanvasGroup\n        - Background (Active)\n          * CanvasRenderer\n         
+        * Image\n          * Outline\n          * Shadow\n        - MessageText (Active)\n         
+        * CanvasRenderer\n          * TextMeshProUGUI\n        - IconImage (Active)\n         
+        * CanvasRenderer\n          * Image\n  - PlatesCounter (Active)\n    * BoxCollider\n   
+        * PlatesCounter\n    - CounterTopPoint (Active)\n    - PlatesCounter_Visual
+        (Active)\n      * PlatesCounterVisual\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - CircleSprite (Active)\n       
+        * SpriteRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - CircleSprite (Inactive)\n        * SpriteRenderer\n  - StoveCounter (1)
+        (Active)\n    * BoxCollider\n    * StoveCounter\n    - CounterTopPoint (Active)\n   
+        - StoveCounter_Visual (Active)\n      * StoveCounterVisual\n      - Counter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n      - Stove (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Frying Pan (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - SizzlingParticles (Inactive)\n       
+        * ParticleSystem\n        * ParticleSystemRenderer\n      - StoveOnVisual
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n        * MeshCollider\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - Counter (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Stove (Inactive)\n        *
+        MeshFilter\n        * MeshRenderer\n      - Frying Pan (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - SizzlingParticles (Inactive)\n       
+        * ParticleSystem\n        * ParticleSystemRenderer\n      - StoveOnVisual
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n        * MeshCollider\n   
+        - ProgressBarUI (Active)\n      * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n     
+        * ProgressBarUI\n      * LookAtCamera\n      * Animator\n      * StoveBurnFlashingBarUI\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Outline\n      - Bar (Active)\n        * CanvasRenderer\n        * Image\n   
+        - Sound (Active)\n      * AudioSource\n      * StoveCounterSound\n    - StoveBurnWarningUI
+        (Active)\n      * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n     
+        * LookAtCamera\n      * StoveBurnWarningUI\n      * Animator\n      * CanvasGroup\n     
+        - Image (Active)\n        * CanvasRenderer\n        * Image\n- DeliveryManager
+        (Active)\n  * DeliveryManager\n- MusicManager (Active)\n  * AudioSource\n 
+        * MusicManager\n- SoundManager (Active)\n  * SoundManager\n- KitchenGameManager
+        (Active)\n  * KitchenGameManager\n- Wall (Active)\n  * MeshFilter\n  * MeshRenderer\n 
+        * BoxCollider\n- Wall (1) (Active)\n  * MeshFilter\n  * MeshRenderer\n  *
+        BoxCollider\n- Wall (2) (Active)\n  * MeshFilter\n  * MeshRenderer\n  * BoxCollider\n-
+        Cube (Active)\n  * MeshFilter\n  * MeshRenderer\n  * BoxCollider\n- Cube
+        (1) (Active)\n  * MeshFilter\n  * MeshRenderer\n  * BoxCollider\n- Cube (2)
+        (Active)\n  * MeshFilter\n  * MeshRenderer\n  * BoxCollider\n\n## Cameras:\n-
+        Main Camera: Position (0.75, 21.50, -20.79), Rotation (46.00, 0.00, 0.00)\n\n##
+        Lights:\n- Directional Light: Type Directional, Position (0.00, 3.00, 0.00)\n"
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Perform spatial analysis on the scene
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: "# Spatial Analysis\n\n## Object Positions and Bounds:\n- DeliveryArrow:
+        Position (7.47, 1.27, 1.98), Size (1.00, 0.00, 1.00)\n  * DeliveryCounter
+        is below DeliveryArrow (distance: 0.01)\n  * Wall is to the right of DeliveryArrow
+        (distance: 0.31)\n  * Wall (2) is in front of DeliveryArrow (distance: 1.81)\n-
+        DeliveryCounter: Position (7.50, 0.00, 2.00), Size (1.50, 1.50, 1.50)\n 
+        * Wall is to the right of DeliveryCounter (distance: 0.02)\n  * Wall (2)
+        is in front of DeliveryCounter (distance: 1.53)\n  * StoveCounter (1) is
+        behind DeliveryCounter (distance: 1.50)\n- PlatesCounter: Position (7.50,
+        0.00, 0.50), Size (1.50, 1.50, 1.50)\n  * Wall is to the right of PlatesCounter
+        (distance: 0.02)\n  * ClearCounter (12) is in front of PlatesCounter (distance:
+        1.50)\n  * TrashCounter is behind PlatesCounter (distance: 1.50)\n- ClearCounter
+        (1): Position (-3.00, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n  * ClearCounter
+        (2) is to the left of ClearCounter (1) (distance: 1.50)\n  * ContainerCounter_CheeseBlock
+        is to the right of ClearCounter (1) (distance: 1.50)\n  * Wall (2) is in
+        front of ClearCounter (1) (distance: 0.04)\n  * ClearCounter (6) is behind
+        ClearCounter (1) (distance: 7.50)\n- ClearCounter (16): Position (-6.00,
+        0.00, -2.50), Size (1.50, 1.50, 1.50)\n  * Wall (1) is to the left of ClearCounter
+        (16) (distance: 0.03)\n  * ClearCounter (18) is in front of ClearCounter
+        (16) (distance: 1.50)\n  * ClearCounter (14) is behind ClearCounter (16)
+        (distance: 1.50)\n- ClearCounter (12): Position (7.50, 0.00, 3.50), Size
+        (1.50, 1.50, 1.50)\n  * StoveCounter is to the left of ClearCounter (12)
+        (distance: 1.50)\n  * Wall is to the right of ClearCounter (12) (distance:
+        0.02)\n  * Wall (2) is in front of ClearCounter (12) (distance: 0.03)\n 
+        * PlatesCounter is behind ClearCounter (12) (distance: 1.50)\n- ContainerCounter_Bread:
+        Position (-4.50, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n  * Wall (1) is to
+        the left of ContainerCounter_Bread (distance: 1.53)\n  * ClearCounter is
+        to the right of ContainerCounter_Bread (distance: 1.50)\n  * Wall (2) is
+        in front of ContainerCounter_Bread (distance: 0.04)\n  * ClearCounter (13)
+        is behind ContainerCounter_Bread (distance: 7.50)\n- ClearCounter (17): Position
+        (-6.00, 0.00, -1.00), Size (1.50, 1.50, 1.50)\n  * Wall (1) is to the left
+        of ClearCounter (17) (distance: 0.03)\n  * ClearCounter (19) is in front
+        of ClearCounter (17) (distance: 1.50)\n  * ClearCounter (15) is behind ClearCounter
+        (17) (distance: 1.50)\n- ClearCounter (19): Position (-6.00, 0.00, 2.00),
+        Size (1.50, 1.50, 1.50)\n  * Wall (1) is to the left of ClearCounter (19)
+        (distance: 0.03)\n  * Wall (2) is in front of ClearCounter (19) (distance:
+        1.54)\n  * ClearCounter (17) is behind ClearCounter (19) (distance: 1.50)\n-
+        CuttingCounter: Position (3.00, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n  *
+        ContainerCounter_CheeseBlock is to the left of CuttingCounter (distance:
+        1.50)\n  * ContainerCounter_MeatPattyUncooked is to the right of CuttingCounter
+        (distance: 1.50)\n  * Wall (2) is in front of CuttingCounter (distance: 0.03)\n 
+        * ClearCounter (7) is behind CuttingCounter (distance: 7.50)\n- ClearCounter
+        (11): Position (7.50, 0.00, -4.00), Size (1.50, 1.50, 1.50)\n  * Wall is
+        to the right of ClearCounter (11) (distance: 0.02)\n  * StoveCounter (1)
+        is in front of ClearCounter (11) (distance: 1.50)\n- ContainerCounter_MeatPattyUncooked:
+        Position (6.00, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n  * CuttingCounter
+        is to the left of ContainerCounter_MeatPattyUncooked (distance: 1.50)\n 
+        * Wall is to the right of ContainerCounter_MeatPattyUncooked (distance: 1.52)\n 
+        * Wall (2) is in front of ContainerCounter_MeatPattyUncooked (distance: 0.03)\n 
+        * ClearCounter (8) is behind ContainerCounter_MeatPattyUncooked (distance:
+        7.50)\n- StoveCounter: Position (4.50, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n 
+        * ClearCounter (4) is to the left of StoveCounter (distance: 1.50)\n  * ClearCounter
+        (12) is to the right of StoveCounter (distance: 1.50)\n  * Wall (2) is in
+        front of StoveCounter (distance: 0.03)\n  * CuttingCounter (1) is behind
+        StoveCounter (distance: 7.50)\n- ContainerCounter_CheeseBlock: Position (0.00,
+        0.00, 3.50), Size (1.50, 1.50, 1.50)\n  * ClearCounter (1) is to the left
+        of ContainerCounter_CheeseBlock (distance: 1.50)\n  * CuttingCounter is to
+        the right of ContainerCounter_CheeseBlock (distance: 1.50)\n  * Wall (2)
+        is in front of ContainerCounter_CheeseBlock (distance: 0.03)\n  * ContainerCounter_Tomato
+        is behind ContainerCounter_CheeseBlock (distance: 7.50)\n- ClearCounter (14):
+        Position (-6.00, 0.00, -5.50), Size (1.50, 1.50, 1.50)\n  * Wall (1) is to
+        the left of ClearCounter (14) (distance: 0.03)\n  * ClearCounter (6) is to
+        the right of ClearCounter (14) (distance: 1.50)\n  * ClearCounter (16) is
+        in front of ClearCounter (14) (distance: 1.50)\n- ClearCounter (4): Position
+        (1.50, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n  * ClearCounter is to the left
+        of ClearCounter (4) (distance: 1.50)\n  * StoveCounter is to the right of
+        ClearCounter (4) (distance: 1.50)\n  * Wall (2) is in front of ClearCounter
+        (4) (distance: 0.03)\n  * ClearCounter (5) is behind ClearCounter (4) (distance:
+        7.50)\n- ClearCounter: Position (-1.50, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n 
+        * ContainerCounter_Bread is to the left of ClearCounter (distance: 1.50)\n 
+        * ClearCounter (4) is to the right of ClearCounter (distance: 1.50)\n  *
+        Wall (2) is in front of ClearCounter (distance: 0.04)\n  * ContainerCounter_Cabbage
+        is behind ClearCounter (distance: 7.50)\n- ContainerCounter_Tomato: Position
+        (0.00, 0.00, -5.50), Size (1.50, 1.50, 1.50)\n  * ClearCounter (6) is to
+        the left of ContainerCounter_Tomato (distance: 1.50)\n  * ClearCounter (7)
+        is to the right of ContainerCounter_Tomato (distance: 1.50)\n  * ContainerCounter_CheeseBlock
+        is in front of ContainerCounter_Tomato (distance: 7.50)\n- StoveCounter (1):
+        Position (7.50, 0.00, -1.00), Size (1.50, 1.50, 1.50)\n  * Wall is to the
+        right of StoveCounter (1) (distance: 0.02)\n  * DeliveryCounter is in front
+        of StoveCounter (1) (distance: 1.50)\n  * ClearCounter (11) is behind StoveCounter
+        (1) (distance: 1.50)\n- ClearCounter (8): Position (6.00, 0.00, -5.50), Size
+        (1.50, 1.50, 1.50)\n  * ClearCounter (7) is to the left of ClearCounter (8)
+        (distance: 1.50)\n  * Wall is to the right of ClearCounter (8) (distance:
+        1.52)\n  * ContainerCounter_MeatPattyUncooked is in front of ClearCounter
+        (8) (distance: 7.50)\n- ClearCounter (7): Position (3.00, 0.00, -5.50), Size
+        (1.50, 1.50, 1.50)\n  * ContainerCounter_Tomato is to the left of ClearCounter
+        (7) (distance: 1.50)\n  * ClearCounter (8) is to the right of ClearCounter
+        (7) (distance: 1.50)\n  * CuttingCounter is in front of ClearCounter (7)
+        (distance: 7.50)\n- ClearCounter (6): Position (-3.00, 0.00, -5.50), Size
+        (1.50, 1.50, 1.50)\n  * ClearCounter (14) is to the left of ClearCounter
+        (6) (distance: 1.50)\n  * ContainerCounter_Tomato is to the right of ClearCounter
+        (6) (distance: 1.50)\n  * ClearCounter (1) is in front of ClearCounter (6)
+        (distance: 7.50)\n- ClearCounter (9): Position (7.50, 0.00, -5.50), Size
+        (1.50, 1.50, 1.50)\n  * CuttingCounter (1) is to the left of ClearCounter
+        (9) (distance: 1.50)\n  * Wall is to the right of ClearCounter (9) (distance:
+        0.02)\n  * TrashCounter is in front of ClearCounter (9) (distance: 1.50)\n-
+        ContainerCounter_Cabbage: Position (-1.50, 0.00, -5.50), Size (1.50, 1.50,
+        1.50)\n  * ClearCounter (13) is to the left of ContainerCounter_Cabbage (distance:
+        1.50)\n  * ClearCounter (5) is to the right of ContainerCounter_Cabbage (distance:
+        1.50)\n  * ClearCounter is in front of ContainerCounter_Cabbage (distance:
+        7.50)\n- ClearCounter (18): Position (-6.00, 0.00, 0.50), Size (1.50, 1.50,
+        1.50)\n  * Wall (1) is to the left of ClearCounter (18) (distance: 0.03)\n 
+        * ClearCounter (2) is in front of ClearCounter (18) (distance: 1.50)\n  *
+        ClearCounter (16) is behind ClearCounter (18) (distance: 1.50)\n- CuttingCounter
+        (1): Position (4.50, 0.00, -5.50), Size (1.50, 1.50, 1.50)\n  * ClearCounter
+        (5) is to the left of CuttingCounter (1) (distance: 1.50)\n  * ClearCounter
+        (9) is to the right of CuttingCounter (1) (distance: 1.50)\n  * StoveCounter
+        is in front of CuttingCounter (1) (distance: 7.50)\n- ClearCounter (5): Position
+        (1.50, 0.00, -5.50), Size (1.50, 1.50, 1.50)\n  * ContainerCounter_Cabbage
+        is to the left of ClearCounter (5) (distance: 1.50)\n  * CuttingCounter (1)
+        is to the right of ClearCounter (5) (distance: 1.50)\n  * ClearCounter (4)
+        is in front of ClearCounter (5) (distance: 7.50)\n- ClearCounter (15): Position
+        (-6.00, 0.00, -4.00), Size (1.50, 1.50, 1.50)\n  * Wall (1) is to the left
+        of ClearCounter (15) (distance: 0.03)\n  * ClearCounter (17) is in front
+        of ClearCounter (15) (distance: 1.50)\n- TrashCounter: Position (7.50, 0.00,
+        -2.50), Size (1.50, 1.50, 1.50)\n  * Wall is to the right of TrashCounter
+        (distance: 0.02)\n  * PlatesCounter is in front of TrashCounter (distance:
+        1.50)\n  * ClearCounter (9) is behind TrashCounter (distance: 1.50)\n- ClearCounter
+        (13): Position (-4.50, 0.00, -5.50), Size (1.50, 1.50, 1.50)\n  * Wall (1)
+        is to the left of ClearCounter (13) (distance: 1.53)\n  * ContainerCounter_Cabbage
+        is to the right of ClearCounter (13) (distance: 1.50)\n  * ContainerCounter_Bread
+        is in front of ClearCounter (13) (distance: 7.50)\n- ClearCounter (2): Position
+        (-6.00, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n  * Wall (1) is to the left
+        of ClearCounter (2) (distance: 0.03)\n  * ClearCounter (1) is to the right
+        of ClearCounter (2) (distance: 1.50)\n  * Wall (2) is in front of ClearCounter
+        (2) (distance: 0.04)\n  * ClearCounter (18) is behind ClearCounter (2) (distance:
+        1.50)\n- Cube (2): Position (1.10, 1.27, 8.33), Size (7.69, 3.17, 31.50)\n-
+        Floor: Position (0.00, 0.00, 0.00), Size (50.00, 0.00, 50.00)\n- Wall: Position
+        (8.40, 1.37, -2.02), Size (0.25, 3.00, 12.68)\n  * Cube (2) is in front of
+        Wall (distance: 0.17)\n- Wall (1): Position (-6.91, 1.37, -2.02), Size (0.25,
+        3.00, 12.68)\n  * Cube (2) is in front of Wall (1) (distance: 0.17)\n- Wall
+        (2): Position (0.78, 1.37, 4.41), Size (0.25, 3.00, 15.53)\n  * Cube (1)
+        is to the left of Wall (2) (distance: 0.04)\n- Cube (1): Position (-10.87,
+        1.27, -1.95), Size (7.69, 3.17, 12.95)\n- Cube: Position (12.36, 1.27, -1.95),
+        Size (7.69, 3.17, 12.95)\n\n## Scene Bounds: Center (0.00, 1.28, 0.00), Size
+        (50.00, 3.19, 50.00), Min (-25.00, -0.32, -25.00), Max (25.00, 2.87, 25.00)\n"
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Perform complete scene analysis
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: "Scene Structure:\n# Scene Structure Analysis\nTotal objects in scene:
+        405\n\n## Hierarchy:\n- Main Camera (Active)\n  * Camera\n  * AudioListener\n-
+        Directional Light (Active)\n  * Light\n- Global Volume (Active)\n- Floor
+        (Active)\n  * MeshFilter\n  * MeshRenderer\n  * MeshCollider\n- Player (Active)\n 
+        * Player\n  * PlayerSounds\n  - PlayerVisual (Active)\n    * Animator\n   
+        * PlayerAnimator\n    - Head (Active)\n      * MeshFilter\n      * MeshRenderer\n     
+        - Eye_R (Active)\n        * MeshFilter\n        * MeshRenderer\n      - Eye_L
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Body (Active)\n     
+        * MeshFilter\n      * MeshRenderer\n  - KitchenObjectHoldPoint (Active)\n 
+        - PlayerMovingParticles (Active)\n    * ParticleSystem\n    * ParticleSystemRenderer\n-
+        Virtual Camera (Active)\n  - cm (Active)\n- GameInput (Active)\n  * GameInput\n-
+        Canvas (Active)\n  * Canvas\n  * CanvasScaler\n  * GraphicRaycaster\n  -
+        DeliveryManagerUI (Active)\n    * DeliveryManagerUI\n    - Container (Active)\n     
+        * VerticalLayoutGroup\n      - RecipeTemplate (Active)\n        * DeliveryManagerSingleUI\n       
+        - Background (Active)\n          * CanvasRenderer\n          * Image\n       
+        - RecipeNameText (Active)\n          * CanvasRenderer\n          * TextMeshProUGUI\n       
+        - IconContainer (Active)\n          * HorizontalLayoutGroup\n          -
+        IconTemplate (Active)\n            * CanvasRenderer\n            * Image\n     
+        - RecipeTemplate (1) (Active)\n        - Background (Active)\n          *
+        CanvasRenderer\n          * Image\n        - RecipeNameText (Active)\n         
+        * CanvasRenderer\n          * TextMeshProUGUI\n      - RecipeTemplate (2)
+        (Active)\n        - Background (Active)\n          * CanvasRenderer\n         
+        * Image\n        - RecipeNameText (Active)\n          * CanvasRenderer\n         
+        * TextMeshProUGUI\n    - TitleText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n  - GameStartCountdownUI (Active)\n    * GameStartCountdownUI\n   
+        * Animator\n    * CanvasGroup\n    - CountdownText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n  - GamePlayingClockUI (Active)\n    * GamePlayingClockUI\n   
+        - Background (Active)\n      * CanvasRenderer\n      * Image\n      * Outline\n     
+        * Shadow\n    - TimerImage (Active)\n      * CanvasRenderer\n      * Image\n     
+        * Outline\n      * Shadow\n  - GameOverUI (Active)\n    * GameOverUI\n   
+        - Background (Active)\n      * CanvasRenderer\n      * Image\n    - GameOverText
+        (Active)\n      * CanvasRenderer\n      * TextMeshProUGUI\n    - LabelRecipesDeliveredText
+        (Active)\n      * CanvasRenderer\n      * TextMeshProUGUI\n    - RecipesDeliveredText
+        (Active)\n      * CanvasRenderer\n      * TextMeshProUGUI\n  - TutorialUI
+        (Active)\n    * TutorialUI\n    - Background (Active)\n      * CanvasRenderer\n     
+        * Image\n    - Image (Active)\n      * CanvasRenderer\n      * Image\n   
+        - KeyMoveUp (Active)\n      - Background (Active)\n        * CanvasRenderer\n       
+        * Image\n        * Shadow\n        * Outline\n      - KeyMoveUpText (Active)\n       
+        * CanvasRenderer\n        * TextMeshProUGUI\n    - KeyMoveDown (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyMoveDownText (Active)\n        *
+        CanvasRenderer\n        * TextMeshProUGUI\n    - KeyMoveLeft (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyMoveLeftText (Active)\n        *
+        CanvasRenderer\n        * TextMeshProUGUI\n    - KeyMoveRight (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyMoveRightText (Active)\n        *
+        CanvasRenderer\n        * TextMeshProUGUI\n    - KeyGamepadMove (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyGamepadMoveText (Active)\n       
+        * CanvasRenderer\n        * TextMeshProUGUI\n    - KeyInteract (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyInteractText (Active)\n        *
+        CanvasRenderer\n        * TextMeshProUGUI\n    - KeyInteractAlternate (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyInteractAlternateText (Active)\n       
+        * CanvasRenderer\n        * TextMeshProUGUI\n    - KeyPause (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyPauseText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - KeyGamepadInteractAlternate (Active)\n      - Background
+        (Active)\n        * CanvasRenderer\n        * Image\n        * Shadow\n       
+        * Outline\n      - KeyGamepadInteractAlternateText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - KeyGamepadInteract (Active)\n      - Background
+        (Active)\n        * CanvasRenderer\n        * Image\n        * Shadow\n       
+        * Outline\n      - KeyGamepadInteractText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - KeyGamepadPause (Active)\n      - Background (Active)\n       
+        * CanvasRenderer\n        * Image\n        * Shadow\n        * Outline\n     
+        - KeyGamepadPauseText (Active)\n        * CanvasRenderer\n        * TextMeshProUGUI\n 
+        - GamePauseUI (Active)\n    * GamePauseUI\n    - Background (Active)\n     
+        * CanvasRenderer\n      * Image\n    - PausedText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - MainMenuButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      * Outline\n      * Shadow\n      - Text (TMP)
+        (Active)\n        * CanvasRenderer\n        * TextMeshProUGUI\n    - ResumeButton
+        (Active)\n      * CanvasRenderer\n      * Image\n      * Button\n      *
+        Outline\n      * Shadow\n      - Text (TMP) (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - OptionsButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      * Outline\n      * Shadow\n      - Text (TMP)
+        (Active)\n        * CanvasRenderer\n        * TextMeshProUGUI\n  - OptionsUI
+        (Active)\n    * OptionsUI\n    - Image (Active)\n      * CanvasRenderer\n     
+        * Image\n    - OptionsText (Active)\n      * CanvasRenderer\n      * TextMeshProUGUI\n   
+        - SoundEffectsButton (Active)\n      * CanvasRenderer\n      * Image\n     
+        * Button\n      - SoundEffectsButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - MusicButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - MusicButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - CloseButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - CloseButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - MoveUpText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - MoveDownText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - MoveLeftText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - MoveRightText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - InteractText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - InteractAlternateText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - PauseText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - MoveUpButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - MoveUpButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - MoveDownButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - MoveDownButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - MoveLeftButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - MoveLeftButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - MoveRightButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - MoveRightButtonText (Active)\n        *
+        CanvasRenderer\n        * TextMeshProUGUI\n    - InteractButton (Active)\n     
+        * CanvasRenderer\n      * Image\n      * Button\n      - InteractButtonText
+        (Active)\n        * CanvasRenderer\n        * TextMeshProUGUI\n    - InteractAlternateButton
+        (Active)\n      * CanvasRenderer\n      * Image\n      * Button\n      -
+        InteractAlternateButtonText (Active)\n        * CanvasRenderer\n        *
+        TextMeshProUGUI\n    - PauseButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - PauseButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - GamepadInteractButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - GamepadInteractButtonText (Active)\n       
+        * CanvasRenderer\n        * TextMeshProUGUI\n    - GamepadInteractAlternateButton
+        (Active)\n      * CanvasRenderer\n      * Image\n      * Button\n      -
+        GamepadInteractAlternateButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - GamepadPauseButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - GamepadPauseButtonText (Active)\n       
+        * CanvasRenderer\n        * TextMeshProUGUI\n    - PressToRebindKey (Inactive)\n     
+        - Image (Inactive)\n        * CanvasRenderer\n        * Image\n      - Text
+        (TMP) (Inactive)\n        * CanvasRenderer\n        * TextMeshProUGUI\n-
+        EventSystem (Active)\n  * EventSystem\n  * InputSystemUIInputModule\n- Counters
+        (Active)\n  - ClearCounter (2) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (4) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (5) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (6) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (1) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - CuttingCounter (Active)\n    * BoxCollider\n    * CuttingCounter\n   
+        - CounterTopPoint (Active)\n    - CuttingCounter_Visual (Active)\n      *
+        Animator\n      * CuttingCounterVisual\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Chopping Board (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Knife (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n        - Trail (Active)\n          * TrailRenderer\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - KitchenCounter
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n      - Chopping
+        Board (Inactive)\n        * MeshFilter\n        * MeshRenderer\n      - Knife
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n        - Trail
+        (Inactive)\n          * TrailRenderer\n    - ProgressBarUI (Active)\n     
+        * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n      * ProgressBarUI\n     
+        * LookAtCamera\n      - Background (Active)\n        * CanvasRenderer\n       
+        * Image\n        * Outline\n      - Bar (Active)\n        * CanvasRenderer\n       
+        * Image\n  - ContainerCounter_MeatPattyUncooked (Active)\n    * BoxCollider\n   
+        * ContainerCounter\n    - CounterTopPoint (Active)\n    - ContainerCounter_Visual
+        (Active)\n      * Animator\n      * ContainerCounterVisual\n      - Counter_solid
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n      - Counter_hole
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n      - Single door
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n        - ObjectSprite
+        (Active)\n          * SpriteRenderer\n      - Black (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - Counter_solid (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Counter_hole (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Single door (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Black (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - ContainerCounter_Bread
+        (Active)\n    * BoxCollider\n    * ContainerCounter\n    - CounterTopPoint
+        (Active)\n    - ContainerCounter_Visual (Active)\n      * Animator\n     
+        * ContainerCounterVisual\n      - Counter_solid (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Counter_hole (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Single door (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n        - ObjectSprite (Active)\n          * SpriteRenderer\n     
+        - Black (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected
+        (Active)\n      * SelectedCounterVisual\n      - Counter_solid (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Counter_hole (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Single door (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Black (Inactive)\n        *
+        MeshFilter\n        * MeshRenderer\n  - ContainerCounter_Tomato (Active)\n   
+        * BoxCollider\n    * ContainerCounter\n    - CounterTopPoint (Active)\n   
+        - ContainerCounter_Visual (Active)\n      * Animator\n      * ContainerCounterVisual\n     
+        - Counter_solid (Active)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Counter_hole (Active)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Single door (Active)\n        * MeshFilter\n        * MeshRenderer\n       
+        - ObjectSprite (Active)\n          * SpriteRenderer\n      - Black (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - Counter_solid (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Counter_hole (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Single door (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Black (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - ContainerCounter_Cabbage
+        (Active)\n    * BoxCollider\n    * ContainerCounter\n    - CounterTopPoint
+        (Active)\n    - ContainerCounter_Visual (Active)\n      * Animator\n     
+        * ContainerCounterVisual\n      - Counter_solid (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Counter_hole (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Single door (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n        - ObjectSprite (Active)\n          * SpriteRenderer\n     
+        - Black (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected
+        (Active)\n      * SelectedCounterVisual\n      - Counter_solid (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Counter_hole (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Single door (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Black (Inactive)\n        *
+        MeshFilter\n        * MeshRenderer\n  - ContainerCounter_CheeseBlock (Active)\n   
+        * BoxCollider\n    * ContainerCounter\n    - CounterTopPoint (Active)\n   
+        - ContainerCounter_Visual (Active)\n      * Animator\n      * ContainerCounterVisual\n     
+        - Counter_solid (Active)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Counter_hole (Active)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Single door (Active)\n        * MeshFilter\n        * MeshRenderer\n       
+        - ObjectSprite (Active)\n          * SpriteRenderer\n      - Black (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - Counter_solid (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Counter_hole (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Single door (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Black (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - ClearCounter
+        (Active)\n    * BoxCollider\n    * ClearCounter\n    - CounterTopPoint (Active)\n   
+        - ClearCounter_Visual (Active)\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n 
+        - CuttingCounter (1) (Active)\n    * BoxCollider\n    * CuttingCounter\n   
+        - CounterTopPoint (Active)\n    - CuttingCounter_Visual (Active)\n      *
+        Animator\n      * CuttingCounterVisual\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Chopping Board (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Knife (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n        - Trail (Active)\n          * TrailRenderer\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - KitchenCounter
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n      - Chopping
+        Board (Inactive)\n        * MeshFilter\n        * MeshRenderer\n      - Knife
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n        - Trail
+        (Inactive)\n          * TrailRenderer\n    - ProgressBarUI (Active)\n     
+        * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n      * ProgressBarUI\n     
+        * LookAtCamera\n      - Background (Active)\n        * CanvasRenderer\n       
+        * Image\n        * Outline\n      - Bar (Active)\n        * CanvasRenderer\n       
+        * Image\n  - ClearCounter (7) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (8) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (9) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - TrashCounter (Active)\n    * BoxCollider\n    * TrashCounter\n   
+        - CounterTopPoint (Active)\n    - TrashCounter_Visual (Active)\n      - Trash
+        bin (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected
+        (Active)\n      * SelectedCounterVisual\n      - Trash bin (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n  - StoveCounter (Active)\n    * BoxCollider\n   
+        * StoveCounter\n    - CounterTopPoint (Active)\n    - StoveCounter_Visual
+        (Active)\n      * StoveCounterVisual\n      - Counter (Active)\n        *
+        MeshFilter\n        * MeshRenderer\n      - Stove (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Frying Pan (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - SizzlingParticles (Inactive)\n        * ParticleSystem\n       
+        * ParticleSystemRenderer\n      - StoveOnVisual (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n        * MeshCollider\n    - Selected (Active)\n      *
+        SelectedCounterVisual\n      - Counter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Stove (Inactive)\n        * MeshFilter\n        *
+        MeshRenderer\n      - Frying Pan (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n      - SizzlingParticles (Inactive)\n        * ParticleSystem\n       
+        * ParticleSystemRenderer\n      - StoveOnVisual (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n        * MeshCollider\n    - ProgressBarUI (Active)\n     
+        * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n      * ProgressBarUI\n     
+        * LookAtCamera\n      * Animator\n      * StoveBurnFlashingBarUI\n      -
+        Background (Active)\n        * CanvasRenderer\n        * Image\n        *
+        Outline\n      - Bar (Active)\n        * CanvasRenderer\n        * Image\n   
+        - Sound (Active)\n      * AudioSource\n      * StoveCounterSound\n    - StoveBurnWarningUI
+        (Active)\n      * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n     
+        * LookAtCamera\n      * StoveBurnWarningUI\n      * Animator\n      * CanvasGroup\n     
+        - Image (Active)\n        * CanvasRenderer\n        * Image\n  - ClearCounter
+        (11) (Active)\n    * BoxCollider\n    * ClearCounter\n    - CounterTopPoint
+        (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n 
+        - ClearCounter (12) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (13) (Active)\n    * BoxCollider\n    *
+        ClearCounter\n    - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n     
+        - KitchenCounter (Active)\n        * MeshFilter\n        * MeshRenderer\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - KitchenCounter
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - ClearCounter
+        (14) (Active)\n    * BoxCollider\n    * ClearCounter\n    - CounterTopPoint
+        (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n 
+        - ClearCounter (15) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (16) (Active)\n    * BoxCollider\n    *
+        ClearCounter\n    - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n     
+        - KitchenCounter (Active)\n        * MeshFilter\n        * MeshRenderer\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - KitchenCounter
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - ClearCounter
+        (17) (Active)\n    * BoxCollider\n    * ClearCounter\n    - CounterTopPoint
+        (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n 
+        - ClearCounter (18) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (19) (Active)\n    * BoxCollider\n    *
+        ClearCounter\n    - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n     
+        - KitchenCounter (Active)\n        * MeshFilter\n        * MeshRenderer\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - KitchenCounter
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - DeliveryCounter
+        (Active)\n    * BoxCollider\n    * DeliveryCounter\n    - CounterTopPoint
+        (Active)\n    - DeliveryCounter_Visual (Active)\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n   
+        - DeliveryArrow (Active)\n      * MeshFilter\n      * MeshRenderer\n     
+        * MeshCollider\n    - DeliveryResultUI_LookAtCamera (Active)\n      * LookAtCamera\n     
+        - DeliveryResultUI (Active)\n        * Canvas\n        * CanvasScaler\n       
+        * GraphicRaycaster\n        * DeliveryResultUI\n        * Animator\n       
+        * CanvasGroup\n        - Background (Active)\n          * CanvasRenderer\n         
+        * Image\n          * Outline\n          * Shadow\n        - MessageText (Active)\n         
+        * CanvasRenderer\n          * TextMeshProUGUI\n        - IconImage (Active)\n         
+        * CanvasRenderer\n          * Image\n  - PlatesCounter (Active)\n    * BoxCollider\n   
+        * PlatesCounter\n    - CounterTopPoint (Active)\n    - PlatesCounter_Visual
+        (Active)\n      * PlatesCounterVisual\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - CircleSprite (Active)\n       
+        * SpriteRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - CircleSprite (Inactive)\n        * SpriteRenderer\n  - StoveCounter (1)
+        (Active)\n    * BoxCollider\n    * StoveCounter\n    - CounterTopPoint (Active)\n   
+        - StoveCounter_Visual (Active)\n      * StoveCounterVisual\n      - Counter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n      - Stove (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Frying Pan (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - SizzlingParticles (Inactive)\n       
+        * ParticleSystem\n        * ParticleSystemRenderer\n      - StoveOnVisual
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n        * MeshCollider\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - Counter (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Stove (Inactive)\n        *
+        MeshFilter\n        * MeshRenderer\n      - Frying Pan (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - SizzlingParticles (Inactive)\n       
+        * ParticleSystem\n        * ParticleSystemRenderer\n      - StoveOnVisual
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n        * MeshCollider\n   
+        - ProgressBarUI (Active)\n      * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n     
+        * ProgressBarUI\n      * LookAtCamera\n      * Animator\n      * StoveBurnFlashingBarUI\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Outline\n      - Bar (Active)\n        * CanvasRenderer\n        * Image\n   
+        - Sound (Active)\n      * AudioSource\n      * StoveCounterSound\n    - StoveBurnWarningUI
+        (Active)\n      * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n     
+        * LookAtCamera\n      * StoveBurnWarningUI\n      * Animator\n      * CanvasGroup\n     
+        - Image (Active)\n        * CanvasRenderer\n        * Image\n- DeliveryManager
+        (Active)\n  * DeliveryManager\n- MusicManager (Active)\n  * AudioSource\n 
+        * MusicManager\n- SoundManager (Active)\n  * SoundManager\n- KitchenGameManager
+        (Active)\n  * KitchenGameManager\n- Wall (Active)\n  * MeshFilter\n  * MeshRenderer\n 
+        * BoxCollider\n- Wall (1) (Active)\n  * MeshFilter\n  * MeshRenderer\n  *
+        BoxCollider\n- Wall (2) (Active)\n  * MeshFilter\n  * MeshRenderer\n  * BoxCollider\n-
+        Cube (Active)\n  * MeshFilter\n  * MeshRenderer\n  * BoxCollider\n- Cube
+        (1) (Active)\n  * MeshFilter\n  * MeshRenderer\n  * BoxCollider\n- Cube (2)
+        (Active)\n  * MeshFilter\n  * MeshRenderer\n  * BoxCollider\n\n## Cameras:\n-
+        Main Camera: Position (0.75, 21.50, -20.79), Rotation (46.00, 0.00, 0.00)\n\n##
+        Lights:\n- Directional Light: Type Directional, Position (0.00, 3.00, 0.00)\n\n\nSpatial
+        Analysis:\n# Spatial Analysis\n\n## Object Positions and Bounds:\n- DeliveryArrow:
+        Position (7.47, 1.27, 1.98), Size (1.00, 0.00, 1.00)\n  * DeliveryCounter
+        is below DeliveryArrow (distance: 0.01)\n  * Wall is to the right of DeliveryArrow
+        (distance: 0.31)\n  * Wall (2) is in front of DeliveryArrow (distance: 1.81)\n-
+        DeliveryCounter: Position (7.50, 0.00, 2.00), Size (1.50, 1.50, 1.50)\n 
+        * Wall is to the right of DeliveryCounter (distance: 0.02)\n  * Wall (2)
+        is in front of DeliveryCounter (distance: 1.53)\n  * StoveCounter (1) is
+        behind DeliveryCounter (distance: 1.50)\n- PlatesCounter: Position (7.50,
+        0.00, 0.50), Size (1.50, 1.50, 1.50)\n  * Wall is to the right of PlatesCounter
+        (distance: 0.02)\n  * ClearCounter (12) is in front of PlatesCounter (distance:
+        1.50)\n  * TrashCounter is behind PlatesCounter (distance: 1.50)\n- ClearCounter
+        (1): Position (-3.00, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n  * ClearCounter
+        (2) is to the left of ClearCounter (1) (distance: 1.50)\n  * ContainerCounter_CheeseBlock
+        is to the right of ClearCounter (1) (distance: 1.50)\n  * Wall (2) is in
+        front of ClearCounter (1) (distance: 0.04)\n  * ClearCounter (6) is behind
+        ClearCounter (1) (distance: 7.50)\n- ClearCounter (16): Position (-6.00,
+        0.00, -2.50), Size (1.50, 1.50, 1.50)\n  * Wall (1) is to the left of ClearCounter
+        (16) (distance: 0.03)\n  * ClearCounter (18) is in front of ClearCounter
+        (16) (distance: 1.50)\n  * ClearCounter (14) is behind ClearCounter (16)
+        (distance: 1.50)\n- ClearCounter (12): Position (7.50, 0.00, 3.50), Size
+        (1.50, 1.50, 1.50)\n  * StoveCounter is to the left of ClearCounter (12)
+        (distance: 1.50)\n  * Wall is to the right of ClearCounter (12) (distance:
+        0.02)\n  * Wall (2) is in front of ClearCounter (12) (distance: 0.03)\n 
+        * PlatesCounter is behind ClearCounter (12) (distance: 1.50)\n- ContainerCounter_Bread:
+        Position (-4.50, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n  * Wall (1) is to
+        the left of ContainerCounter_Bread (distance: 1.53)\n  * ClearCounter is
+        to the right of ContainerCounter_Bread (distance: 1.50)\n  * Wall (2) is
+        in front of ContainerCounter_Bread (distance: 0.04)\n  * ClearCounter (13)
+        is behind ContainerCounter_Bread (distance: 7.50)\n- ClearCounter (17): Position
+        (-6.00, 0.00, -1.00), Size (1.50, 1.50, 1.50)\n  * Wall (1) is to the left
+        of ClearCounter (17) (distance: 0.03)\n  * ClearCounter (19) is in front
+        of ClearCounter (17) (distance: 1.50)\n  * ClearCounter (15) is behind ClearCounter
+        (17) (distance: 1.50)\n- ClearCounter (19): Position (-6.00, 0.00, 2.00),
+        Size (1.50, 1.50, 1.50)\n  * Wall (1) is to the left of ClearCounter (19)
+        (distance: 0.03)\n  * Wall (2) is in front of ClearCounter (19) (distance:
+        1.54)\n  * ClearCounter (17) is behind ClearCounter (19) (distance: 1.50)\n-
+        CuttingCounter: Position (3.00, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n  *
+        ContainerCounter_CheeseBlock is to the left of CuttingCounter (distance:
+        1.50)\n  * ContainerCounter_MeatPattyUncooked is to the right of CuttingCounter
+        (distance: 1.50)\n  * Wall (2) is in front of CuttingCounter (distance: 0.03)\n 
+        * ClearCounter (7) is behind CuttingCounter (distance: 7.50)\n- ClearCounter
+        (11): Position (7.50, 0.00, -4.00), Size (1.50, 1.50, 1.50)\n  * Wall is
+        to the right of ClearCounter (11) (distance: 0.02)\n  * StoveCounter (1)
+        is in front of ClearCounter (11) (distance: 1.50)\n- ContainerCounter_MeatPattyUncooked:
+        Position (6.00, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n  * CuttingCounter
+        is to the left of ContainerCounter_MeatPattyUncooked (distance: 1.50)\n 
+        * Wall is to the right of ContainerCounter_MeatPattyUncooked (distance: 1.52)\n 
+        * Wall (2) is in front of ContainerCounter_MeatPattyUncooked (distance: 0.03)\n 
+        * ClearCounter (8) is behind ContainerCounter_MeatPattyUncooked (distance:
+        7.50)\n- StoveCounter: Position (4.50, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n 
+        * ClearCounter (4) is to the left of StoveCounter (distance: 1.50)\n  * ClearCounter
+        (12) is to the right of StoveCounter (distance: 1.50)\n  * Wall (2) is in
+        front of StoveCounter (distance: 0.03)\n  * CuttingCounter (1) is behind
+        StoveCounter (distance: 7.50)\n- ContainerCounter_CheeseBlock: Position (0.00,
+        0.00, 3.50), Size (1.50, 1.50, 1.50)\n  * ClearCounter (1) is to the left
+        of ContainerCounter_CheeseBlock (distance: 1.50)\n  * CuttingCounter is to
+        the right of ContainerCounter_CheeseBlock (distance: 1.50)\n  * Wall (2)
+        is in front of ContainerCounter_CheeseBlock (distance: 0.03)\n  * ContainerCounter_Tomato
+        is behind ContainerCounter_CheeseBlock (distance: 7.50)\n- ClearCounter (14):
+        Position (-6.00, 0.00, -5.50), Size (1.50, 1.50, 1.50)\n  * Wall (1) is to
+        the left of ClearCounter (14) (distance: 0.03)\n  * ClearCounter (6) is to
+        the right of ClearCounter (14) (distance: 1.50)\n  * ClearCounter (16) is
+        in front of ClearCounter (14) (distance: 1.50)\n- ClearCounter (4): Position
+        (1.50, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n  * ClearCounter is to the left
+        of ClearCounter (4) (distance: 1.50)\n  * StoveCounter is to the right of
+        ClearCounter (4) (distance: 1.50)\n  * Wall (2) is in front of ClearCounter
+        (4) (distance: 0.03)\n  * ClearCounter (5) is behind ClearCounter (4) (distance:
+        7.50)\n- ClearCounter: Position (-1.50, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n 
+        * ContainerCounter_Bread is to the left of ClearCounter (distance: 1.50)\n 
+        * ClearCounter (4) is to the right of ClearCounter (distance: 1.50)\n  *
+        Wall (2) is in front of ClearCounter (distance: 0.04)\n  * ContainerCounter_Cabbage
+        is behind ClearCounter (distance: 7.50)\n- ContainerCounter_Tomato: Position
+        (0.00, 0.00, -5.50), Size (1.50, 1.50, 1.50)\n  * ClearCounter (6) is to
+        the left of ContainerCounter_Tomato (distance: 1.50)\n  * ClearCounter (7)
+        is to the right of ContainerCounter_Tomato (distance: 1.50)\n  * ContainerCounter_CheeseBlock
+        is in front of ContainerCounter_Tomato (distance: 7.50)\n- StoveCounter (1):
+        Position (7.50, 0.00, -1.00), Size (1.50, 1.50, 1.50)\n  * Wall is to the
+        right of StoveCounter (1) (distance: 0.02)\n  * DeliveryCounter is in front
+        of StoveCounter (1) (distance: 1.50)\n  * ClearCounter (11) is behind StoveCounter
+        (1) (distance: 1.50)\n- ClearCounter (8): Position (6.00, 0.00, -5.50), Size
+        (1.50, 1.50, 1.50)\n  * ClearCounter (7) is to the left of ClearCounter (8)
+        (distance: 1.50)\n  * Wall is to the right of ClearCounter (8) (distance:
+        1.52)\n  * ContainerCounter_MeatPattyUncooked is in front of ClearCounter
+        (8) (distance: 7.50)\n- ClearCounter (7): Position (3.00, 0.00, -5.50), Size
+        (1.50, 1.50, 1.50)\n  * ContainerCounter_Tomato is to the left of ClearCounter
+        (7) (distance: 1.50)\n  * ClearCounter (8) is to the right of ClearCounter
+        (7) (distance: 1.50)\n  * CuttingCounter is in front of ClearCounter (7)
+        (distance: 7.50)\n- ClearCounter (6): Position (-3.00, 0.00, -5.50), Size
+        (1.50, 1.50, 1.50)\n  * ClearCounter (14) is to the left of ClearCounter
+        (6) (distance: 1.50)\n  * ContainerCounter_Tomato is to the right of ClearCounter
+        (6) (distance: 1.50)\n  * ClearCounter (1) is in front of ClearCounter (6)
+        (distance: 7.50)\n- ClearCounter (9): Position (7.50, 0.00, -5.50), Size
+        (1.50, 1.50, 1.50)\n  * CuttingCounter (1) is to the left of ClearCounter
+        (9) (distance: 1.50)\n  * Wall is to the right of ClearCounter (9) (distance:
+        0.02)\n  * TrashCounter is in front of ClearCounter (9) (distance: 1.50)\n-
+        ContainerCounter_Cabbage: Position (-1.50, 0.00, -5.50), Size (1.50, 1.50,
+        1.50)\n  * ClearCounter (13) is to the left of ContainerCounter_Cabbage (distance:
+        1.50)\n  * ClearCounter (5) is to the right of ContainerCounter_Cabbage (distance:
+        1.50)\n  * ClearCounter is in front of ContainerCounter_Cabbage (distance:
+        7.50)\n- ClearCounter (18): Position (-6.00, 0.00, 0.50), Size (1.50, 1.50,
+        1.50)\n  * Wall (1) is to the left of ClearCounter (18) (distance: 0.03)\n 
+        * ClearCounter (2) is in front of ClearCounter (18) (distance: 1.50)\n  *
+        ClearCounter (16) is behind ClearCounter (18) (distance: 1.50)\n- CuttingCounter
+        (1): Position (4.50, 0.00, -5.50), Size (1.50, 1.50, 1.50)\n  * ClearCounter
+        (5) is to the left of CuttingCounter (1) (distance: 1.50)\n  * ClearCounter
+        (9) is to the right of CuttingCounter (1) (distance: 1.50)\n  * StoveCounter
+        is in front of CuttingCounter (1) (distance: 7.50)\n- ClearCounter (5): Position
+        (1.50, 0.00, -5.50), Size (1.50, 1.50, 1.50)\n  * ContainerCounter_Cabbage
+        is to the left of ClearCounter (5) (distance: 1.50)\n  * CuttingCounter (1)
+        is to the right of ClearCounter (5) (distance: 1.50)\n  * ClearCounter (4)
+        is in front of ClearCounter (5) (distance: 7.50)\n- ClearCounter (15): Position
+        (-6.00, 0.00, -4.00), Size (1.50, 1.50, 1.50)\n  * Wall (1) is to the left
+        of ClearCounter (15) (distance: 0.03)\n  * ClearCounter (17) is in front
+        of ClearCounter (15) (distance: 1.50)\n- TrashCounter: Position (7.50, 0.00,
+        -2.50), Size (1.50, 1.50, 1.50)\n  * Wall is to the right of TrashCounter
+        (distance: 0.02)\n  * PlatesCounter is in front of TrashCounter (distance:
+        1.50)\n  * ClearCounter (9) is behind TrashCounter (distance: 1.50)\n- ClearCounter
+        (13): Position (-4.50, 0.00, -5.50), Size (1.50, 1.50, 1.50)\n  * Wall (1)
+        is to the left of ClearCounter (13) (distance: 1.53)\n  * ContainerCounter_Cabbage
+        is to the right of ClearCounter (13) (distance: 1.50)\n  * ContainerCounter_Bread
+        is in front of ClearCounter (13) (distance: 7.50)\n- ClearCounter (2): Position
+        (-6.00, 0.00, 3.50), Size (1.50, 1.50, 1.50)\n  * Wall (1) is to the left
+        of ClearCounter (2) (distance: 0.03)\n  * ClearCounter (1) is to the right
+        of ClearCounter (2) (distance: 1.50)\n  * Wall (2) is in front of ClearCounter
+        (2) (distance: 0.04)\n  * ClearCounter (18) is behind ClearCounter (2) (distance:
+        1.50)\n- Cube (2): Position (1.10, 1.27, 8.33), Size (7.69, 3.17, 31.50)\n-
+        Floor: Position (0.00, 0.00, 0.00), Size (50.00, 0.00, 50.00)\n- Wall: Position
+        (8.40, 1.37, -2.02), Size (0.25, 3.00, 12.68)\n  * Cube (2) is in front of
+        Wall (distance: 0.17)\n- Wall (1): Position (-6.91, 1.37, -2.02), Size (0.25,
+        3.00, 12.68)\n  * Cube (2) is in front of Wall (1) (distance: 0.17)\n- Wall
+        (2): Position (0.78, 1.37, 4.41), Size (0.25, 3.00, 15.53)\n  * Cube (1)
+        is to the left of Wall (2) (distance: 0.04)\n- Cube (1): Position (-10.87,
+        1.27, -1.95), Size (7.69, 3.17, 12.95)\n- Cube: Position (12.36, 1.27, -1.95),
+        Size (7.69, 3.17, 12.95)\n\n## Scene Bounds: Center (0.00, 1.28, 0.00), Size
+        (50.00, 3.19, 50.00), Min (-25.00, -0.32, -25.00), Max (25.00, 2.87, 25.00)\n"
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: can you describe this scene?
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Including selected files in this query.
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 'Based on the spatial relationships between objects, the scene can
+        be described as a kitchen environment with various interactive objects and
+        UI elements. Here are some key components:
+
+
+        - The kitchen area consists
+        of counters for preparing different ingredients such as meat, bread, tomato,
+        cabbage, and cheese.
+
+        - There are clear counters, cutting counters,
+        and stove counters where specific actions can be performed.
+
+        - Objects
+        like plates counter, trash bin, delivery counter, and icons for different
+        ingredients placement are part of the scene.
+
+        - UI elements include
+        recipes, game start countdown, game over messages, tutorial instructions,
+        key controls, and pause menu functionality.
+
+        - The scene also includes
+        visual representations such as the player model, kitchen objects, walls,
+        cubes, and floor.
+
+        - Cameras are positioned to provide different
+        perspectives within the environment.
+
+        - Lights are set to illuminate
+        specific areas of the scene.
+
+
+        Overall, the scene presents a detailed
+        kitchen environment where players can interact with objects to complete cooking
+        tasks.'
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: do you see the articulation robot scene?
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Including selected files in this query.
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: I have analyzed the spatial relationships of objects in the scene,
+        but I can't visualize the scene like you would see it in Unity Editor. If
+        you have any specific questions about the spatial layout or relationships
+        between objects in the scene, feel free to ask!
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Open scene GameScene.unity
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Scene GameScene.unity loaded successfully.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Open scene ArticulationRobot.unity
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Scene ArticulationRobot.unity loaded successfully.
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Your current scene's context will be included in your queries.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Analyze the current scene structure
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: "# Scene Structure Analysis\nTotal objects in scene: 405\n\n## Hierarchy:\n-
+        Main Camera (Active)\n  * Camera\n  * AudioListener\n- Directional Light
+        (Active)\n  * Light\n- Global Volume (Active)\n- Floor (Active)\n  * MeshFilter\n 
+        * MeshRenderer\n  * MeshCollider\n- Player (Active)\n  * Player\n  * PlayerSounds\n 
+        - PlayerVisual (Active)\n    * Animator\n    * PlayerAnimator\n    - Head
+        (Active)\n      * MeshFilter\n      * MeshRenderer\n      - Eye_R (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Eye_L (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n    - Body (Active)\n      * MeshFilter\n      * MeshRenderer\n 
+        - KitchenObjectHoldPoint (Active)\n  - PlayerMovingParticles (Active)\n   
+        * ParticleSystem\n    * ParticleSystemRenderer\n- Virtual Camera (Active)\n 
+        - cm (Active)\n- GameInput (Active)\n  * GameInput\n- Canvas (Active)\n 
+        * Canvas\n  * CanvasScaler\n  * GraphicRaycaster\n  - DeliveryManagerUI (Active)\n   
+        * DeliveryManagerUI\n    - Container (Active)\n      * VerticalLayoutGroup\n     
+        - RecipeTemplate (Active)\n        * DeliveryManagerSingleUI\n        - Background
+        (Active)\n          * CanvasRenderer\n          * Image\n        - RecipeNameText
+        (Active)\n          * CanvasRenderer\n          * TextMeshProUGUI\n       
+        - IconContainer (Active)\n          * HorizontalLayoutGroup\n          -
+        IconTemplate (Active)\n            * CanvasRenderer\n            * Image\n     
+        - RecipeTemplate (1) (Active)\n        - Background (Active)\n          *
+        CanvasRenderer\n          * Image\n        - RecipeNameText (Active)\n         
+        * CanvasRenderer\n          * TextMeshProUGUI\n      - RecipeTemplate (2)
+        (Active)\n        - Background (Active)\n          * CanvasRenderer\n         
+        * Image\n        - RecipeNameText (Active)\n          * CanvasRenderer\n         
+        * TextMeshProUGUI\n    - TitleText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n  - GameStartCountdownUI (Active)\n    * GameStartCountdownUI\n   
+        * Animator\n    * CanvasGroup\n    - CountdownText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n  - GamePlayingClockUI (Active)\n    * GamePlayingClockUI\n   
+        - Background (Active)\n      * CanvasRenderer\n      * Image\n      * Outline\n     
+        * Shadow\n    - TimerImage (Active)\n      * CanvasRenderer\n      * Image\n     
+        * Outline\n      * Shadow\n  - GameOverUI (Active)\n    * GameOverUI\n   
+        - Background (Active)\n      * CanvasRenderer\n      * Image\n    - GameOverText
+        (Active)\n      * CanvasRenderer\n      * TextMeshProUGUI\n    - LabelRecipesDeliveredText
+        (Active)\n      * CanvasRenderer\n      * TextMeshProUGUI\n    - RecipesDeliveredText
+        (Active)\n      * CanvasRenderer\n      * TextMeshProUGUI\n  - TutorialUI
+        (Active)\n    * TutorialUI\n    - Background (Active)\n      * CanvasRenderer\n     
+        * Image\n    - Image (Active)\n      * CanvasRenderer\n      * Image\n   
+        - KeyMoveUp (Active)\n      - Background (Active)\n        * CanvasRenderer\n       
+        * Image\n        * Shadow\n        * Outline\n      - KeyMoveUpText (Active)\n       
+        * CanvasRenderer\n        * TextMeshProUGUI\n    - KeyMoveDown (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyMoveDownText (Active)\n        *
+        CanvasRenderer\n        * TextMeshProUGUI\n    - KeyMoveLeft (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyMoveLeftText (Active)\n        *
+        CanvasRenderer\n        * TextMeshProUGUI\n    - KeyMoveRight (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyMoveRightText (Active)\n        *
+        CanvasRenderer\n        * TextMeshProUGUI\n    - KeyGamepadMove (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyGamepadMoveText (Active)\n       
+        * CanvasRenderer\n        * TextMeshProUGUI\n    - KeyInteract (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyInteractText (Active)\n        *
+        CanvasRenderer\n        * TextMeshProUGUI\n    - KeyInteractAlternate (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyInteractAlternateText (Active)\n       
+        * CanvasRenderer\n        * TextMeshProUGUI\n    - KeyPause (Active)\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Shadow\n        * Outline\n      - KeyPauseText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - KeyGamepadInteractAlternate (Active)\n      - Background
+        (Active)\n        * CanvasRenderer\n        * Image\n        * Shadow\n       
+        * Outline\n      - KeyGamepadInteractAlternateText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - KeyGamepadInteract (Active)\n      - Background
+        (Active)\n        * CanvasRenderer\n        * Image\n        * Shadow\n       
+        * Outline\n      - KeyGamepadInteractText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - KeyGamepadPause (Active)\n      - Background (Active)\n       
+        * CanvasRenderer\n        * Image\n        * Shadow\n        * Outline\n     
+        - KeyGamepadPauseText (Active)\n        * CanvasRenderer\n        * TextMeshProUGUI\n 
+        - GamePauseUI (Active)\n    * GamePauseUI\n    - Background (Active)\n     
+        * CanvasRenderer\n      * Image\n    - PausedText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - MainMenuButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      * Outline\n      * Shadow\n      - Text (TMP)
+        (Active)\n        * CanvasRenderer\n        * TextMeshProUGUI\n    - ResumeButton
+        (Active)\n      * CanvasRenderer\n      * Image\n      * Button\n      *
+        Outline\n      * Shadow\n      - Text (TMP) (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - OptionsButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      * Outline\n      * Shadow\n      - Text (TMP)
+        (Active)\n        * CanvasRenderer\n        * TextMeshProUGUI\n  - OptionsUI
+        (Active)\n    * OptionsUI\n    - Image (Active)\n      * CanvasRenderer\n     
+        * Image\n    - OptionsText (Active)\n      * CanvasRenderer\n      * TextMeshProUGUI\n   
+        - SoundEffectsButton (Active)\n      * CanvasRenderer\n      * Image\n     
+        * Button\n      - SoundEffectsButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - MusicButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - MusicButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - CloseButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - CloseButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - MoveUpText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - MoveDownText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - MoveLeftText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - MoveRightText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - InteractText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - InteractAlternateText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - PauseText (Active)\n      * CanvasRenderer\n     
+        * TextMeshProUGUI\n    - MoveUpButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - MoveUpButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - MoveDownButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - MoveDownButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - MoveLeftButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - MoveLeftButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - MoveRightButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - MoveRightButtonText (Active)\n        *
+        CanvasRenderer\n        * TextMeshProUGUI\n    - InteractButton (Active)\n     
+        * CanvasRenderer\n      * Image\n      * Button\n      - InteractButtonText
+        (Active)\n        * CanvasRenderer\n        * TextMeshProUGUI\n    - InteractAlternateButton
+        (Active)\n      * CanvasRenderer\n      * Image\n      * Button\n      -
+        InteractAlternateButtonText (Active)\n        * CanvasRenderer\n        *
+        TextMeshProUGUI\n    - PauseButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - PauseButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - GamepadInteractButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - GamepadInteractButtonText (Active)\n       
+        * CanvasRenderer\n        * TextMeshProUGUI\n    - GamepadInteractAlternateButton
+        (Active)\n      * CanvasRenderer\n      * Image\n      * Button\n      -
+        GamepadInteractAlternateButtonText (Active)\n        * CanvasRenderer\n       
+        * TextMeshProUGUI\n    - GamepadPauseButton (Active)\n      * CanvasRenderer\n     
+        * Image\n      * Button\n      - GamepadPauseButtonText (Active)\n       
+        * CanvasRenderer\n        * TextMeshProUGUI\n    - PressToRebindKey (Inactive)\n     
+        - Image (Inactive)\n        * CanvasRenderer\n        * Image\n      - Text
+        (TMP) (Inactive)\n        * CanvasRenderer\n        * TextMeshProUGUI\n-
+        EventSystem (Active)\n  * EventSystem\n  * InputSystemUIInputModule\n- Counters
+        (Active)\n  - ClearCounter (2) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (4) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (5) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (6) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (1) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - CuttingCounter (Active)\n    * BoxCollider\n    * CuttingCounter\n   
+        - CounterTopPoint (Active)\n    - CuttingCounter_Visual (Active)\n      *
+        Animator\n      * CuttingCounterVisual\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Chopping Board (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Knife (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n        - Trail (Active)\n          * TrailRenderer\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - KitchenCounter
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n      - Chopping
+        Board (Inactive)\n        * MeshFilter\n        * MeshRenderer\n      - Knife
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n        - Trail
+        (Inactive)\n          * TrailRenderer\n    - ProgressBarUI (Active)\n     
+        * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n      * ProgressBarUI\n     
+        * LookAtCamera\n      - Background (Active)\n        * CanvasRenderer\n       
+        * Image\n        * Outline\n      - Bar (Active)\n        * CanvasRenderer\n       
+        * Image\n  - ContainerCounter_MeatPattyUncooked (Active)\n    * BoxCollider\n   
+        * ContainerCounter\n    - CounterTopPoint (Active)\n    - ContainerCounter_Visual
+        (Active)\n      * Animator\n      * ContainerCounterVisual\n      - Counter_solid
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n      - Counter_hole
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n      - Single door
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n        - ObjectSprite
+        (Active)\n          * SpriteRenderer\n      - Black (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - Counter_solid (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Counter_hole (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Single door (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Black (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - ContainerCounter_Bread
+        (Active)\n    * BoxCollider\n    * ContainerCounter\n    - CounterTopPoint
+        (Active)\n    - ContainerCounter_Visual (Active)\n      * Animator\n     
+        * ContainerCounterVisual\n      - Counter_solid (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Counter_hole (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Single door (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n        - ObjectSprite (Active)\n          * SpriteRenderer\n     
+        - Black (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected
+        (Active)\n      * SelectedCounterVisual\n      - Counter_solid (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Counter_hole (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Single door (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Black (Inactive)\n        *
+        MeshFilter\n        * MeshRenderer\n  - ContainerCounter_Tomato (Active)\n   
+        * BoxCollider\n    * ContainerCounter\n    - CounterTopPoint (Active)\n   
+        - ContainerCounter_Visual (Active)\n      * Animator\n      * ContainerCounterVisual\n     
+        - Counter_solid (Active)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Counter_hole (Active)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Single door (Active)\n        * MeshFilter\n        * MeshRenderer\n       
+        - ObjectSprite (Active)\n          * SpriteRenderer\n      - Black (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - Counter_solid (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Counter_hole (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Single door (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Black (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - ContainerCounter_Cabbage
+        (Active)\n    * BoxCollider\n    * ContainerCounter\n    - CounterTopPoint
+        (Active)\n    - ContainerCounter_Visual (Active)\n      * Animator\n     
+        * ContainerCounterVisual\n      - Counter_solid (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Counter_hole (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Single door (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n        - ObjectSprite (Active)\n          * SpriteRenderer\n     
+        - Black (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected
+        (Active)\n      * SelectedCounterVisual\n      - Counter_solid (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Counter_hole (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Single door (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Black (Inactive)\n        *
+        MeshFilter\n        * MeshRenderer\n  - ContainerCounter_CheeseBlock (Active)\n   
+        * BoxCollider\n    * ContainerCounter\n    - CounterTopPoint (Active)\n   
+        - ContainerCounter_Visual (Active)\n      * Animator\n      * ContainerCounterVisual\n     
+        - Counter_solid (Active)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Counter_hole (Active)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Single door (Active)\n        * MeshFilter\n        * MeshRenderer\n       
+        - ObjectSprite (Active)\n          * SpriteRenderer\n      - Black (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - Counter_solid (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Counter_hole (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Single door (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - Black (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - ClearCounter
+        (Active)\n    * BoxCollider\n    * ClearCounter\n    - CounterTopPoint (Active)\n   
+        - ClearCounter_Visual (Active)\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n 
+        - CuttingCounter (1) (Active)\n    * BoxCollider\n    * CuttingCounter\n   
+        - CounterTopPoint (Active)\n    - CuttingCounter_Visual (Active)\n      *
+        Animator\n      * CuttingCounterVisual\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Chopping Board (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Knife (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n        - Trail (Active)\n          * TrailRenderer\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - KitchenCounter
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n      - Chopping
+        Board (Inactive)\n        * MeshFilter\n        * MeshRenderer\n      - Knife
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n        - Trail
+        (Inactive)\n          * TrailRenderer\n    - ProgressBarUI (Active)\n     
+        * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n      * ProgressBarUI\n     
+        * LookAtCamera\n      - Background (Active)\n        * CanvasRenderer\n       
+        * Image\n        * Outline\n      - Bar (Active)\n        * CanvasRenderer\n       
+        * Image\n  - ClearCounter (7) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (8) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (9) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - TrashCounter (Active)\n    * BoxCollider\n    * TrashCounter\n   
+        - CounterTopPoint (Active)\n    - TrashCounter_Visual (Active)\n      - Trash
+        bin (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected
+        (Active)\n      * SelectedCounterVisual\n      - Trash bin (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n  - StoveCounter (Active)\n    * BoxCollider\n   
+        * StoveCounter\n    - CounterTopPoint (Active)\n    - StoveCounter_Visual
+        (Active)\n      * StoveCounterVisual\n      - Counter (Active)\n        *
+        MeshFilter\n        * MeshRenderer\n      - Stove (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Frying Pan (Active)\n        * MeshFilter\n       
+        * MeshRenderer\n      - SizzlingParticles (Inactive)\n        * ParticleSystem\n       
+        * ParticleSystemRenderer\n      - StoveOnVisual (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n        * MeshCollider\n    - Selected (Active)\n      *
+        SelectedCounterVisual\n      - Counter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n      - Stove (Inactive)\n        * MeshFilter\n        *
+        MeshRenderer\n      - Frying Pan (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n      - SizzlingParticles (Inactive)\n        * ParticleSystem\n       
+        * ParticleSystemRenderer\n      - StoveOnVisual (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n        * MeshCollider\n    - ProgressBarUI (Active)\n     
+        * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n      * ProgressBarUI\n     
+        * LookAtCamera\n      * Animator\n      * StoveBurnFlashingBarUI\n      -
+        Background (Active)\n        * CanvasRenderer\n        * Image\n        *
+        Outline\n      - Bar (Active)\n        * CanvasRenderer\n        * Image\n   
+        - Sound (Active)\n      * AudioSource\n      * StoveCounterSound\n    - StoveBurnWarningUI
+        (Active)\n      * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n     
+        * LookAtCamera\n      * StoveBurnWarningUI\n      * Animator\n      * CanvasGroup\n     
+        - Image (Active)\n        * CanvasRenderer\n        * Image\n  - ClearCounter
+        (11) (Active)\n    * BoxCollider\n    * ClearCounter\n    - CounterTopPoint
+        (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n 
+        - ClearCounter (12) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (13) (Active)\n    * BoxCollider\n    *
+        ClearCounter\n    - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n     
+        - KitchenCounter (Active)\n        * MeshFilter\n        * MeshRenderer\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - KitchenCounter
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - ClearCounter
+        (14) (Active)\n    * BoxCollider\n    * ClearCounter\n    - CounterTopPoint
+        (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n 
+        - ClearCounter (15) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (16) (Active)\n    * BoxCollider\n    *
+        ClearCounter\n    - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n     
+        - KitchenCounter (Active)\n        * MeshFilter\n        * MeshRenderer\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - KitchenCounter
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - ClearCounter
+        (17) (Active)\n    * BoxCollider\n    * ClearCounter\n    - CounterTopPoint
+        (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n 
+        - ClearCounter (18) (Active)\n    * BoxCollider\n    * ClearCounter\n   
+        - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n      - KitchenCounter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n     
+        * SelectedCounterVisual\n      - KitchenCounter (Inactive)\n        * MeshFilter\n       
+        * MeshRenderer\n  - ClearCounter (19) (Active)\n    * BoxCollider\n    *
+        ClearCounter\n    - CounterTopPoint (Active)\n    - ClearCounter_Visual (Active)\n     
+        - KitchenCounter (Active)\n        * MeshFilter\n        * MeshRenderer\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - KitchenCounter
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n  - DeliveryCounter
+        (Active)\n    * BoxCollider\n    * DeliveryCounter\n    - CounterTopPoint
+        (Active)\n    - DeliveryCounter_Visual (Active)\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n   
+        - DeliveryArrow (Active)\n      * MeshFilter\n      * MeshRenderer\n     
+        * MeshCollider\n    - DeliveryResultUI_LookAtCamera (Active)\n      * LookAtCamera\n     
+        - DeliveryResultUI (Active)\n        * Canvas\n        * CanvasScaler\n       
+        * GraphicRaycaster\n        * DeliveryResultUI\n        * Animator\n       
+        * CanvasGroup\n        - Background (Active)\n          * CanvasRenderer\n         
+        * Image\n          * Outline\n          * Shadow\n        - MessageText (Active)\n         
+        * CanvasRenderer\n          * TextMeshProUGUI\n        - IconImage (Active)\n         
+        * CanvasRenderer\n          * Image\n  - PlatesCounter (Active)\n    * BoxCollider\n   
+        * PlatesCounter\n    - CounterTopPoint (Active)\n    - PlatesCounter_Visual
+        (Active)\n      * PlatesCounterVisual\n      - KitchenCounter (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - CircleSprite (Active)\n       
+        * SpriteRenderer\n    - Selected (Active)\n      * SelectedCounterVisual\n     
+        - KitchenCounter (Inactive)\n        * MeshFilter\n        * MeshRenderer\n     
+        - CircleSprite (Inactive)\n        * SpriteRenderer\n  - StoveCounter (1)
+        (Active)\n    * BoxCollider\n    * StoveCounter\n    - CounterTopPoint (Active)\n   
+        - StoveCounter_Visual (Active)\n      * StoveCounterVisual\n      - Counter
+        (Active)\n        * MeshFilter\n        * MeshRenderer\n      - Stove (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Frying Pan (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n      - SizzlingParticles (Inactive)\n       
+        * ParticleSystem\n        * ParticleSystemRenderer\n      - StoveOnVisual
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n        * MeshCollider\n   
+        - Selected (Active)\n      * SelectedCounterVisual\n      - Counter (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - Stove (Inactive)\n        *
+        MeshFilter\n        * MeshRenderer\n      - Frying Pan (Inactive)\n       
+        * MeshFilter\n        * MeshRenderer\n      - SizzlingParticles (Inactive)\n       
+        * ParticleSystem\n        * ParticleSystemRenderer\n      - StoveOnVisual
+        (Inactive)\n        * MeshFilter\n        * MeshRenderer\n        * MeshCollider\n   
+        - ProgressBarUI (Active)\n      * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n     
+        * ProgressBarUI\n      * LookAtCamera\n      * Animator\n      * StoveBurnFlashingBarUI\n     
+        - Background (Active)\n        * CanvasRenderer\n        * Image\n       
+        * Outline\n      - Bar (Active)\n        * CanvasRenderer\n        * Image\n   
+        - Sound (Active)\n      * AudioSource\n      * StoveCounterSound\n    - StoveBurnWarningUI
+        (Active)\n      * Canvas\n      * CanvasScaler\n      * GraphicRaycaster\n     
+        * LookAtCamera\n      * StoveBurnWarningUI\n      * Animator\n      * CanvasGroup\n     
+        - Image (Active)\n        * CanvasRenderer\n        * Image\n- DeliveryManager
+        (Active)\n  * DeliveryManager\n- MusicManager (Active)\n  * AudioSource\n 
+        * MusicManager\n- SoundManager (Active)\n  * SoundManager\n- KitchenGameManager
+        (Active)\n  * KitchenGameManager\n- Wall (Active)\n  * MeshFilter\n  * MeshRenderer\n 
+        * BoxCollider\n- Wall (1) (Active)\n  * MeshFilter\n  * MeshRenderer\n  *
+        BoxCollider\n- Wall (2) (Active)\n  * MeshFilter\n  * MeshRenderer\n  * BoxCollider\n-
+        Cube (Active)\n  * MeshFilter\n  * MeshRenderer\n  * BoxCollider\n- Cube
+        (1) (Active)\n  * MeshFilter\n  * MeshRenderer\n  * BoxCollider\n- Cube (2)
+        (Active)\n  * MeshFilter\n  * MeshRenderer\n  * BoxCollider\n\n## Cameras:\n-
+        Main Camera: Position (0.75, 21.50, -20.79), Rotation (46.00, 0.00, 0.00)\n\n##
+        Lights:\n- Directional Light: Type Directional, Position (0.00, 3.00, 0.00)\n"
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: can you describe my current scene?
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Including current scene context, spatial analysis, and selected files
+        in this query.
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: '<error: could not get response>'
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Model changed to gpt-4 (OpenAI)
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: can you describe my current scene?
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Including current scene context, spatial analysis, and selected files
+        in this query.
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: '<error: could not get response>'
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Open scene ArticulationRobot.unity
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Scene ArticulationRobot.unity loaded successfully.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Open scene ArticulationRobot.unity
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Scene ArticulationRobot.unity loaded successfully.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Analyze the current scene structure
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: "# Scene Structure Analysis\nTotal objects in scene: 17\n\n## Hierarchy:\n-
+        Main Camera (Active)\n  * Camera\n  * AudioListener\n- Directional Light
+        (Active)\n  * Light\n- Floor (Active)\n  * MeshFilter\n  * MeshRenderer\n 
+        * MeshCollider\n- UR3 (Active)\n  * MeshFilter\n  * MeshRenderer\n  * MeshCollider\n 
+        * ArticulationBody\n  * RobotController\n  - Base (Active)\n    * MeshFilter\n   
+        * MeshRenderer\n    * MeshCollider\n    * ArticulationBody\n    * ArticulationJointController\n   
+        - Shoulder (Active)\n      * MeshFilter\n      * MeshRenderer\n      * MeshCollider\n     
+        * ArticulationBody\n      * ArticulationJointController\n      - Elbow (Active)\n       
+        * MeshFilter\n        * MeshRenderer\n        * MeshCollider\n        * ArticulationBody\n       
+        * ArticulationJointController\n        - Wrist1 (Active)\n          * MeshFilter\n         
+        * MeshRenderer\n          * MeshCollider\n          * ArticulationBody\n         
+        * ArticulationJointController\n          - Wrist2 (Active)\n            *
+        MeshFilter\n            * MeshRenderer\n            * MeshCollider\n           
+        * ArticulationBody\n            * ArticulationJointController\n           
+        - Wrist3 (Active)\n              * MeshFilter\n              * MeshRenderer\n             
+        * MeshCollider\n              * ArticulationBody\n              * ArticulationJointController\n             
+        - HandE (Active)\n                * MeshFilter\n                * MeshRenderer\n               
+        * Animator\n                * CapsuleCollider\n                * ArticulationBody\n               
+        * ArticulationJointController\n                * PincherController\n               
+        - Bolts (Active)\n                  * MeshFilter\n                  * MeshRenderer\n               
+        - FingerA (Active)\n                  * MeshFilter\n                  * MeshRenderer\n                 
+        * BoxCollider\n                  * ArticulationBody\n                  *
+        PincherFingerController\n                - FingerB (Active)\n                 
+        * MeshFilter\n                  * MeshRenderer\n                  * BoxCollider\n                 
+        * ArticulationBody\n                  * PincherFingerController\n- Table
+        (Active)\n  * MeshFilter\n  * MeshRenderer\n  * Rigidbody\n  * BoxCollider\n-
+        Cube (Active)\n  * MeshFilter\n  * MeshRenderer\n  * BoxCollider\n  * Rigidbody\n-
+        ManualInput (Active)\n  * ArticulationHandManualInput\n  * RobotManualInput\n\n##
+        Cameras:\n- Main Camera: Position (0.00, 1.00, -1.49), Rotation (0.00, 0.00,
+        0.00)\n\n## Lights:\n- Directional Light: Type Directional, Position (0.00,
+        3.00, 0.00)\n"
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Perform spatial analysis on the scene
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: "# Spatial Analysis\n\n## Object Positions and Bounds:\n- Shoulder:
+        Position (0.00, 0.91, -0.06), Size (0.09, 0.33, 0.12)\n  * Elbow is above
+        Shoulder (distance: 0.04)\n  * Floor is below Shoulder (distance: 0.75)\n-
+        Wrist3: Position (0.00, 1.41, -0.11), Size (0.06, 0.08, 0.09)\n  * Shoulder
+        is below Wrist3 (distance: 0.18)\n- Elbow: Position (0.00, 1.16, -0.07),
+        Size (0.08, 0.21, 0.07)\n  * Wrist1 is above Elbow (distance: 0.08)\n  *
+        Table is below Elbow (distance: 0.29)\n- HandE: Position (0.00, 1.46, -0.16),
+        Size (0.08, 0.10, 0.08)\n  * Shoulder is below HandE (distance: 0.22)\n-
+        Table: Position (0.00, 0.00, 0.00), Size (1.83, 0.76, 0.91)\n  * UR3 is above
+        Table (distance: 0.38)\n- Base: Position (0.00, 0.85, 0.00), Size (0.09,
+        0.13, 0.11)\n  * Elbow is above Base (distance: 0.26)\n  * Table is below
+        Base (distance: 0.02)\n- Wrist2: Position (0.00, 1.37, -0.07), Size (0.06,
+        0.07, 0.08)\n  * Wrist3 is above Wrist2 (distance: 0.01)\n  * Shoulder is
+        below Wrist2 (distance: 0.15)\n- Cube: Position (0.49, 0.78, -0.17), Size
+        (0.03, 0.03, 0.10)\n  * Table is below Cube (distance: 0.00)\n- UR3: Position
+        (0.00, 0.76, 0.00), Size (0.13, 0.09, 0.13)\n  * Base is above UR3 (distance:
+        0.04)\n  * Floor is below UR3 (distance: 0.72)\n- FingerB: Position (-0.01,
+        1.44, -0.27), Size (0.03, 0.06, 0.01)\n  * FingerA is above FingerB (distance:
+        0.03)\n  * Wrist3 is in front of FingerB (distance: 0.09)\n- Floor: Position
+        (0.00, 0.00, 0.00), Size (200.00, 0.00, 200.00)\n  * UR3 is above Floor (distance:
+        0.76)\n- FingerA: Position (0.01, 1.47, -0.27), Size (0.03, 0.06, 0.01)\n 
+        * FingerB is below FingerA (distance: 0.03)\n  * Wrist3 is in front of FingerA
+        (distance: 0.09)\n- Wrist1: Position (0.00, 1.33, -0.03), Size (0.06, 0.08,
+        0.09)\n  * Base is below Wrist1 (distance: 0.31)\n\n## Scene Bounds: Center
+        (0.00, 0.75, 0.00), Size (200.00, 1.49, 200.00), Min (-100.00, 0.00, -100.00),
+        Max (100.00, 1.49, 100.00)\n"
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: I've opened the scene ArticulationRobot.unity. Can you analyze this
+        scene and suggest improvements?
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Including selected files in this query.
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "Based on the spatial relationships between objects in the scene,
+        here are some suggestions for improvements:\n\n1. **Organization of Components**:\n  
+        - Consider organizing related components under empty game objects to keep
+        the hierarchy clean and easy to navigate.\n   - For example, you could group
+        the MeshFilter, MeshRenderer, and MeshCollider components under a parent
+        empty game object for each part of the robot arm (Shoulder, Elbow, Wrist1,
+        etc.).\n\n2. **Consistent Naming Convention**:\n   - Ensure consistent naming
+        conventions for objects and components to improve clarity and maintainability.\n  
+        - It would be helpful to have clear and descriptive names for objects like
+        \"Table,\" \"Base,\" \"UR3\" to easily identify them in the scene.\n\n3.
+        **Optimization**:\n   - Check if all MeshCollider components are necessary
+        for each object. Simplifying collider shapes where possible can improve performance.\n  
+        - Consider optimizing collider shapes to better fit the object's geometry
+        and reduce unnecessary complexity, especially for objects like \"Cube\" with
+        small colliders.\n\n4. **ArticulationBody Configuration**:\n   - Verify that
+        the ArticulationBody settings are optimized for each part of the robot arm
+        to ensure realistic joint behavior and performance. Adjusting parameters
+        like limits, drive settings, and constraints can enhance the realism of the
+        robot's movement.\n\n5. **Animator Usage**:\n   - Review the Animator component
+        on the \"HandE\" object to ensure it is used effectively for animations.
+        Verify that it is correctly configured and utilized for the desired functionality.\n\n6.
+        **Interactivity**:\n   - Consider adding interactive behaviors to the objects
+        in the scene, such as allowing user input to manipulate the robot arm or
+        interact with the environment.\n\n7. **Lighting Setup**:\n   - Experiment
+        with different lighting techniques to enhance the visual quality of the scene.
+        Adjusting light intensity, color, and shadows can improve the overall look
+        and feel of the environment.\n\n8. **Camera Placement**:\n   - Explore different
+        camera angles and positions to provide better views of the robot arm and
+        interactions within the scene. Adjusting the camera's position and field
+        of view can improve the user experience.\n\nIf you'd like specific code changes
+        or further details on any of these suggestions, feel free to ask!\n"
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: can you write a script to make the robot arm rotate 90 degrees?
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Including selected files in this query.
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "Sure! To make the robot arm rotate 90 degrees, you can create a script
+        that rotates the specific parts of the arm as needed.\n\nHere is an example
+        script that rotates the \"Shoulder\", \"Elbow\", \"Wrist1\", \"Wrist2\",
+        and \"Wrist3\" parts of the robot arm by 90 degrees around their respective
+        axes:\n\n```csharp:Assets/Scripts/RobotRotation.cs\nusing UnityEngine;\n\npublic
+        class RobotRotation : MonoBehaviour\n{\n    public Transform shoulder;\n   
+        public Transform elbow;\n    public Transform wrist1;\n    public Transform
+        wrist2;\n    public Transform wrist3;\n\n    void Start()\n    {\n       
+        // Rotate each part by 90 degrees\n        RotatePart(shoulder, Vector3.forward,
+        90f);\n        RotatePart(elbow, Vector3.forward, 90f);\n        RotatePart(wrist1,
+        Vector3.forward, 90f);\n        RotatePart(wrist2, Vector3.forward, 90f);\n       
+        RotatePart(wrist3, Vector3.forward, 90f);\n    }\n\n    void RotatePart(Transform
+        part, Vector3 axis, float angle)\n    {\n        part.Rotate(axis, angle,
+        Space.Self);\n    }\n}\n```\n\nIn this script:\n- Attach the script to a
+        GameObject in your scene.\n- Assign the corresponding parts of the robot
+        arm to the script's public transform fields (shoulder, elbow, wrist1, wrist2,
+        wrist3) in the Inspector.\n- When the script runs (in the Start method),
+        it rotates each designated part by 90 degrees around the specified axis.\n\nMake
+        sure the axes and angles are correct for your specific robot arm setup. You
+        may need to adjust them based on the actual orientation of the parts in your
+        scene."
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Applied changes to Assets/Scripts/RobotRotation.cs
+      IsFileContent: 0
+      FileName: 
+    LastLoadedScriptPath: 
+    LastLoadedScriptContent: 
+    LastLoadedScenePath: Assets/Scenes/ArticulationRobot.unity
+    IsSceneLoaded: 1
+  currentSessionIndex: 3
   selectedModelIndex: 0
   lastLoadedScriptPath: 
   lastLoadedScriptContent: 
-  lastLoadedScenePath: 
-  isSceneLoaded: 0
---- !u!114 &15
+  lastLoadedScenePath: Assets/Scenes/ArticulationRobot.unity
+  isSceneLoaded: 1
+--- !u!114 &16
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 13953, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinSize: {x: 800, y: 250}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_TitleContent:
+    m_Text: Package Manager
+    m_Image: {fileID: 5076950121296946556, guid: 0000000000000000d000000000000000,
+      type: 0}
+    m_Tooltip: 
+  m_Pos:
+    serializedVersion: 2
+    x: 628
+    y: 286
+    width: 800
+    height: 552
+  m_SerializedDataModeController:
+    m_DataMode: 0
+    m_PreferredDataMode: 0
+    m_SupportedDataModes: 
+    isAutomatic: 1
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+    m_OverlaysVisible: 1
+--- !u!114 &17
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12019, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinSize: {x: 275, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_TitleContent:
+    m_Text: Inspector
+    m_Image: {fileID: -440750813802333266, guid: 0000000000000000d000000000000000,
+      type: 0}
+    m_Tooltip: 
+  m_Pos:
+    serializedVersion: 2
+    x: 859
+    y: 96
+    width: 652
+    height: 792
+  m_SerializedDataModeController:
+    m_DataMode: 0
+    m_PreferredDataMode: 0
+    m_SupportedDataModes: 
+    isAutomatic: 1
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+    m_OverlaysVisible: 1
+  m_ObjectsLockedBeforeSerialization: []
+  m_InstanceIDsLockedBeforeSerialization: 
+  m_PreviewResizer:
+    m_CachedPref: 151
+    m_ControlHash: 1412526313
+    m_PrefName: Preview_InspectorPreview
+  m_LastInspectedObjectInstanceID: 19582
+  m_LastVerticalScrollValue: 0
+  m_GlobalObjectId: 
+  m_InspectorMode: 0
+  m_LockTracker:
+    m_IsLocked: 0
+  m_PreviewWindow: {fileID: 0}
+--- !u!114 &18
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -384,10 +2965,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 395.5
+    x: 205
     y: 96
-    width: 1083.5
-    height: 370
+    width: 652
+    height: 409.5
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -404,7 +2985,7 @@ MonoBehaviour:
   m_ShowGizmos: 0
   m_TargetDisplay: 0
   m_ClearColor: {r: 0, g: 0, b: 0, a: 0}
-  m_TargetSize: {x: 2167, y: 698}
+  m_TargetSize: {x: 1304, y: 777}
   m_TextureFilterMode: 0
   m_TextureHideFlags: 61
   m_RenderIMGUI: 1
@@ -419,17 +3000,17 @@ MonoBehaviour:
     m_VRangeLocked: 0
     hZoomLockedByDefault: 0
     vZoomLockedByDefault: 0
-    m_HBaseRangeMin: -541.75
-    m_HBaseRangeMax: 541.75
-    m_VBaseRangeMin: -174.5
-    m_VBaseRangeMax: 174.5
+    m_HBaseRangeMin: -326
+    m_HBaseRangeMax: 326
+    m_VBaseRangeMin: -194.25
+    m_VBaseRangeMax: 194.25
     m_HAllowExceedBaseRangeMin: 1
     m_HAllowExceedBaseRangeMax: 1
     m_VAllowExceedBaseRangeMin: 1
     m_VAllowExceedBaseRangeMax: 1
     m_ScaleWithWindow: 0
-    m_HSlider: 0
-    m_VSlider: 0
+    m_HSlider: 1
+    m_VSlider: 1
     m_IgnoreScrollWheelUntilClicked: 0
     m_EnableMouseInput: 1
     m_EnableSliderZoomHorizontal: 0
@@ -440,29 +3021,29 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0
       y: 21
-      width: 1083.5
-      height: 349
-    m_Scale: {x: 1, y: 1}
-    m_Translation: {x: 541.75, y: 174.5}
+      width: 652
+      height: 388.5
+    m_Scale: {x: 1.0884696, y: 1.0884691}
+    m_Translation: {x: 315.02994, y: 202.2786}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -541.75
-      y: -174.5
-      width: 1083.5
-      height: 349
+      x: -289.42465
+      y: -185.83769
+      width: 599.00616
+      height: 356.9233
     m_MinimalGUI: 1
   m_defaultScale: 1
-  m_LastWindowPixelSize: {x: 2167, y: 740}
+  m_LastWindowPixelSize: {x: 1304, y: 819}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 00000000000000000000
   m_XRRenderMode: 0
   m_RenderTexture: {fileID: 0}
---- !u!114 &16
+--- !u!114 &19
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -483,10 +3064,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 39
+    x: 0
     y: 96
-    width: 355.5
-    height: 370
+    width: 204
+    height: 409.5
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -500,9 +3081,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
+      m_SelectedIDs: 7e4c0000
       m_LastClickedID: 0
-      m_ExpandedIDs: 7cf8ffff1afaffff32fbffff
+      m_ExpandedIDs: 46bcffff18c7ffffa0c8ffff12caffff3ad2ffff6ed3ffffd4d4ffff2cddffff46f9ffff2afbffff9e740000ba740000e0740000ee7400000875000042750000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -526,7 +3107,7 @@ MonoBehaviour:
       m_IsLocked: 0
     m_CurrentSortingName: TransformSorting
   m_WindowGUID: 4c969a2b90040154d917609493e03593
---- !u!114 &17
+--- !u!114 &20
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -547,10 +3128,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 395.5
+    x: 188.5
     y: 96
-    width: 1083.5
-    height: 370
+    width: 586.5
+    height: 531.5
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1053,7 +3634,7 @@ MonoBehaviour:
   m_SceneVisActive: 1
   m_LastLockedObject: {fileID: 0}
   m_ViewIsLockedToObject: 0
---- !u!114 &18
+--- !u!114 &21
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1074,10 +3655,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 39
-    y: 487
-    width: 1441
-    height: 399
+    x: 0
+    y: 526.5
+    width: 858
+    height: 361.5
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1109,14 +3690,14 @@ MonoBehaviour:
   m_LastFolders:
   - Assets/Scenes
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: /Users/nathanzhao/Documents/vscode/2025-Unusual-4
+  m_LastProjectPath: /Users/trisha/Documents/GitHub/2025-Unusual-4
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: c6460000
-    m_LastClickedID: 18118
-    m_ExpandedIDs: 00000000ce470000
+    scrollPos: {x: 0, y: 4.5}
+    m_SelectedIDs: 5e4c0000
+    m_LastClickedID: 19550
+    m_ExpandedIDs: 00000000084c0000504c00005e4c000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1132,7 +3713,7 @@ MonoBehaviour:
       m_IsRenaming: 0
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 13}
+      m_ClientGUIView: {fileID: 14}
     m_SearchString: 
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
@@ -1144,7 +3725,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000ce470000
+    m_ExpandedIDs: 00000000084c0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1200,7 +3781,7 @@ MonoBehaviour:
     m_GridSize: 64
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 207
---- !u!114 &19
+--- !u!114 &22
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1221,10 +3802,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 39
-    y: 487
-    width: 1441
-    height: 399
+    x: 0
+    y: 648.5
+    width: 776
+    height: 239.5
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
