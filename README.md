@@ -5,11 +5,9 @@
 This Unity Editor extension is a core component of the XeleR platform—a Text2XR solution designed to transform the XR app development ecosystem. XeleR aims to provide rapid, AI-assisted XR prototyping that lowers development barriers, accelerates iteration cycles, and ensures cross-platform compatibility. This project delivers a real-time chatbot window integrated into the Unity Editor, enabling developers to receive streaming AI responses, automated code suggestions, scene analysis, and file browsing capabilities.
 
 ## Demo Video
-Demo Video of how to use XeleR to rapidly iterate on your screen.
-<video width="640" height="360" controls>
-  <source src="./kitchen_demo.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+Demo Video of how to use XeleR to rapidly iterate on your screen. Here you can see how we add a new character onto the kitchen scene.
+[![Watch the video](https://img.youtube.com/vi/Zdj6ES_ETMg/0.jpg)](https://youtu.be/Zdj6ES_ETMg)
+
 
 ## Features
 
