@@ -832,7 +832,7 @@ public class ChatbotEditorWindow : EditorWindow
         // Send to the appropriate API based on the selected model's provider
         if (provider == "OpenAI")
         {
-            SendQueryToOpenAIStreaming(contextEnhancedPrompt, selectedModel.Name);
+            SendQueryToOpenAIStreaming(contextEnhancedPrompt, selectedModel.Name, OnResponseReceived);
         }
         else if (provider == "Claude")
         {
@@ -1137,13 +1137,30 @@ public class ChatbotEditorWindow : EditorWindow
         AssetDatabase.Refresh();
     }
 
-    private async void SendQueryToOpenAIStreaming(string userMessage, string model )
+    private async void SendQueryToOpenAIStreaming(string userMessage, string model, Action<string, string> onResponse)
     {
         const string url = "https://api.openai.com/v1/chat/completions";
         string apiKey = ApiKeyManager.GetKey(ApiKeyManager.OPENAI_KEY);
         if (string.IsNullOrEmpty(apiKey))
         {
             AddMessageToHistory("System", "<error: OpenAI API key not set. Click the API Settings button to configure it.>");
+            return;
+        }
+
+        // Check if the user is asking for more examples
+        if (userMessage.ToLower().Contains("more example") || 
+            userMessage.ToLower().Contains("more prompt") || 
+            userMessage.ToLower().Contains("give example") ||
+            userMessage.ToLower().Contains("show example"))
+        {
+            // Get more example prompts
+            List<string> moreExamples = PromptRecommender.GetRandomPrompts(3);
+            string examplesMessage = "Here are some more example prompts you can try:\n\n" +
+                                     $"• {moreExamples[0]}\n" +
+                                     $"• {moreExamples[1]}\n" +
+                                     $"• {moreExamples[2]}";
+            
+            onResponse?.Invoke(examplesMessage, "OpenAI");
             return;
         }
 
