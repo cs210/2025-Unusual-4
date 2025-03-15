@@ -6,79 +6,111 @@ This Unity Editor extension is a core component of the XeleR platform—a Text2X
 
 ## Demo Video
 Demo Video of how to use XeleR to rapidly iterate on your screen. Here you can see how we add a new character onto the kitchen scene.
+
 [![Watch the video](https://img.youtube.com/vi/Zdj6ES_ETMg/0.jpg)](https://youtu.be/Zdj6ES_ETMg)
+
+## XeleR Interface Explanation
+
+![XeleR Interface](./InterfaceExplanation.png)
+
+**Context & Scene Analysis:**
+
+- **@ Context Button:**  
+  - This button allows you to include relevant project details when making requests.  
+  - If you’ve loaded a script or scene, activating this ensures that the chatbot considers the current project state when generating responses.  
+  - *Use this for fine control over what context the AI receives.*
+
+- **Scene Analysis Button:**  
+  - Clicking this button generates a structural overview of your current Unity scene.  
+  - It lists all GameObjects (e.g., robotic arm, conveyor belt, control panel) and identifies missing or problematic components (e.g., "The robotic arm has no Collider, which may cause interaction issues").  
+  - **Best Used For:**  
+    - Obtaining a scene overview before deciding what to change.  
+    - Spotting missing components or potential issues.
+
+- **Quick Context Toggle:**  
+  - Enabling this checkbox allows the chatbot to automatically include scene context in all queries.  
+  - **Without Quick Context Enabled (@ Context Only):**  
+    - You must manually select scripts or assets; AI only considers the specific files you choose.  
+  - **With Quick Context Enabled:**  
+    - The AI automatically detects relevant scripts and scene data based on what’s actively used in the project.  
+    - This is ideal for iterative development, where frequent updates are made without reconfiguring context each time.
+
+
+## XeleR Framework
+
+Below is a high-level diagram of how XeleR’s chatbot fits into your Unity workflow:
+
+![XeleR Flow Diagram](./frameWork.png)
+
+1. **Open Unity & Load Scene**  
+   You begin by opening your Unity project and loading the desired scene.
+2. **Open XeleR Chat**  
+   Launch the XeleR Chat window (docked in the Editor). The system analyzes your current scene and is ready to provide AI-driven assistance.
+3. **Scene Understanding**  
+   - Use the `@Context` button or scene analysis features to include your scene’s scripts and assets in the AI’s context.
+   - The AI acknowledges the scene context and can answer questions or confirm understanding before code generation.
+4. **New Development Command**  
+   - Send commands or prompts to generate new code, modify scene objects, or integrate new assets.
+   - The chatbot automatically detects relevant scripts to change or create.
+5. **Code Generation Iteration**  
+   - The AI provides code suggestions or direct file edits.
+   - You can run, review, and iterate on these changes in the Unity Editor, quickly testing your XR experience.
 
 
 ## Features
 
-- **Real-Time Chat Interface:**  
-  Provides a dockable chat window that streams AI responses in real time using Unity's UIElements.
-
-- **AI API Integration:**  
-  Communicates with OpenAI and Anthropic Claude APIs for code assistance, debugging, and context-aware suggestions.
-
-- **Code Assistance & Editing:**  
-  Detects and processes specially formatted code blocks in AI responses to automatically apply code changes to project files.
+- **Unity Integrated Real-Time Chat Interface:**  
+  Provides a dockable chat window within Unity that streams AI responses in real time using Unity's UIElements.
 
 - **Scene Analysis & Debugging:**  
-  Extracts scene context and applies modifications via reflection, helping developers quickly iterate on scene design and interactions.
+  Extracts scene context and applies modifications via reflection, helping developers quickly iterate on scene design and interactions. So you no longer have to explain things within the scene anymore
 
 - **File & Scene Browsing:**  
   Integrates file browsing functionality to load scripts or scenes, incorporating them into AI queries for context-aware responses.
 
-- **Session Management:**  
-  Manages multi-session chat histories by serializing conversation data with EditorPrefs, ensuring persistence across editor restarts and recompilations.
+  ---
 
-- **Streaming Responses:**  
-  Utilizes streaming download handlers to progressively update the chat window as API responses arrive.
+## Installation & Setup
 
-## Technical Details
+1. **Add the Script Files**  
+   - Clone or download this repository.  
+   - Place the script files into an `Editor` folder within your Unity project.  
+   - Unity will automatically compile them as part of its editor extension workflow.
 
-- **Editor Extension:**  
-  Built with Unity’s UIElements for a modern, flexible UI and seamless integration into the Unity Editor environment.
+2. **Configure API Keys**  
+   - In the Unity menu, go to **Window → Chatbox** to open the XeleR Chat window.  
+   - Click the **API Settings** button to enter your OpenAI and/or Claude API keys.  
+   - These keys are securely stored using Unity’s `EditorPrefs`.
 
-- **Networking:**  
-  Uses `UnityWebRequest` for HTTP communication with AI APIs, supporting both standard and streaming response modes.
+3. **Load the Extension**  
+   - Once the scripts are in place and Unity finishes compiling, the Chatbox should appear docked (or open it manually if needed).  
+   - If it doesn’t appear automatically, use **Window → Chatbox** to open it.
 
-- **JSON Parsing:**  
-  Leverages Unity’s `JsonUtility` for efficient parsing of API responses, including handling of streaming JSON chunks.
-
-- **Dynamic Code & Scene Updates:**  
-  Implements reflection to parse and apply code or scene changes from AI suggestions, allowing for partial or full file updates.
-
-- **Persistent State Management:**  
-  Chat sessions and conversation histories are stored in EditorPrefs, enabling smooth restoration of sessions after script recompilations.
 
 ## Usage
 
-1. **Installation:**  
-   Place the script files in an `Editor` folder within your Unity project.
+1. **Analyze the Scene**  
+   - Load the desired Unity scene.  
+   - In the Chat window, click `@Context` to browse scripts or scenes and add them to the AI context.  
+   - Optionally, enable the **scene analysis** features to allow the AI to examine objects and hierarchy in the current scene.
 
-2. **API Configuration:**  
-   Open the chat window via **Window → Chatbox** and configure your API keys using the API Settings button.
+2. **Start Generating Code**  
+   - Type your query or command in the chat input. For example:  
+     *"Create a new GameObject called ‘PlayerAvatar’ and attach a CharacterController."*  
+   - The chatbot will respond with code snippets or scene modifications.  
+   - When code is suggested in a specific format (e.g., ```csharp:Assets/Scripts/SomeFile.cs```), the system can automatically apply these changes to your project.
 
-3. **Interaction:**  
-   - Type queries into the input field and send them to receive real-time, streaming responses.
-   - Use the context menu to browse and load script files or scenes to include additional context in your queries.
-   - View AI-generated code suggestions and scene modifications directly within the editor.
+3. **Iterate & Refine**  
+   - Press **Play** in Unity to test changes.  
+   - Return to the Chat window to further refine or debug your XR experience.  
+   - Repeat the process until you reach a satisfactory prototype.
 
-4. **Session Management:**  
-   Switch between multiple chat sessions, save conversation histories, and restore previous states seamlessly.
+4. **Session Management**  
+   - Create multiple chat sessions for different projects or prototypes.  
+   - Switch sessions to load previous conversation histories, code references, and scene contexts.  
+   - All data is stored in `EditorPrefs`, so sessions persist across Unity restarts.
 
-## XeleR Product Context
-
-**XeleR PRD - Version 0.1**
-
-XeleR is designed to be the platform XR developers turn to for rapidly building XR products. By integrating AI-driven prototyping, XeleR aims to:
-
-- **Accelerate Prototyping:**  
-  Dramatically reduce the time and cost required to build and iterate XR prototypes, enabling rapid user feedback without significant hardware investments.
-
-- **Lower Development Barriers:**  
-  Provide a unified, cross-platform development environment that simplifies the complexities of fragmented XR SDKs and APIs.
-
-- **Enhance Developer Experience:**  
-  Utilize AI-powered debugging, asset discovery, and test case generation to streamline development and improve the overall quality of XR applications.
+---
 
 **Key Benefits:**
 
@@ -91,10 +123,3 @@ XeleR is designed to be the platform XR developers turn to for rapidly building 
 - **Cross-Platform Compatibility:**  
   Develop once and deploy across multiple XR devices seamlessly, ensuring broad reach and flexibility.
 
-## Contributing
-
-Contributions are welcome! Please follow the standard GitHub contribution guidelines and ensure that any pull requests are thoroughly documented.
-
-## License
-
-This project is licensed under the MIT License.
