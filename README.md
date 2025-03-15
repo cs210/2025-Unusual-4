@@ -7,7 +7,10 @@ This Unity Editor extension is a core component of the XeleR platform—a Text2X
 ## Demo Video
 Demo Video of how to use XeleR to rapidly iterate on your screen. Here you can see how we add a new character onto the kitchen scene.
 
+Watch a demo video here (Click on the Thumbnail):
+
 [![Watch the video](https://img.youtube.com/vi/Zdj6ES_ETMg/0.jpg)](https://youtu.be/Zdj6ES_ETMg)
+
 
 ## XeleR Interface Explanation
 
