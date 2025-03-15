@@ -1137,7 +1137,7 @@ public class ChatbotEditorWindow : EditorWindow
         AssetDatabase.Refresh();
     }
 
-    private async void SendQueryToOpenAIStreaming(string userMessage, string model)
+    private async void SendQueryToOpenAIStreaming(string userMessage, string model )
     {
         const string url = "https://api.openai.com/v1/chat/completions";
         string apiKey = ApiKeyManager.GetKey(ApiKeyManager.OPENAI_KEY);
@@ -1291,6 +1291,23 @@ public class ChatbotEditorWindow : EditorWindow
             onResponse?.Invoke("<error: OpenAI API key not set. Click the API Settings button to configure it.>", "OpenAI");
             return;
         }
+
+        // Check if the user is asking for more examples
+        if (userMessage.ToLower().Contains("more example") || 
+            userMessage.ToLower().Contains("more prompt") || 
+            userMessage.ToLower().Contains("give example") ||
+            userMessage.ToLower().Contains("show example"))
+        {
+            // Get more example prompts
+            List<string> moreExamples = PromptRecommender.GetRandomPrompts(3);
+            string examplesMessage = "Here are some more example prompts you can try:\n\n" +
+                                     $"• {moreExamples[0]}\n" +
+                                     $"• {moreExamples[1]}\n" +
+                                     $"• {moreExamples[2]}";
+            
+            onResponse?.Invoke(examplesMessage, "OpenAI");
+            return;
+        }
         
         // Properly escape the user message to avoid JSON formatting issues
         string escapedMessage = EscapeJson(userMessage);
@@ -1394,6 +1411,23 @@ public class ChatbotEditorWindow : EditorWindow
         if (string.IsNullOrEmpty(apiKey))
         {
             onResponse?.Invoke("<error: Claude API key not set. Click the API Settings button to configure it.>", "Claude");
+            return;
+        }
+
+        // Check if the user is asking for more examples
+        if (userMessage.ToLower().Contains("more example") || 
+            userMessage.ToLower().Contains("more prompt") || 
+            userMessage.ToLower().Contains("give example") ||
+            userMessage.ToLower().Contains("show example"))
+        {
+            // Get more example prompts
+            List<string> moreExamples = PromptRecommender.GetRandomPrompts(3);
+            string examplesMessage = "Here are some more example prompts you can try:\n\n" +
+                                     $"• {moreExamples[0]}\n" +
+                                     $"• {moreExamples[1]}\n" +
+                                     $"• {moreExamples[2]}";
+            
+            onResponse?.Invoke(examplesMessage, "Claude");
             return;
         }
         
@@ -1830,6 +1864,13 @@ public class ChatbotEditorWindow : EditorWindow
                     AddMessageToHistoryWithoutSaving(message.Sender, message.Content);
                 }
             }
+
+            // If this is a new session with no messages, add the welcome message
+            if (currentSession.Messages.Count == 0)
+            {
+                AddWelcomeMessage();
+            }
+           
             
             // Scroll to bottom
             EditorApplication.delayCall += ScrollToBottom;
@@ -2162,6 +2203,13 @@ public class ChatbotEditorWindow : EditorWindow
         
         // Save the updated state
         SaveChatSessionsToEditorPrefs();
+    }
+
+    // Add a method to display the welcome message with example prompts
+    private void AddWelcomeMessage()
+    {
+        string welcomeMessage = PromptRecommender.GetWelcomeMessage();
+        AddMessageToHistory("XeleR", welcomeMessage);
     }
 
     private void SaveCurrentSessionState()
