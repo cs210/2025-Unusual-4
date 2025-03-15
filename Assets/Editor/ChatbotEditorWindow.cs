@@ -1419,6 +1419,151 @@ public class ChatbotEditorWindow : EditorWindow
         }
     }
 
+    private async void SendQueryToClaudeStreaming(string userMessage, string model, Action<string, string> onResponse)
+    {
+        const string url = "https://api.anthropic.com/v1/messages";
+        string apiKey = ApiKeyManager.GetKey(ApiKeyManager.CLAUDE_KEY);
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            AddMessageToHistory("System", "<error: Claude API key not set. Click the API Settings button to configure it.>");
+            return;
+        }
+
+        // Check if the user is asking for more examples
+        if (userMessage.ToLower().Contains("more example") ||
+            userMessage.ToLower().Contains("more prompt") ||
+            userMessage.ToLower().Contains("give example") ||
+            userMessage.ToLower().Contains("show example"))
+        {
+            List<string> moreExamples = PromptRecommender.GetRandomPrompts(3);
+            string examplesMessage = "Here are some more example prompts you can try:\n\n" +
+                                    $"• {moreExamples[0]}\n" +
+                                    $"• {moreExamples[1]}\n" +
+                                    $"• {moreExamples[2]}";
+            onResponse?.Invoke(examplesMessage, "Claude");
+            return;
+        }
+
+        // Escape the user message to avoid JSON formatting issues
+        string escapedMessage = EscapeJson(userMessage);
+
+        // Load scene analyzer metaprompt if available
+        string systemPrompt = "You are a Unity development assistant that can help with code. When suggesting code changes, use the format ```csharp:Assets/Scripts/FileName.cs\\n// code here\\n``` so the changes can be automatically applied.";
+        string sceneAnalyzerPrompt = SceneAnalysisIntegration.LoadMetaprompt("SceneAnalyzer_RequestAware");
+        if (!string.IsNullOrEmpty(sceneAnalyzerPrompt))
+        {
+            systemPrompt += "\n\n" + sceneAnalyzerPrompt;
+        }
+
+        // Add script context if available
+        string contextMessage = "";
+        if (!string.IsNullOrEmpty(lastLoadedScriptPath) && !string.IsNullOrEmpty(lastLoadedScriptContent))
+        {
+            contextMessage = $"I'm working with this file: {lastLoadedScriptPath}\\n```csharp\\n{EscapeJson(lastLoadedScriptContent)}\\n```\\n\\nMy question is: ";
+        }
+
+        // Add scene context if available
+        if (isSceneLoaded && !string.IsNullOrEmpty(lastLoadedScenePath))
+        {
+            string sceneName = Path.GetFileName(lastLoadedScenePath);
+            string sceneContext = SceneAnalysisIntegration.GetSceneStructureSummary();
+            contextMessage += $"I'm working with the Unity scene: {sceneName}\n{sceneContext}\n\nMy question is: ";
+        }
+
+        // Construct JSON payload with streaming enabled
+        string jsonPayload = @"{
+            ""model"": """ + model + @""",
+            ""stream"": true,
+            ""max_tokens"": 1024,
+            ""messages"": [
+                {
+                    ""role"": ""system"",
+                    ""content"": """ + systemPrompt + @"""
+                },";
+        if (!string.IsNullOrEmpty(contextMessage))
+        {
+            jsonPayload += @"
+                {
+                    ""role"": ""user"",
+                    ""content"": """ + contextMessage + escapedMessage + @"""
+                }";
+        }
+        else
+        {
+            jsonPayload += @"
+                {
+                    ""role"": ""user"",
+                    ""content"": """ + escapedMessage + @"""
+                }";
+        }
+        jsonPayload += @"
+            ]
+        }";
+        jsonPayload = Regex.Replace(jsonPayload, @"\s+", " ").Replace(" \"", "\"").Replace("\" ", "\"");
+
+        // Create a placeholder message for streaming and store the label reference.
+        AddStreamingPlaceholderMessage();
+
+        // Define a callback to update the UI as chunks arrive.
+        void OnChunkReceived(string chunk)
+        {
+            string processed = chunk.StartsWith("data:") ? chunk.Substring(5).Trim() : chunk;
+            if (processed == "[DONE]")
+                return;
+            OpenAIStreamChunk chunkObj = null;
+            try
+            {
+                chunkObj = JsonUtility.FromJson<OpenAIStreamChunk>(processed);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("Failed to parse streaming JSON chunk from Claude: " + e.Message);
+                return;
+            }
+            if (chunkObj?.choices != null && chunkObj.choices.Length > 0)
+            {
+                string content = chunkObj.choices[0].delta?.content;
+                if (!string.IsNullOrEmpty(content))
+                {
+                    string[] words = content.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string word in words)
+                    {
+                        UpdateStreamingMessage(word + " ");
+                    }
+                }
+            }
+        }
+
+        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        {
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
+            var streamingHandler = new StreamingDownloadHandler(OnChunkReceived);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = streamingHandler;
+
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("x-api-key", apiKey);
+            request.SetRequestHeader("anthropic-version", "2023-06-01");
+
+            Debug.Log("Sending streaming request to Claude with payload: " + jsonPayload);
+            var operation = request.SendWebRequest();
+            while (!operation.isDone)
+                await Task.Yield();
+
+            queryField.SetEnabled(true);
+            sendButton.SetEnabled(true);
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Claude Streaming API Error: " + request.error);
+                Debug.LogError("Response body: " + request.downloadHandler.text);
+                AddMessageToHistory("System", "<error: could not get response from Claude>");
+                return;
+            }
+        }
+    }
+
+
     private async void SendQueryToClaude(string userMessage, string model, Action<string, string> onResponse)
     {
         const string url = "https://api.anthropic.com/v1/messages";
