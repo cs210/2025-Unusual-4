@@ -44,7 +44,7 @@ public class ChatbotEditorWindow : EditorWindow
     // Add a field to store the streaming message label
     private Label streamingMessageLabel;
 
-       private void AddStreamingPlaceholderMessage()
+    private void AddStreamingPlaceholderMessage()
     {
         // Create a container for the streaming message
         var messageContainer = new VisualElement
@@ -83,7 +83,7 @@ public class ChatbotEditorWindow : EditorWindow
         conversationScrollView.Add(messageContainer);
     }
 
-        private void UpdateStreamingMessage(string newText)
+    private void UpdateStreamingMessage(string newText)
     {
         if (streamingMessageLabel != null)
         {
@@ -1234,7 +1234,6 @@ public class ChatbotEditorWindow : EditorWindow
         
             if (chunkObj?.choices != null && chunkObj.choices.Length > 0)
             {
-
                 // // Text Streaming CodeBlock Error FIX: Instead of splitting on spaces:
                 string content = chunkObj.choices[0].delta?.content;
                 if (!string.IsNullOrEmpty(content))
@@ -1242,17 +1241,6 @@ public class ChatbotEditorWindow : EditorWindow
                     // Just append the raw chunk:
                     UpdateStreamingMessage(content);
                 }
-                        
-                // string content = chunkObj.choices[0].delta?.content;
-                // Debug.Log("Streaming response: " + content);
-                // if (!string.IsNullOrEmpty(content))
-                // {
-                //     string[] words = content.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                //     foreach (string word in words)
-                //     {
-                //         UpdateStreamingMessage(word + " ");
-                //     }
-                // }
             }
         }
         
@@ -1283,182 +1271,28 @@ public class ChatbotEditorWindow : EditorWindow
                 AddMessageToHistory("System", "<error: could not get response>");
                 return;
             }
-        
+
             if (streamingMessageLabel != null)
             {
                 string finalResponse = streamingMessageLabel.text;
                 if (streamingMessageLabel.parent != null)
                     streamingMessageLabel.parent.RemoveFromHierarchy();
                 streamingMessageLabel = null;
+
+                // We add it to the UI
                 AddMessageToHistory("XeleR", finalResponse);
+
+                // Then pass the actual text so ProcessAndApplyCodeEdits can detect code blocks
+                onResponse?.Invoke(finalResponse, "OpenAI");
             }
-
-            
+            else
+            {
+                // If for some reason streamingMessageLabel was null, just pass empty
+                onResponse?.Invoke("", "OpenAI");
+            }
         }
-        
-        onResponse?.Invoke("", "OpenAI");
+        // Extra closing brace added to fix missing }
     }
-
-
-    // private async void SendQueryToOpenAIStreaming(string userMessage, string model, Action<string, string> onResponse)
-    // {
-    //     const string url = "https://api.openai.com/v1/chat/completions";
-    //     string apiKey = ApiKeyManager.GetKey(ApiKeyManager.OPENAI_KEY);
-    //     if (string.IsNullOrEmpty(apiKey))
-    //     {
-    //         AddMessageToHistory("System", "<error: OpenAI API key not set. Click the API Settings button to configure it.>");
-    //         return;
-    //     }
-
-    //     // Check if the user is asking for more examples
-    //     if (userMessage.ToLower().Contains("more example") || 
-    //         userMessage.ToLower().Contains("more prompt") || 
-    //         userMessage.ToLower().Contains("give example") ||
-    //         userMessage.ToLower().Contains("show example"))
-    //     {
-    //         // Get more example prompts
-    //         List<string> moreExamples = PromptRecommender.GetRandomPrompts(3);
-    //         string examplesMessage = "Here are some more example prompts you can try:\n\n" +
-    //                                  $"• {moreExamples[0]}\n" +
-    //                                  $"• {moreExamples[1]}\n" +
-    //                                  $"• {moreExamples[2]}";
-            
-    //         onResponse?.Invoke(examplesMessage, "OpenAI");
-    //         return;
-    //     }
-
-    //     string escapedMessage = EscapeJson(userMessage);
-    //     string systemPrompt = "You are a Unity development assistant that can help with code. When suggesting code changes, use the format ```csharp:Assets/Scripts/FileName.cs\\n// code here\\n``` so the changes can be automatically applied.";
-    //     string sceneAnalyzerPrompt = SceneAnalysisIntegration.LoadMetaprompt("SceneAnalyzer_RequestAware");
-    //     if (!string.IsNullOrEmpty(sceneAnalyzerPrompt))
-    //     {
-    //         systemPrompt += "\n\n" + sceneAnalyzerPrompt;
-    //     }
-
-    //     string contextMessage = "";
-    //     if (!string.IsNullOrEmpty(lastLoadedScriptPath) && !string.IsNullOrEmpty(lastLoadedScriptContent))
-    //     {
-    //         contextMessage = $"I'm working with this file: {lastLoadedScriptPath}\\n```csharp\\n{EscapeJson(lastLoadedScriptContent)}\\n```\\n\\nMy question is: ";
-    //     }
-    //     if (isSceneLoaded && !string.IsNullOrEmpty(lastLoadedScenePath))
-    //     {
-    //         string sceneName = Path.GetFileName(lastLoadedScenePath);
-    //         string sceneContext = SceneAnalysisIntegration.GetSceneStructureSummary();
-    //         contextMessage += $"I'm working with the Unity scene: {sceneName}\n{sceneContext}\n\nMy question is: ";
-    //     }
-
-    //     string jsonPayload = @"{
-    //         ""model"": """ + model + @""",
-    //         ""stream"": true,
-    //         ""messages"": [
-    //             {
-    //                 ""role"": ""system"",
-    //                 ""content"": """ + systemPrompt + @"""
-    //             },";
-
-    //     if (!string.IsNullOrEmpty(contextMessage))
-    //     {
-    //         jsonPayload += @"
-    //             {
-    //                 ""role"": ""user"",
-    //                 ""content"": """ + contextMessage + escapedMessage + @"""
-    //             }";
-    //     }
-    //     else
-    //     {
-    //         jsonPayload += @"
-    //             {
-    //                 ""role"": ""user"",
-    //                 ""content"": """ + escapedMessage + @"""
-    //             }";
-    //     }
-    //     jsonPayload += @"
-    //         ]
-    //     }";
-
-    //     jsonPayload = Regex.Replace(jsonPayload, @"\s+", " ").Replace(" \"", "\"").Replace("\" ", "\"");
-
-    //     // // Create a temporary container in the UI to display streaming text.
-    //     // AddMessageToHistory("XeleR", "");
-
-    //     // // Capture the index of the last message for streaming updates.
-    //     // int lastMessageIndex = chatSessions[currentSessionIndex].Messages.Count;
-
-    //     // Create a placeholder message for streaming and store the label reference.
-    //     AddStreamingPlaceholderMessage();
-
-    //     // Define a callback to update the UI as chunks arrive.
-    //     void OnChunkReceived(string chunk)
-    //     {
-    //         // 1. Strip off "data:" if present
-    //         string processed = chunk.StartsWith("data:") ? chunk.Substring(5).Trim() : chunk;
-
-    //         // 2. Check if [DONE]
-    //         if (processed == "[DONE]")
-    //             return;
-
-    //         // 3. Parse JSON into our OpenAIStreamChunk structure
-    //         OpenAIStreamChunk chunkObj = null;
-    //         try
-    //         {
-    //             chunkObj = JsonUtility.FromJson<OpenAIStreamChunk>(processed);
-    //         }
-    //         catch (Exception e)
-    //         {
-    //             Debug.LogWarning("Failed to parse streaming JSON chunk: " + e.Message);
-    //             return;
-    //         }
-
-    //         // 4. Each chunk may or may not have .choices[0].delta.content
-    //         //    If it does, we append that text to our streaming label.
-    //         if (chunkObj?.choices != null && chunkObj.choices.Length > 0)
-    //         {
-    //             // Typically, only the first choice matters in a single-stream scenario
-    //             string content = chunkObj.choices[0].delta?.content;
-    //             if (!string.IsNullOrEmpty(content))
-    //             {
-    //                 // 5. Optionally split the content by words for a "word-by-word" reveal
-    //                 string[] words = content.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-    //                 foreach (string word in words)
-    //                 {
-    //                     UpdateStreamingMessage(word + " ");
-    //                     // await Task.Delay(50); // adjust speed to your preference
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
-    //     {
-    //         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
-    //         // Use StreamingDownloadHandler to process streamed chunks.
-    //         var streamingHandler = new StreamingDownloadHandler(OnChunkReceived);
-    //         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-    //         request.downloadHandler = streamingHandler;
-
-    //         request.SetRequestHeader("Content-Type", "application/json");
-    //         request.SetRequestHeader("Authorization", "Bearer " + apiKey);
-
-    //         var operation = request.SendWebRequest();
-
-    //         Debug.Log("Sending streaming request to OpenAI with payload: " + jsonPayload);
-
-    //         while (!operation.isDone)
-    //             await Task.Yield();
-
-    //         // Once streaming is done (or failed), re-enable input:
-    //         queryField.SetEnabled(true);
-    //         sendButton.SetEnabled(true);
-
-    //         if (request.result != UnityWebRequest.Result.Success)
-    //         {
-    //             Debug.LogError("OpenAI Streaming API Error: " + request.error);
-    //             Debug.LogError("Response body: " + request.downloadHandler.text);
-    //             AddMessageToHistory("System", "<error: could not get response>");
-    //             return;
-    //         }
-    //     }
-    // }
 
     private async void SendQueryToOpenAI(string userMessage, string model, Action<string, string> onResponse)
     {
@@ -1685,7 +1519,6 @@ public class ChatbotEditorWindow : EditorWindow
             }
             if (chunkObj?.choices != null && chunkObj.choices.Length > 0)
             {
-
                 // Text Streaming CodeBlock Error FIX: Instead of splitting on spaces:
                 string content = chunkObj.choices[0].delta?.content;
                 if (!string.IsNullOrEmpty(content))
@@ -1693,15 +1526,6 @@ public class ChatbotEditorWindow : EditorWindow
                     // Just append the raw chunk:
                     UpdateStreamingMessage(content);
                 }
-                // string content = chunkObj.choices[0].delta?.content;
-                // if (!string.IsNullOrEmpty(content))
-                // {
-                //     string[] words = content.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                //     foreach (string word in words)
-                //     {
-                //         UpdateStreamingMessage(word + " ");
-                //     }
-                // }
             }
         }
 
@@ -1733,7 +1557,6 @@ public class ChatbotEditorWindow : EditorWindow
             }
         }
     }
-
 
     private async void SendQueryToClaude(string userMessage, string model, Action<string, string> onResponse)
     {
@@ -2319,7 +2142,7 @@ public class ChatbotEditorWindow : EditorWindow
     }
 
     // Add a method to handle scene context in queries
-    private string AddSceneContextToQuery(string query)
+    public string AddSceneContextToQuery(string query)
     {
         if (!includeSceneContext)
             return query;
