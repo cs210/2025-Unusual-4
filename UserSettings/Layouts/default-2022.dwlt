@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PixelRect:
     serializedVersion: 2
-    x: 853
-    y: 274
-    width: 659
-    height: 621
+    x: 1112
+    y: 123
+    width: 400
+    height: 200
   m_ShowMode: 0
-  m_Title: Chat v0
+  m_Title: API Settings
   m_RootView: {fileID: 4}
   m_MinSize: {x: 100, y: 121}
   m_MaxSize: {x: 4000, y: 4021}
@@ -32,19 +32,19 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
-  m_EditorHideFlags: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 12004, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
   m_EditorClassIdentifier: 
   m_PixelRect:
     serializedVersion: 2
-    x: 39
+    x: 60
     y: 66
-    width: 1441
-    height: 861
+    width: 1452
+    height: 916
   m_ShowMode: 4
-  m_Title: Console
-  m_RootView: {fileID: 5}
+  m_Title: Chat x0
+  m_RootView: {fileID: 6}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
   m_Maximized: 0
@@ -58,20 +58,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ChatbotEditorWindow
+  m_Name: ApiSettingsWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 659
-    height: 621
+    width: 400
+    height: 200
   m_MinSize: {x: 100, y: 121}
   m_MaxSize: {x: 4000, y: 4021}
-  m_ActualView: {fileID: 14}
+  m_ActualView: {fileID: 15}
   m_Panes:
-  - {fileID: 14}
+  - {fileID: 15}
   m_Selected: 0
   m_LastSelected: 0
 --- !u!114 &4
@@ -92,13 +92,40 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 659
-    height: 621
+    width: 400
+    height: 200
   m_MinSize: {x: 100, y: 121}
   m_MaxSize: {x: 4000, y: 4021}
   vertical: 0
-  controlID: 212
+  controlID: 249
 --- !u!114 &5
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: ChatbotEditorWindow
+  m_EditorClassIdentifier: 
+  m_Children: []
+  m_Position:
+    serializedVersion: 2
+    x: 912.5
+    y: 0
+    width: 539.5
+    height: 866
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
+  m_ActualView: {fileID: 16}
+  m_Panes:
+  - {fileID: 17}
+  - {fileID: 16}
+  m_Selected: 1
+  m_LastSelected: 0
+--- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,22 +138,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Children:
-  - {fileID: 6}
-  - {fileID: 8}
   - {fileID: 7}
+  - {fileID: 9}
+  - {fileID: 8}
   m_Position:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1441
-    height: 861
+    width: 1452
+    height: 916
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
   m_UseTopView: 1
   m_TopViewHeight: 30
   m_UseBottomView: 1
   m_BottomViewHeight: 20
---- !u!114 &6
+--- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,12 +170,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1441
+    width: 1452
     height: 30
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
   m_LastLoadedLayoutName: 
---- !u!114 &7
+--- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -164,35 +191,11 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 841
-    width: 1441
+    y: 896
+    width: 1452
     height: 20
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
---- !u!114 &8
-MonoBehaviour:
-  m_ObjectHideFlags: 52
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 1
-  m_Script: {fileID: 12010, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Children:
-  - {fileID: 9}
-  m_Position:
-    serializedVersion: 2
-    x: 0
-    y: 30
-    width: 1441
-    height: 811
-  m_MinSize: {x: 200, y: 100}
-  m_MaxSize: {x: 16192, y: 16192}
-  vertical: 0
-  controlID: 61
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -207,17 +210,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Children:
   - {fileID: 10}
-  - {fileID: 13}
+  - {fileID: 5}
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 0
-    width: 1441
-    height: 811
-  m_MinSize: {x: 200, y: 100}
-  m_MaxSize: {x: 16192, y: 16192}
-  vertical: 1
-  controlID: 62
+    y: 30
+    width: 1452
+    height: 866
+  m_MinSize: {x: 300, y: 100}
+  m_MaxSize: {x: 24288, y: 16192}
+  vertical: 0
+  controlID: 116
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -232,18 +235,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Children:
   - {fileID: 11}
-  - {fileID: 12}
+  - {fileID: 14}
   m_Position:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1441
-    height: 391
+    width: 912.5
+    height: 866
+  m_MinSize: {x: 200, y: 100}
+  m_MaxSize: {x: 16192, y: 16192}
+  vertical: 1
+  controlID: 117
+--- !u!114 &11
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 1
+  m_Script: {fileID: 12010, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Children:
+  - {fileID: 12}
+  - {fileID: 13}
+  m_Position:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 912.5
+    height: 458.5
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 39
---- !u!114 &11
+  controlID: 118
+--- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -260,41 +288,14 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 356.5
-    height: 391
-  m_MinSize: {x: 201, y: 221}
-  m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 16}
+    width: 217.5
+    height: 458.5
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_ActualView: {fileID: 19}
   m_Panes:
-  - {fileID: 16}
+  - {fileID: 19}
   m_Selected: 0
-  m_LastSelected: 0
---- !u!114 &12
-MonoBehaviour:
-  m_ObjectHideFlags: 52
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 1
-  m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: GameView
-  m_EditorClassIdentifier: 
-  m_Children: []
-  m_Position:
-    serializedVersion: 2
-    x: 356.5
-    y: 0
-    width: 1084.5
-    height: 391
-  m_MinSize: {x: 101, y: 121}
-  m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 15}
-  m_Panes:
-  - {fileID: 17}
-  - {fileID: 15}
-  m_Selected: 1
   m_LastSelected: 0
 --- !u!114 &13
 MonoBehaviour:
@@ -306,24 +307,85 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ConsoleWindow
+  m_Name: SceneView
+  m_EditorClassIdentifier: 
+  m_Children: []
+  m_Position:
+    serializedVersion: 2
+    x: 217.5
+    y: 0
+    width: 695
+    height: 458.5
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
+  m_ActualView: {fileID: 20}
+  m_Panes:
+  - {fileID: 20}
+  - {fileID: 18}
+  m_Selected: 0
+  m_LastSelected: 1
+--- !u!114 &14
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 1
+  m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: ProjectBrowser
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 391
-    width: 1441
-    height: 420
+    y: 458.5
+    width: 912.5
+    height: 407.5
+  m_MinSize: {x: 231, y: 271}
+  m_MaxSize: {x: 10001, y: 10021}
+  m_ActualView: {fileID: 21}
+  m_Panes:
+  - {fileID: 21}
+  - {fileID: 22}
+  m_Selected: 0
+  m_LastSelected: 1
+--- !u!114 &15
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e92a64f9246034bdcb607d4a2cb5e513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 4000, y: 4000}
-  m_ActualView: {fileID: 19}
-  m_Panes:
-  - {fileID: 18}
-  - {fileID: 19}
-  m_Selected: 1
-  m_LastSelected: 0
---- !u!114 &14
+  m_TitleContent:
+    m_Text: API Settings
+    m_Image: {fileID: 0}
+    m_Tooltip: 
+  m_Pos:
+    serializedVersion: 2
+    x: 1112
+    y: 123
+    width: 400
+    height: 179
+  m_SerializedDataModeController:
+    m_DataMode: 0
+    m_PreferredDataMode: 0
+    m_SupportedDataModes: 
+    isAutomatic: 1
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+    m_OverlaysVisible: 1
+--- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -338,15 +400,15 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
-    m_Text: Chat v0
+    m_Text: Chat x0
     m_Image: {fileID: 0}
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 853
-    y: 274
-    width: 659
-    height: 600
+    x: 972.5
+    y: 96
+    width: 538.5
+    height: 845
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -358,12 +420,815 @@ MonoBehaviour:
     m_SaveData: []
     m_OverlaysVisible: 1
   conversationHistory: []
+  chatSessions:
+  - Name: Chat 1
+    Messages:
+    - Sender: System
+      Content: Please set up your API keys to continue.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: Hello! How can I assist you today?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: good I would liek to make a dog in the scene
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 'To create a dog in your scene, you can start by adding a 3D model
+        of a dog to your project. You can find free or paid dog models online. Once
+        you have the model, you can then import it into your Unity project and add
+        it to the scene.
+
+
+        If you need help with specific code or interactions
+        related to the dog in the scene, feel free to ask!'
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hello!
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: "{\n    \"error\": {\n        \"message\": \"We could not parse the
+        JSON body of your request. (HINT: This likely means you aren't using your
+        HTTP library correctly. The OpenAI API expects a JSON payload, but what was
+        sent was not valid JSON. If you have trouble figuring out how to fix this,
+        please contact us through our help center at help.openai.com.)\",\n       
+        \"type\": \"invalid_request_error\",\n        \"param\": null,\n        \"code\":
+        null\n    }\n}\n"
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hello!
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: 'data: {"id":"chatcmpl-BAUpIJS8dlMvAj15bUx0kVLRFTDDY","object":"chat.completion.chunk","created":1741841476,"model":"gpt-3.5-turbo-0125","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"role":"assistant","content":"","refusal":null},"logprobs":null,"finish_reason":null}]}
+
+
+'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: 'data: {"id":"chatcmpl-BAUpIJS8dlMvAj15bUx0kVLRFTDDY","object":"chat.completion.chunk","created":1741841476,"model":"gpt-3.5-turbo-0125","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"Hello"},"logprobs":null,"finish_reason":null}]}
+
+
+        data:
+        {"id":"chatcmpl-BAUpIJS8dlMvAj15bUx0kVLRFTDDY","object":"chat.completion.chunk","created":1741841476,"model":"gpt-3.5-turbo-0125","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"!"},"logprobs":null,"finish_reason":null}]}
+
+
+'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: 'data: {"id":"chatcmpl-BAUpIJS8dlMvAj15bUx0kVLRFTDDY","object":"chat.completion.chunk","created":1741841476,"model":"gpt-3.5-turbo-0125","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        How"},"logprobs":null,"finish_reason":null}]}
+
+
+        data: {"id":"chatcmpl-BAUpIJS8dlMvAj15bUx0kVLRFTDDY","object":"chat.completion.chunk","created":1741841476,"model":"gpt-3.5-turbo-0125","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        can"},"logprobs":null,"finish_reason":null}]}
+
+
+'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: 'data: {"id":"chatcmpl-BAUpIJS8dlMvAj15bUx0kVLRFTDDY","object":"chat.completion.chunk","created":1741841476,"model":"gpt-3.5-turbo-0125","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        I"},"logprobs":null,"finish_reason":null}]}
+
+
+        data: {"id":"chatcmpl-BAUpIJS8dlMvAj15bUx0kVLRFTDDY","object":"chat.completion.chunk","created":1741841476,"model":"gpt-3.5-turbo-0125","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        assist"},"logprobs":null,"finish_reason":null}]}
+
+
+'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: 'data: {"id":"chatcmpl-BAUpIJS8dlMvAj15bUx0kVLRFTDDY","object":"chat.completion.chunk","created":1741841476,"model":"gpt-3.5-turbo-0125","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        you"},"logprobs":null,"finish_reason":null}]}
+
+
+        data: {"id":"chatcmpl-BAUpIJS8dlMvAj15bUx0kVLRFTDDY","object":"chat.completion.chunk","created":1741841476,"model":"gpt-3.5-turbo-0125","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        today"},"logprobs":null,"finish_reason":null}]}
+
+
+        data: {"id":"chatcmpl-BAUpIJS8dlMvAj15bUx0kVLRFTDDY","object":"chat.completion.chunk","created":1741841476,"model":"gpt-3.5-turbo-0125","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"?"},"logprobs":null,"finish_reason":null}]}
+
+
+        data:
+        {"id":"chatcmpl-BAUpIJS8dlMvAj15bUx0kVLRFTDDY","object":"chat.completion.chunk","created":1741841476,"model":"gpt-3.5-turbo-0125","service_tier":"default","system_fingerprint":null,"choice'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: 's":[{"index":0,"delta":{},"logprobs":null,"finish_reason":"stop"}]}
+
+
+        data:
+        [DONE]
+
+
+'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: Hello
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: '!'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' How'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' can'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' I'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' assist'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' you'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' today'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: '?'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: I would like you to analyze the current scene
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: Sure
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: '!'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' Please'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' provide'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' me'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' with'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' the'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' scene'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' file'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' so'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' I'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' can'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' analyze'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' it'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' for'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: ' you'
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR (streaming)
+      Content: .
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Analyze the current scene structure
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: "# Scene Structure Analysis\nTotal objects in scene: 2\n\n## Hierarchy:\n-
+        Main Camera (Active)\n  * Camera\n  * AudioListener\n- Directional Light
+        (Active)\n  * Light\n\n## Cameras:\n- Main Camera: Position (0.00, 1.00,
+        -10.00), Rotation (0.00, 0.00, 0.00)\n\n## Lights:\n- Directional Light:
+        Type Directional, Position (0.00, 3.00, 0.00)\n"
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Analyze the current scene structure
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: "# Scene Structure Analysis\nTotal objects in scene: 2\n\n## Hierarchy:\n-
+        Main Camera (Active)\n  * Camera\n  * AudioListener\n- Directional Light
+        (Active)\n  * Light\n\n## Cameras:\n- Main Camera: Position (0.00, 1.00,
+        -10.00), Rotation (0.00, 0.00, 0.00)\n\n## Lights:\n- Directional Light:
+        Type Directional, Position (0.00, 3.00, 0.00)\n"
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hey
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: what are you doing?
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: I need help with unity
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hello
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hello
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hello
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: Hello! How can I assist you today?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: '<error: could not get response>'
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: good
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: I want to edit the scene
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: I want to edit the scene
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: everything
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Analyze the current scene structure
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: "# Scene Structure Analysis\nTotal objects in scene: 2\n\n## Hierarchy:\n-
+        Main Camera (Active)\n  * Camera\n  * AudioListener\n- Directional Light
+        (Active)\n  * Light\n\n## Cameras:\n- Main Camera: Position (0.00, 1.00,
+        -10.00), Rotation (0.00, 0.00, 0.00)\n\n## Lights:\n- Directional Light:
+        Type Directional, Position (0.00, 3.00, 0.00)\n"
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Open scene ArticulationRobot.unity
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Scene ArticulationRobot.unity loaded successfully.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: I've opened the scene ArticulationRobot.unity. Can you analyze this
+        scene and suggest improvements?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: It looks like you pasted a scene structure analysis report, but didn't
+        include a specific question. How can I assist you with the Unity scene "ArticulationRobot.unity"
+        based on the information provided?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: 'It seems like you accidentally input "My question is: hi" at the
+        end of the scene analysis. If you have any questions related to the scene
+        structure or anything else, feel free to ask!'
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hello
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: Hello! How can I assist you with the Unity scene analysis information
+        you provided?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hello
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: Hello! How can I assist you with the Unity scene analysis you provided?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hey
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hey
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: It seems like you didn't include a specific question. How can I assist
+        you with the Unity scene "ArticulationRobot.unity"?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: I want to edit the scene
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: What specific changes or modifications would you like to make to the
+        scene? Let me know so I can provide you with the necessary guidance.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: I want to make the robot arm move
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "To make the robot arm move, you can update the joint angles of the
+        articulation body's articulation joints. You can achieve this by creating
+        a script that controls the movement of the robot arm by updating the joint
+        angles based on your desired motion.\n\nHere's a basic example of how you
+        can create a script to move the robot arm:\n\n```csharp:Assets/Scripts/RobotArmController.cs\nusing
+        UnityEngine;\n\npublic class RobotArmController : MonoBehaviour\n{\n    public
+        ArticulationBody shoulder;\n    public ArticulationBody elbow;\n    public
+        ArticulationBody wrist1;\n    public ArticulationBody wrist2;\n    public
+        ArticulationBody wrist3;\n\n    public float shoulderAngle;\n    public float
+        elbowAngle;\n    public float wrist1Angle;\n    public float wrist2Angle;\n   
+        public float wrist3Angle;\n\n    void Update()\n    {\n        shoulder.jointPosition
+        = shoulderAngle;\n        elbow.jointPosition = elbowAngle;\n        wrist1.jointPosition
+        = wrist1Angle;\n        wrist2.jointPosition = wrist2Angle;\n        wrist3.jointPosition
+        = wrist3Angle;\n    }\n}\n```\n\nIn this script:\n- Assign the corresponding
+        articulation bodies for shoulder, elbow, wrist1, wrist2, and wrist3 in the
+        Unity Editor.\n- Set the desired joint angles for each articulation body
+        in the respective variables (shoulderAngle, elbowAngle, etc.).\n- The Update
+        method will continuously update the joint positions based on these angle
+        values.\n\nAttach this script to an empty GameObject in your scene and assign
+        the articulation bodies accordingly in the Inspector. Then, you can update
+        the joint angles in the script to make the robot arm move as desired.\n\nFeel
+        free to adjust the script and extend it to handle more complex robot arm
+        movements if needed based on your robot arm's specific configuration and
+        motion requirements."
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Applied changes to Assets/Scripts/RobotArmController.cs
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: cool!
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: It looks like you have a detailed analysis of the objects in your
+        Unity scene "ArticulationRobot.unity". If you have any specific questions
+        or need assistance with anything related to the scene structure, components,
+        or functionalities, feel free to ask!
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hello!
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: Hello! How can I assist you with the Unity scene "ArticulationRobot.unity"?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: NICe to meet yoU!
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: Nice to meet you too! How can I assist you today with the Unity scene
+        "ArticulationRobot.unity"?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Hello!
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: Hello! How can I assist you with the Unity scene analysis?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Hi there
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: It seems like you didn't specify an actual question in your message.
+        How can I assist you today with the Unity scene "ArticulationRobot.unity"?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Hello!
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: Hello! How can I assist you with the Unity scene analysis for the
+        scene "ArticulationRobot.unity"?
+      IsFileContent: 0
+      FileName: 
+    LastLoadedScriptPath: 
+    LastLoadedScriptContent: 
+    LastLoadedScenePath: Assets/Scenes/ArticulationRobot.unity
+    IsSceneLoaded: 1
+  - Name: Chat 2
+    Messages:
+    - Sender: XeleR
+      Content: "Hello, how can I help you today? Feel free to try out these example
+        prompts:\n\n\u2022 Are there any GameObject's with too many components?\n\u2022
+        What's the best way to use the new Input System?\n\u2022 What changes would
+        you make to improve framerate?\n\nYou can also ask for more example prompts
+        anytime."
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Hello!
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: Hello! How can I assist you today?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: I want to edit a object
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: Sure! What specific changes would you like to make to the object in
+        your Unity scene?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Ther eis a robot arm I want to edit!
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: Sure! What specific changes would you like to make to the robot arm
+        in Unity?
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: can you make the robot arm rotate?
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: "Sure! To make the robot arm rotate, you can modify the rotation of
+        the arm GameObject in your Unity scene. If you have a specific script controlling
+        the rotation, you can update that script to rotate the arm. If you don't
+        have a script yet, you can create one to control the rotation.\n\nHere is
+        an example script that you can use to rotate the robot arm:\n\n```csharp:Assets/Scripts/RobotArmRotation.cs\nusing
+        UnityEngine;\n\npublic class RobotArmRotation : MonoBehaviour\n{\n    public
+        float rotationSpeed = 50f; // Adjust the speed of rotation as needed\n\n   
+        void Update()\n    {\n        // Rotate the arm around the Y axis\n       
+        transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);\n    }\n}\n```\n\nAfter
+        creating the script, attach it to the GameObject that represents the robot
+        arm in your scene. Adjust the `rotationSpeed` variable in the script to control
+        how fast the arm rotates.\n\nThis script will continuously rotate the robot
+        arm around the Y-axis when the game is running."
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Applied changes to Assets/Scripts/RobotArmRotation.cs
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Open scene ArticulationRobot.unity
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Scene ArticulationRobot.unity loaded successfully.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: Open scene GripperScene.unity
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: Scene GripperScene.unity loaded successfully.
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: XeleR
+      Content: It seems like you pasted a scene analysis report without a specific
+        question. How can I assist you with the Unity scene analysis of GripperScene.unity?
+      IsFileContent: 0
+      FileName: 
+    LastLoadedScriptPath: 
+    LastLoadedScriptContent: 
+    LastLoadedScenePath: Assets/Scenes/GripperScene.unity
+    IsSceneLoaded: 1
+  - Name: Chat 3
+    Messages:
+    - Sender: System
+      Content: 'Started new chat session: Chat 3'
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: good!
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: scared
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: hi
+      IsFileContent: 0
+      FileName: 
+    LastLoadedScriptPath: 
+    LastLoadedScriptContent: 
+    LastLoadedScenePath: 
+    IsSceneLoaded: 0
+  - Name: Chat 4
+    Messages:
+    - Sender: XeleR
+      Content: "Hello, how can I help you today? Feel free to try out these example
+        prompts:\n\n\u2022 Are there any objects that seem oddly positioned?\n\u2022
+        Can you identify any potential collision issues?\n\u2022 Can you analyze
+        the hierarchy of my scene?\n\nYou can also ask for more example prompts anytime."
+      IsFileContent: 0
+      FileName: 
+    - Sender: System
+      Content: 'Started new chat session: Chat 4'
+      IsFileContent: 0
+      FileName: 
+    - Sender: You
+      Content: what is in the scene
+      IsFileContent: 0
+      FileName: 
+    LastLoadedScriptPath: 
+    LastLoadedScriptContent: 
+    LastLoadedScenePath: 
+    IsSceneLoaded: 0
+  currentSessionIndex: 3
   selectedModelIndex: 0
   lastLoadedScriptPath: 
   lastLoadedScriptContent: 
   lastLoadedScenePath: 
   isSceneLoaded: 0
---- !u!114 &15
+--- !u!114 &17
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12019, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinSize: {x: 275, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_TitleContent:
+    m_Text: Inspector
+    m_Image: {fileID: -440750813802333266, guid: 0000000000000000d000000000000000,
+      type: 0}
+    m_Tooltip: 
+  m_Pos:
+    serializedVersion: 2
+    x: 859
+    y: 96
+    width: 652
+    height: 792
+  m_SerializedDataModeController:
+    m_DataMode: 0
+    m_PreferredDataMode: 0
+    m_SupportedDataModes: 
+    isAutomatic: 1
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+    m_OverlaysVisible: 1
+  m_ObjectsLockedBeforeSerialization: []
+  m_InstanceIDsLockedBeforeSerialization: 
+  m_PreviewResizer:
+    m_CachedPref: 151
+    m_ControlHash: 1412526313
+    m_PrefName: Preview_InspectorPreview
+  m_LastInspectedObjectInstanceID: -36968
+  m_LastVerticalScrollValue: 0
+  m_GlobalObjectId: 
+  m_InspectorMode: 0
+  m_LockTracker:
+    m_IsLocked: 0
+  m_PreviewWindow: {fileID: 0}
+--- !u!114 &18
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -384,10 +1249,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 395.5
+    x: 257
     y: 96
-    width: 1083.5
-    height: 370
+    width: 626
+    height: 437.5
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -404,7 +1269,7 @@ MonoBehaviour:
   m_ShowGizmos: 0
   m_TargetDisplay: 0
   m_ClearColor: {r: 0, g: 0, b: 0, a: 0}
-  m_TargetSize: {x: 2167, y: 698}
+  m_TargetSize: {x: 1252, y: 833}
   m_TextureFilterMode: 0
   m_TextureHideFlags: 61
   m_RenderIMGUI: 1
@@ -419,17 +1284,17 @@ MonoBehaviour:
     m_VRangeLocked: 0
     hZoomLockedByDefault: 0
     vZoomLockedByDefault: 0
-    m_HBaseRangeMin: -541.75
-    m_HBaseRangeMax: 541.75
-    m_VBaseRangeMin: -174.5
-    m_VBaseRangeMax: 174.5
+    m_HBaseRangeMin: -313
+    m_HBaseRangeMax: 313
+    m_VBaseRangeMin: -208.25
+    m_VBaseRangeMax: 208.25
     m_HAllowExceedBaseRangeMin: 1
     m_HAllowExceedBaseRangeMax: 1
     m_VAllowExceedBaseRangeMin: 1
     m_VAllowExceedBaseRangeMax: 1
     m_ScaleWithWindow: 0
-    m_HSlider: 0
-    m_VSlider: 0
+    m_HSlider: 1
+    m_VSlider: 1
     m_IgnoreScrollWheelUntilClicked: 0
     m_EnableMouseInput: 1
     m_EnableSliderZoomHorizontal: 0
@@ -440,29 +1305,29 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0
       y: 21
-      width: 1083.5
-      height: 349
-    m_Scale: {x: 1, y: 1}
-    m_Translation: {x: 541.75, y: 174.5}
+      width: 626
+      height: 416.5
+    m_Scale: {x: 1.0884696, y: 1.0884691}
+    m_Translation: {x: 302.02994, y: 216.2786}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -541.75
-      y: -174.5
-      width: 1083.5
-      height: 349
+      x: -277.48126
+      y: -198.6998
+      width: 575.1194
+      height: 382.6475
     m_MinimalGUI: 1
   m_defaultScale: 1
-  m_LastWindowPixelSize: {x: 2167, y: 740}
+  m_LastWindowPixelSize: {x: 1252, y: 875}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 00000000000000000000
   m_XRRenderMode: 0
   m_RenderTexture: {fileID: 0}
---- !u!114 &16
+--- !u!114 &19
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -483,10 +1348,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 39
+    x: 60
     y: 96
-    width: 355.5
-    height: 370
+    width: 216.5
+    height: 437.5
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -500,9 +1365,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
+      m_SelectedIDs: 986fffff
       m_LastClickedID: 0
-      m_ExpandedIDs: 7cf8ffff1afaffff32fbffff
+      m_ExpandedIDs: da6fffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -526,7 +1391,7 @@ MonoBehaviour:
       m_IsLocked: 0
     m_CurrentSortingName: TransformSorting
   m_WindowGUID: 4c969a2b90040154d917609493e03593
---- !u!114 &17
+--- !u!114 &20
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -547,10 +1412,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 395.5
+    x: 277.5
     y: 96
-    width: 1083.5
-    height: 370
+    width: 693
+    height: 437.5
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1053,7 +1918,7 @@ MonoBehaviour:
   m_SceneVisActive: 1
   m_LastLockedObject: {fileID: 0}
   m_ViewIsLockedToObject: 0
---- !u!114 &18
+--- !u!114 &21
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1074,10 +1939,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 39
-    y: 487
-    width: 1441
-    height: 399
+    x: 0
+    y: 477.5
+    width: 911.5
+    height: 386.5
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1099,7 +1964,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes
+    - Assets/Editor
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -1107,16 +1972,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scenes
+  - Assets/Editor
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: /Users/nathanzhao/Documents/vscode/2025-Unusual-4
+  m_LastProjectPath: /Users/seongheelee/Desktop/github/2025-Unusual-4-main
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: c6460000
-    m_LastClickedID: 18118
-    m_ExpandedIDs: 00000000ce470000
+    m_SelectedIDs: 96060000
+    m_LastClickedID: 1686
+    m_ExpandedIDs: 00000000e605000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1132,7 +1997,7 @@ MonoBehaviour:
       m_IsRenaming: 0
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 13}
+      m_ClientGUIView: {fileID: 14}
     m_SearchString: 
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
@@ -1144,7 +2009,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000ce470000
+    m_ExpandedIDs: 00000000e605000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1171,7 +2036,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1200,7 +2065,7 @@ MonoBehaviour:
     m_GridSize: 64
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 207
---- !u!114 &19
+--- !u!114 &22
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1221,10 +2086,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 39
-    y: 487
-    width: 1441
-    height: 399
+    x: 0
+    y: 648.5
+    width: 776
+    height: 239.5
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0

@@ -11,9 +11,93 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Compilation;
 
+// 1) A small class to help parse the JSON from the streaming chunks.
+[Serializable]
+public class OpenAIStreamChunk
+{
+    public string id;
+    public string @object;
+    public long created;
+    public string model;
+    public Choice[] choices;
+
+    [Serializable]
+    public class Choice
+    {
+        public Delta delta;
+        public int index;
+        public string finish_reason;
+    }
+
+    [Serializable]
+    public class Delta
+    {
+        public string role;
+        public string content;
+    }
+}
+
+
 [InitializeOnLoad]
 public class ChatbotEditorWindow : EditorWindow
 {
+    // Add a field to store the streaming message label
+    private Label streamingMessageLabel;
+
+       private void AddStreamingPlaceholderMessage()
+    {
+        // Create a container for the streaming message
+        var messageContainer = new VisualElement
+        {
+            style =
+            {
+                marginBottom = 8,
+                paddingLeft = 4,
+                paddingRight = 4
+            }
+        };
+
+        // Add the sender label
+        var senderLabel = new Label("XeleR:")
+        {
+            style =
+            {
+                unityFontStyleAndWeight = FontStyle.Bold,
+                marginBottom = 2
+            }
+        };
+        messageContainer.Add(senderLabel);
+
+        // Create and store the streaming message label
+        streamingMessageLabel = new Label("")
+        {
+            style =
+            {
+                whiteSpace = WhiteSpace.Normal,
+                marginLeft = 4
+            }
+        };
+        messageContainer.Add(streamingMessageLabel);
+
+        // Add the container to the conversation view
+        conversationScrollView.Add(messageContainer);
+    }
+
+        private void UpdateStreamingMessage(string newText)
+    {
+        if (streamingMessageLabel != null)
+        {
+            streamingMessageLabel.text += newText;
+            // Optionally scroll to bottom
+            EditorApplication.delayCall += ScrollToBottom;
+        }
+        else
+        {
+            Debug.LogWarning("Streaming message label is null. Unable to update streaming text.");
+        }
+    }
+
+
     // Static constructor that will be called when Unity starts or scripts are recompiled
     static ChatbotEditorWindow()
     {
@@ -57,16 +141,27 @@ public class ChatbotEditorWindow : EditorWindow
         {
             window.Close();
         }
-        
-        // Create a fresh window instance
-        var newWindow = CreateWindow<ChatbotEditorWindow>("Chat v0");
+
+        // Create a fresh window instance, docked next to the Inspector if possible
+        var editorAssembly = typeof(UnityEditor.Editor).Assembly;
+        var inspectorType = editorAssembly.GetType("UnityEditor.InspectorWindow");
+
+        ChatbotEditorWindow newWindow;
+        if (inspectorType == null)
+        {
+            // If Inspector isn't found at all, just open normally
+            newWindow = GetWindow<ChatbotEditorWindow>("Chat x0", true);
+        }
+        else
+        {
+            // Attempt to dock next to the Inspector
+            newWindow = GetWindow<ChatbotEditorWindow>("Chat x0", true, inspectorType);
+        }
+
         newWindow.Show();
         newWindow.Focus();
-        
-        // Log that we're forcing the window open
+
         Debug.LogWarning("ChatbotEditorWindow: Forcing window to open");
-        
-        // Set a flag in EditorPrefs to indicate the window is open
         EditorPrefs.SetBool("ChatbotEditorWindowOpen", true);
     }
     
@@ -160,6 +255,16 @@ public class ChatbotEditorWindow : EditorWindow
     private Toggle includeSceneContextToggle;
     private bool includeSceneContext = false;
 
+    // Add this as a class member
+    private Button contextMenuButton;
+    private VisualElement contextMenuDropdown;
+    private bool isContextMenuOpen = false;
+
+    private string[] selectedFiles = new string[0];
+
+    // Add a reference to the sessionContainer
+    private VisualElement sessionContainer;
+
     [MenuItem("Window/Chatbox %i")]
     public static void ShowWindow()
     {
@@ -239,12 +344,13 @@ public class ChatbotEditorWindow : EditorWindow
         };
 
         // Add chat session selector
-        var sessionContainer = new VisualElement
+        sessionContainer = new VisualElement
         {
             style =
             {
                 flexDirection = FlexDirection.Row,
-                height = 22,
+                flexWrap = Wrap.Wrap, // Add this to allow wrapping if there are many options
+                minHeight = 22,
                 marginRight = 8
             }
         };
@@ -265,18 +371,113 @@ public class ChatbotEditorWindow : EditorWindow
         newChatButton.style.height = 22;
         sessionContainer.Add(newChatButton);
 
+        // Add the @ context button for file browsing
+        contextMenuButton = new Button(OnContextMenuButtonClicked) { text = "@ Context" };
+        contextMenuButton.style.height = 22;
+        contextMenuButton.style.width = 80;
+        contextMenuButton.style.backgroundColor = new Color(0.2f, 0.4f, 0.6f);
+        contextMenuButton.style.color = Color.white;
+        contextMenuButton.style.borderTopLeftRadius = 4;
+        contextMenuButton.style.borderTopRightRadius = 4;
+        contextMenuButton.style.borderBottomLeftRadius = 4;
+        contextMenuButton.style.borderBottomRightRadius = 4;
+        contextMenuButton.style.marginLeft = 4; // Small margin to separate from the + button
+        sessionContainer.Add(contextMenuButton); // Add to the sessionContainer, right after the newChatButton
+
+        // Add a single Scene Analysis button
+        var sceneAnalysisButton = new Button(OnSceneAnalysisClicked) { text = "Scene Analysis" };
+        sceneAnalysisButton.style.height = 22;
+        sceneAnalysisButton.style.marginLeft = 4;
+        sceneAnalysisButton.style.paddingLeft = 8;
+        sceneAnalysisButton.style.paddingRight = 8;
+        sceneAnalysisButton.style.backgroundColor = new Color(0.3f, 0.5f, 0.3f); // Green for scene analysis
+        sceneAnalysisButton.style.color = Color.white;
+        sceneAnalysisButton.style.borderTopLeftRadius = 4;
+        sceneAnalysisButton.style.borderTopRightRadius = 4;
+        sceneAnalysisButton.style.borderBottomLeftRadius = 4;
+        sceneAnalysisButton.style.borderBottomRightRadius = 4;
+        sceneAnalysisButton.style.borderTopWidth = 1;
+        sceneAnalysisButton.style.borderBottomWidth = 1;
+        sceneAnalysisButton.style.borderLeftWidth = 1;
+        sceneAnalysisButton.style.borderRightWidth = 1;
+        sceneAnalysisButton.style.borderTopColor = new Color(0.4f, 0.4f, 0.4f);
+        sceneAnalysisButton.style.borderBottomColor = new Color(0.4f, 0.4f, 0.4f);
+        sceneAnalysisButton.style.borderLeftColor = new Color(0.4f, 0.4f, 0.4f);
+        sceneAnalysisButton.style.borderRightColor = new Color(0.4f, 0.4f, 0.4f);
+        sessionContainer.Add(sceneAnalysisButton);
+
+        // Add Scene Context toggle with a visible box
+        var contextContainer = new VisualElement
+        {
+            style =
+            {
+                flexDirection = FlexDirection.Row,
+                alignItems = Align.Center,
+                marginLeft = 8
+            }
+        };
+
+        includeSceneContextToggle = new Toggle
+        {
+            value = includeSceneContext
+        };
+        
+        // Style the toggle to ensure the box is visible
+        includeSceneContextToggle.style.marginRight = 4;
+        
+        // Make the checkmark box more visible
+        var toggleCheckmark = includeSceneContextToggle.Q(className: "unity-toggle__checkmark");
+        if (toggleCheckmark != null)
+        {
+            toggleCheckmark.style.width = 16;
+            toggleCheckmark.style.height = 16;
+            toggleCheckmark.style.backgroundColor = new Color(0.2f, 0.2f, 0.2f);
+            toggleCheckmark.style.borderTopWidth = 1;
+            toggleCheckmark.style.borderBottomWidth = 1;
+            toggleCheckmark.style.borderLeftWidth = 1;
+            toggleCheckmark.style.borderRightWidth = 1;
+            toggleCheckmark.style.borderTopColor = new Color(0.5f, 0.5f, 0.5f);
+            toggleCheckmark.style.borderBottomColor = new Color(0.5f, 0.5f, 0.5f);
+            toggleCheckmark.style.borderLeftColor = new Color(0.5f, 0.5f, 0.5f);
+            toggleCheckmark.style.borderRightColor = new Color(0.5f, 0.5f, 0.5f);
+        }
+        
+        includeSceneContextToggle.RegisterValueChangedCallback(evt => {
+            includeSceneContext = evt.newValue;
+            if (includeSceneContext)
+                AddMessageToHistory("System", "Your current scene's context will be included in your queries.");
+            else
+                AddMessageToHistory("System", "Scene context disabled.");
+        });
+        
+        contextContainer.Add(includeSceneContextToggle);
+        
+        var contextLabel = new Label("Quick Context");
+        contextLabel.style.marginTop = 2; // Align with the toggle
+        contextContainer.Add(contextLabel);
+
+        // Add the context container to the session container
+        sessionContainer.Add(contextContainer);
+
+        // Create the context menu dropdown (initially hidden)
+        contextMenuDropdown = new VisualElement();
+        contextMenuDropdown.style.position = Position.Absolute;
+        contextMenuDropdown.style.backgroundColor = new Color(0.2f, 0.2f, 0.2f, 0.95f);
+        contextMenuDropdown.style.borderTopWidth = 1;
+        contextMenuDropdown.style.borderBottomWidth = 1;
+        contextMenuDropdown.style.borderLeftWidth = 1;
+        contextMenuDropdown.style.borderRightWidth = 1;
+        contextMenuDropdown.style.borderTopColor = new Color(0.3f, 0.3f, 0.3f);
+        contextMenuDropdown.style.borderBottomColor = new Color(0.3f, 0.3f, 0.3f);
+        contextMenuDropdown.style.borderLeftColor = new Color(0.3f, 0.3f, 0.3f);
+        contextMenuDropdown.style.borderRightColor = new Color(0.3f, 0.3f, 0.3f);
+        contextMenuDropdown.style.paddingTop = 5;
+        contextMenuDropdown.style.paddingBottom = 5;
+        contextMenuDropdown.style.display = DisplayStyle.None; // Hidden by default
+        contextMenuDropdown.pickingMode = PickingMode.Position;
+        rootVisualElement.Add(contextMenuDropdown);
+
         toolbar.Add(sessionContainer);
-
-        // Browse scripts button
-        browseScriptsButton = new Button(OnBrowseScriptsClicked) { text = "Browse Scripts" };
-        browseScriptsButton.style.height = 22; // Fixed height
-        toolbar.Add(browseScriptsButton);
-
-        // Browse scenes button
-        browseScenesButton = new Button(OnBrowseScenesClicked) { text = "Browse Scenes" };
-        browseScenesButton.style.height = 22; // Fixed height
-        browseScenesButton.style.marginLeft = 4;
-        toolbar.Add(browseScenesButton);
 
         // Model selection dropdown
         var modelContainer = new VisualElement
@@ -300,51 +501,7 @@ public class ChatbotEditorWindow : EditorWindow
         modelSelector.style.height = 22; // Fixed height
         modelSelector.RegisterValueChangedCallback(OnModelChanged);
         modelContainer.Add(modelSelector);
-
         toolbar.Add(modelContainer);
-
-        // Add scene analysis buttons to the toolbar
-        analyzeSceneButton = new Button(OnAnalyzeSceneClicked) { text = "Analyze Scene" };
-        analyzeSceneButton.style.height = 22; // Fixed height
-        toolbar.Add(analyzeSceneButton);
-        
-        spatialAnalysisButton = new Button(OnSpatialAnalysisClicked) { text = "Spatial Analysis" };
-        spatialAnalysisButton.style.height = 22; // Fixed height
-        toolbar.Add(spatialAnalysisButton);
-        
-        // Add a separator
-        var separator = new VisualElement();
-        separator.style.width = 1;
-        separator.style.height = 22;
-        separator.style.backgroundColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
-        separator.style.marginLeft = 8;
-        separator.style.marginRight = 8;
-        toolbar.Add(separator);
-
-        // Add toggle for including scene context in all queries - make it more prominent
-        includeSceneContextToggle = new Toggle("Scene Context");
-        includeSceneContextToggle.value = includeSceneContext;
-        includeSceneContextToggle.style.height = 22;
-        includeSceneContextToggle.style.marginLeft = 4;
-        includeSceneContextToggle.style.backgroundColor = new Color(0.2f, 0.3f, 0.4f, 0.2f);
-        includeSceneContextToggle.style.paddingLeft = 4;
-        includeSceneContextToggle.style.paddingRight = 4;
-        includeSceneContextToggle.style.borderTopWidth = 1;
-        includeSceneContextToggle.style.borderBottomWidth = 1;
-        includeSceneContextToggle.style.borderLeftWidth = 1;
-        includeSceneContextToggle.style.borderRightWidth = 1;
-        includeSceneContextToggle.style.borderTopColor = new Color(0.3f, 0.3f, 0.3f);
-        includeSceneContextToggle.style.borderBottomColor = new Color(0.3f, 0.3f, 0.3f);
-        includeSceneContextToggle.style.borderLeftColor = new Color(0.3f, 0.3f, 0.3f);
-        includeSceneContextToggle.style.borderRightColor = new Color(0.3f, 0.3f, 0.3f);
-        includeSceneContextToggle.RegisterValueChangedCallback(evt => {
-            includeSceneContext = evt.newValue;
-            if (evt.newValue)
-                AddMessageToHistory("System", "Scene context will be included in your queries.");
-            else
-                AddMessageToHistory("System", "Scene context disabled.");
-        });
-        toolbar.Add(includeSceneContextToggle);
 
         rootVisualElement.Add(toolbar);
 
@@ -419,6 +576,9 @@ public class ChatbotEditorWindow : EditorWindow
         
         // Ensure we scroll to the bottom after restoring history
         EditorApplication.delayCall += ScrollToBottom;
+
+        // After adding all the buttons to sessionContainer, update the selected files display
+        UpdateSelectedFilesDisplay();
     }
 
     private void OnModelChanged(ChangeEvent<ModelInfo> evt)
@@ -480,6 +640,15 @@ public class ChatbotEditorWindow : EditorWindow
         {
             string fileContent = File.ReadAllText(filePath);
             string fileName = Path.GetFileName(filePath);
+            
+            // Add the file path to the selected files array if not already in the array
+            if (Array.IndexOf(selectedFiles, filePath) < 0) {
+                Array.Resize(ref selectedFiles, selectedFiles.Length + 1);
+                selectedFiles[selectedFiles.Length - 1] = filePath;
+            }
+            
+            // Update the display of selected files
+            UpdateSelectedFilesDisplay();
             
             // Add the file content to the conversation
             AddMessageToHistory("You", $"Show me the contents of {fileName}");
@@ -583,21 +752,87 @@ public class ChatbotEditorWindow : EditorWindow
         var selectedModel = modelSelector.value;
         string provider = selectedModel.Provider;
         
+        // Build context from selected files
+        string filesContext = "";
+        if (selectedFiles.Length > 0)
+        {
+            StringBuilder contextBuilder = new StringBuilder();
+            contextBuilder.AppendLine("[Selected Files Context]");
+            
+            foreach (string filePath in selectedFiles)
+            {
+                if (filePath.EndsWith(".unity"))
+                {
+                    // Load the scene if it's not already loaded
+                    if (lastLoadedScenePath != filePath)
+                    {
+                        contextBuilder.AppendLine($"Scene: {Path.GetFileName(filePath)}");
+                        contextBuilder.AppendLine("[Scene Structure]");
+                        contextBuilder.AppendLine(SceneAnalysisIntegration.GetSceneStructureSummary());
+                        contextBuilder.AppendLine("[Spatial Information]");
+                        contextBuilder.AppendLine(SceneAnalysisIntegration.GetSpatialInformation());
+                    }
+                    else if (isSceneLoaded)
+                    {
+                        contextBuilder.AppendLine($"Scene: {Path.GetFileName(filePath)}");
+                        contextBuilder.AppendLine("[Scene Structure]");
+                        contextBuilder.AppendLine(SceneAnalysisIntegration.GetSceneStructureSummary());
+                        contextBuilder.AppendLine("[Spatial Information]");
+                        contextBuilder.AppendLine(SceneAnalysisIntegration.GetSpatialInformation());
+                    }
+                }
+                else if (filePath.EndsWith(".cs")) // Script file
+                {
+                    try
+                    {
+                        string fileContent = File.ReadAllText(filePath);
+                        contextBuilder.AppendLine($"Script: {Path.GetFileName(filePath)}");
+                        contextBuilder.AppendLine("```csharp");
+                        contextBuilder.AppendLine(fileContent);
+                        contextBuilder.AppendLine("```");
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"Error reading file {filePath}: {ex.Message}");
+                    }
+                }
+            }
+            
+            filesContext = contextBuilder.ToString();
+        }
+        
         // Include scene context if the toggle is enabled
         string contextEnhancedPrompt = userText;
-        if (includeSceneContext)
-        {
-            string sceneContext = SceneAnalysisIntegration.GetSceneStructureSummary();
-            contextEnhancedPrompt = $"[Scene Context]\n{sceneContext}\n\n[User Query]\n{userText}";
+        if (includeSceneContext) {
+            string sceneStructure = SceneAnalysisIntegration.GetSceneStructureSummary();
+            string spatialInfo = SceneAnalysisIntegration.GetSpatialInformation();
             
+            // Combine both types of information
+            string combinedContext = $"[Scene Context]\n{sceneStructure}\n\n[Spatial Information]\n{spatialInfo}";
+            
+            // Add files context if available
+            if (!string.IsNullOrEmpty(filesContext)) {
+                contextEnhancedPrompt = $"{filesContext}\n\n{combinedContext}\n\n[User Query]\n{userText}";
+            }
+            else
+            {
+                contextEnhancedPrompt = $"{combinedContext}\n\n[User Query]\n{userText}";
+            }
+                
             // Add a system message to show the user we're including scene context
-            AddMessageToHistory("System", "Including scene context in this query.");
+            AddMessageToHistory("System", "Including current scene context, spatial analysis, and selected files in this query.");
+        }
+        else if (!string.IsNullOrEmpty(filesContext))
+        {
+            // Only include files context
+            contextEnhancedPrompt = $"{filesContext}\n\n[User Query]\n{userText}";
+            AddMessageToHistory("System", "Including selected files in this query.");
         }
         
         // Send to the appropriate API based on the selected model's provider
         if (provider == "OpenAI")
         {
-            SendQueryToOpenAI(contextEnhancedPrompt, selectedModel.Name, OnResponseReceived);
+            SendQueryToOpenAIStreaming(contextEnhancedPrompt, selectedModel.Name, OnResponseReceived);
         }
         else if (provider == "Claude")
         {
@@ -902,6 +1137,329 @@ public class ChatbotEditorWindow : EditorWindow
         AssetDatabase.Refresh();
     }
 
+    private async void SendQueryToOpenAIStreaming(string userMessage, string model, Action<string, string> onResponse)
+    {
+        const string url = "https://api.openai.com/v1/chat/completions";
+        string apiKey = ApiKeyManager.GetKey(ApiKeyManager.OPENAI_KEY);
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            AddMessageToHistory("System", "<error: OpenAI API key not set. Click the API Settings button to configure it.>");
+            return;
+        }
+        
+        if (userMessage.ToLower().Contains("more example") ||
+            userMessage.ToLower().Contains("more prompt") ||
+            userMessage.ToLower().Contains("give example") ||
+            userMessage.ToLower().Contains("show example"))
+        {
+            List<string> moreExamples = PromptRecommender.GetRandomPrompts(3);
+            string examplesMessage = "Here are some more example prompts you can try:\n\n" +
+                                    $"• {moreExamples[0]}\n" +
+                                    $"• {moreExamples[1]}\n" +
+                                    $"• {moreExamples[2]}";
+            onResponse?.Invoke(examplesMessage, "OpenAI");
+            return;
+        }
+        
+        string escapedMessage = EscapeJson(userMessage);
+        string systemPrompt = "You are a Unity development assistant that can help with code. When suggesting code changes, use the format ```csharp:Assets/Scripts/FileName.cs\\n// code here\\n``` so the changes can be automatically applied.";
+        string sceneAnalyzerPrompt = SceneAnalysisIntegration.LoadMetaprompt("SceneAnalyzer_RequestAware");
+        if (!string.IsNullOrEmpty(sceneAnalyzerPrompt))
+        {
+            systemPrompt += "\n\n" + sceneAnalyzerPrompt;
+        }
+        
+        string contextMessage = "";
+        if (!string.IsNullOrEmpty(lastLoadedScriptPath) && !string.IsNullOrEmpty(lastLoadedScriptContent))
+        {
+            contextMessage = $"I'm working with this file: {lastLoadedScriptPath}\\n```csharp\\n{EscapeJson(lastLoadedScriptContent)}\\n```\\n\\nMy question is: ";
+        }
+        if (isSceneLoaded && !string.IsNullOrEmpty(lastLoadedScenePath))
+        {
+            string sceneName = Path.GetFileName(lastLoadedScenePath);
+            string sceneContext = SceneAnalysisIntegration.GetSceneStructureSummary();
+            contextMessage += $"I'm working with the Unity scene: {sceneName}\n{sceneContext}\n\nMy question is: ";
+        }
+        
+        string jsonPayload = @"{
+            ""model"": """ + model + @""",
+            ""stream"": true,
+            ""messages"": [
+                {
+                    ""role"": ""system"",
+                    ""content"": """ + systemPrompt + @"""
+                },";
+        
+        if (!string.IsNullOrEmpty(contextMessage))
+        {
+            jsonPayload += @"
+                {
+                    ""role"": ""user"",
+                    ""content"": """ + contextMessage + escapedMessage + @"""
+                }";
+        }
+        else
+        {
+            jsonPayload += @"
+                {
+                    ""role"": ""user"",
+                    ""content"": """ + escapedMessage + @"""
+                }";
+        }
+        
+        jsonPayload += @"
+            ]
+        }";
+        
+        jsonPayload = Regex.Replace(jsonPayload, @"\s+", " ").Replace(" \"", "\"").Replace("\" ", "\"");
+        
+        AddStreamingPlaceholderMessage();
+        
+        void OnChunkReceived(string chunk)
+        {
+            string processed = chunk.StartsWith("data:") ? chunk.Substring(5).Trim() : chunk;
+            if (processed == "[DONE]")
+                return;
+        
+            OpenAIStreamChunk chunkObj = null;
+            try
+            {
+                chunkObj = JsonUtility.FromJson<OpenAIStreamChunk>(processed);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("Failed to parse streaming JSON chunk: " + e.Message);
+                return;
+            }
+        
+            if (chunkObj?.choices != null && chunkObj.choices.Length > 0)
+            {
+
+                // // Text Streaming CodeBlock Error FIX: Instead of splitting on spaces:
+                string content = chunkObj.choices[0].delta?.content;
+                if (!string.IsNullOrEmpty(content))
+                {
+                    // Just append the raw chunk:
+                    UpdateStreamingMessage(content);
+                }
+                        
+                // string content = chunkObj.choices[0].delta?.content;
+                // Debug.Log("Streaming response: " + content);
+                // if (!string.IsNullOrEmpty(content))
+                // {
+                //     string[] words = content.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                //     foreach (string word in words)
+                //     {
+                //         UpdateStreamingMessage(word + " ");
+                //     }
+                // }
+            }
+        }
+        
+        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        {
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
+            var streamingHandler = new StreamingDownloadHandler(OnChunkReceived);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = streamingHandler;
+        
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("Authorization", "Bearer " + apiKey);
+        
+            var operation = request.SendWebRequest();
+        
+            Debug.Log("Sending streaming request to OpenAI with payload: " + jsonPayload);
+        
+            while (!operation.isDone)
+                await Task.Yield();
+        
+            queryField.SetEnabled(true);
+            sendButton.SetEnabled(true);
+        
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("OpenAI Streaming API Error: " + request.error);
+                Debug.LogError("Response body: " + request.downloadHandler.text);
+                AddMessageToHistory("System", "<error: could not get response>");
+                return;
+            }
+        
+            if (streamingMessageLabel != null)
+            {
+                string finalResponse = streamingMessageLabel.text;
+                if (streamingMessageLabel.parent != null)
+                    streamingMessageLabel.parent.RemoveFromHierarchy();
+                streamingMessageLabel = null;
+                AddMessageToHistory("XeleR", finalResponse);
+            }
+
+            
+        }
+        
+        onResponse?.Invoke("", "OpenAI");
+    }
+
+
+    // private async void SendQueryToOpenAIStreaming(string userMessage, string model, Action<string, string> onResponse)
+    // {
+    //     const string url = "https://api.openai.com/v1/chat/completions";
+    //     string apiKey = ApiKeyManager.GetKey(ApiKeyManager.OPENAI_KEY);
+    //     if (string.IsNullOrEmpty(apiKey))
+    //     {
+    //         AddMessageToHistory("System", "<error: OpenAI API key not set. Click the API Settings button to configure it.>");
+    //         return;
+    //     }
+
+    //     // Check if the user is asking for more examples
+    //     if (userMessage.ToLower().Contains("more example") || 
+    //         userMessage.ToLower().Contains("more prompt") || 
+    //         userMessage.ToLower().Contains("give example") ||
+    //         userMessage.ToLower().Contains("show example"))
+    //     {
+    //         // Get more example prompts
+    //         List<string> moreExamples = PromptRecommender.GetRandomPrompts(3);
+    //         string examplesMessage = "Here are some more example prompts you can try:\n\n" +
+    //                                  $"• {moreExamples[0]}\n" +
+    //                                  $"• {moreExamples[1]}\n" +
+    //                                  $"• {moreExamples[2]}";
+            
+    //         onResponse?.Invoke(examplesMessage, "OpenAI");
+    //         return;
+    //     }
+
+    //     string escapedMessage = EscapeJson(userMessage);
+    //     string systemPrompt = "You are a Unity development assistant that can help with code. When suggesting code changes, use the format ```csharp:Assets/Scripts/FileName.cs\\n// code here\\n``` so the changes can be automatically applied.";
+    //     string sceneAnalyzerPrompt = SceneAnalysisIntegration.LoadMetaprompt("SceneAnalyzer_RequestAware");
+    //     if (!string.IsNullOrEmpty(sceneAnalyzerPrompt))
+    //     {
+    //         systemPrompt += "\n\n" + sceneAnalyzerPrompt;
+    //     }
+
+    //     string contextMessage = "";
+    //     if (!string.IsNullOrEmpty(lastLoadedScriptPath) && !string.IsNullOrEmpty(lastLoadedScriptContent))
+    //     {
+    //         contextMessage = $"I'm working with this file: {lastLoadedScriptPath}\\n```csharp\\n{EscapeJson(lastLoadedScriptContent)}\\n```\\n\\nMy question is: ";
+    //     }
+    //     if (isSceneLoaded && !string.IsNullOrEmpty(lastLoadedScenePath))
+    //     {
+    //         string sceneName = Path.GetFileName(lastLoadedScenePath);
+    //         string sceneContext = SceneAnalysisIntegration.GetSceneStructureSummary();
+    //         contextMessage += $"I'm working with the Unity scene: {sceneName}\n{sceneContext}\n\nMy question is: ";
+    //     }
+
+    //     string jsonPayload = @"{
+    //         ""model"": """ + model + @""",
+    //         ""stream"": true,
+    //         ""messages"": [
+    //             {
+    //                 ""role"": ""system"",
+    //                 ""content"": """ + systemPrompt + @"""
+    //             },";
+
+    //     if (!string.IsNullOrEmpty(contextMessage))
+    //     {
+    //         jsonPayload += @"
+    //             {
+    //                 ""role"": ""user"",
+    //                 ""content"": """ + contextMessage + escapedMessage + @"""
+    //             }";
+    //     }
+    //     else
+    //     {
+    //         jsonPayload += @"
+    //             {
+    //                 ""role"": ""user"",
+    //                 ""content"": """ + escapedMessage + @"""
+    //             }";
+    //     }
+    //     jsonPayload += @"
+    //         ]
+    //     }";
+
+    //     jsonPayload = Regex.Replace(jsonPayload, @"\s+", " ").Replace(" \"", "\"").Replace("\" ", "\"");
+
+    //     // // Create a temporary container in the UI to display streaming text.
+    //     // AddMessageToHistory("XeleR", "");
+
+    //     // // Capture the index of the last message for streaming updates.
+    //     // int lastMessageIndex = chatSessions[currentSessionIndex].Messages.Count;
+
+    //     // Create a placeholder message for streaming and store the label reference.
+    //     AddStreamingPlaceholderMessage();
+
+    //     // Define a callback to update the UI as chunks arrive.
+    //     void OnChunkReceived(string chunk)
+    //     {
+    //         // 1. Strip off "data:" if present
+    //         string processed = chunk.StartsWith("data:") ? chunk.Substring(5).Trim() : chunk;
+
+    //         // 2. Check if [DONE]
+    //         if (processed == "[DONE]")
+    //             return;
+
+    //         // 3. Parse JSON into our OpenAIStreamChunk structure
+    //         OpenAIStreamChunk chunkObj = null;
+    //         try
+    //         {
+    //             chunkObj = JsonUtility.FromJson<OpenAIStreamChunk>(processed);
+    //         }
+    //         catch (Exception e)
+    //         {
+    //             Debug.LogWarning("Failed to parse streaming JSON chunk: " + e.Message);
+    //             return;
+    //         }
+
+    //         // 4. Each chunk may or may not have .choices[0].delta.content
+    //         //    If it does, we append that text to our streaming label.
+    //         if (chunkObj?.choices != null && chunkObj.choices.Length > 0)
+    //         {
+    //             // Typically, only the first choice matters in a single-stream scenario
+    //             string content = chunkObj.choices[0].delta?.content;
+    //             if (!string.IsNullOrEmpty(content))
+    //             {
+    //                 // 5. Optionally split the content by words for a "word-by-word" reveal
+    //                 string[] words = content.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+    //                 foreach (string word in words)
+    //                 {
+    //                     UpdateStreamingMessage(word + " ");
+    //                     // await Task.Delay(50); // adjust speed to your preference
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+    //     {
+    //         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
+    //         // Use StreamingDownloadHandler to process streamed chunks.
+    //         var streamingHandler = new StreamingDownloadHandler(OnChunkReceived);
+    //         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+    //         request.downloadHandler = streamingHandler;
+
+    //         request.SetRequestHeader("Content-Type", "application/json");
+    //         request.SetRequestHeader("Authorization", "Bearer " + apiKey);
+
+    //         var operation = request.SendWebRequest();
+
+    //         Debug.Log("Sending streaming request to OpenAI with payload: " + jsonPayload);
+
+    //         while (!operation.isDone)
+    //             await Task.Yield();
+
+    //         // Once streaming is done (or failed), re-enable input:
+    //         queryField.SetEnabled(true);
+    //         sendButton.SetEnabled(true);
+
+    //         if (request.result != UnityWebRequest.Result.Success)
+    //         {
+    //             Debug.LogError("OpenAI Streaming API Error: " + request.error);
+    //             Debug.LogError("Response body: " + request.downloadHandler.text);
+    //             AddMessageToHistory("System", "<error: could not get response>");
+    //             return;
+    //         }
+    //     }
+    // }
+
     private async void SendQueryToOpenAI(string userMessage, string model, Action<string, string> onResponse)
     {
         const string url = "https://api.openai.com/v1/chat/completions";
@@ -911,6 +1469,23 @@ public class ChatbotEditorWindow : EditorWindow
         if (string.IsNullOrEmpty(apiKey))
         {
             onResponse?.Invoke("<error: OpenAI API key not set. Click the API Settings button to configure it.>", "OpenAI");
+            return;
+        }
+
+        // Check if the user is asking for more examples
+        if (userMessage.ToLower().Contains("more example") || 
+            userMessage.ToLower().Contains("more prompt") || 
+            userMessage.ToLower().Contains("give example") ||
+            userMessage.ToLower().Contains("show example"))
+        {
+            // Get more example prompts
+            List<string> moreExamples = PromptRecommender.GetRandomPrompts(3);
+            string examplesMessage = "Here are some more example prompts you can try:\n\n" +
+                                     $"• {moreExamples[0]}\n" +
+                                     $"• {moreExamples[1]}\n" +
+                                     $"• {moreExamples[2]}";
+            
+            onResponse?.Invoke(examplesMessage, "OpenAI");
             return;
         }
         
@@ -1007,6 +1582,159 @@ public class ChatbotEditorWindow : EditorWindow
         }
     }
 
+    private async void SendQueryToClaudeStreaming(string userMessage, string model, Action<string, string> onResponse)
+    {
+        const string url = "https://api.anthropic.com/v1/messages";
+        string apiKey = ApiKeyManager.GetKey(ApiKeyManager.CLAUDE_KEY);
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            AddMessageToHistory("System", "<error: Claude API key not set. Click the API Settings button to configure it.>");
+            return;
+        }
+
+        // Check if the user is asking for more examples
+        if (userMessage.ToLower().Contains("more example") ||
+            userMessage.ToLower().Contains("more prompt") ||
+            userMessage.ToLower().Contains("give example") ||
+            userMessage.ToLower().Contains("show example"))
+        {
+            List<string> moreExamples = PromptRecommender.GetRandomPrompts(3);
+            string examplesMessage = "Here are some more example prompts you can try:\n\n" +
+                                    $"• {moreExamples[0]}\n" +
+                                    $"• {moreExamples[1]}\n" +
+                                    $"• {moreExamples[2]}";
+            onResponse?.Invoke(examplesMessage, "Claude");
+            return;
+        }
+
+        // Escape the user message to avoid JSON formatting issues
+        string escapedMessage = EscapeJson(userMessage);
+
+        // Load scene analyzer metaprompt if available
+        string systemPrompt = "You are a Unity development assistant that can help with code. When suggesting code changes, use the format ```csharp:Assets/Scripts/FileName.cs\\n// code here\\n``` so the changes can be automatically applied.";
+        string sceneAnalyzerPrompt = SceneAnalysisIntegration.LoadMetaprompt("SceneAnalyzer_RequestAware");
+        if (!string.IsNullOrEmpty(sceneAnalyzerPrompt))
+        {
+            systemPrompt += "\n\n" + sceneAnalyzerPrompt;
+        }
+
+        // Add script context if available
+        string contextMessage = "";
+        if (!string.IsNullOrEmpty(lastLoadedScriptPath) && !string.IsNullOrEmpty(lastLoadedScriptContent))
+        {
+            contextMessage = $"I'm working with this file: {lastLoadedScriptPath}\\n```csharp\\n{EscapeJson(lastLoadedScriptContent)}\\n```\\n\\nMy question is: ";
+        }
+
+        // Add scene context if available
+        if (isSceneLoaded && !string.IsNullOrEmpty(lastLoadedScenePath))
+        {
+            string sceneName = Path.GetFileName(lastLoadedScenePath);
+            string sceneContext = SceneAnalysisIntegration.GetSceneStructureSummary();
+            contextMessage += $"I'm working with the Unity scene: {sceneName}\n{sceneContext}\n\nMy question is: ";
+        }
+
+        // Construct JSON payload with streaming enabled
+        string jsonPayload = @"{
+            ""model"": """ + model + @""",
+            ""stream"": true,
+            ""max_tokens"": 1024,
+            ""messages"": [
+                {
+                    ""role"": ""system"",
+                    ""content"": """ + systemPrompt + @"""
+                },";
+        if (!string.IsNullOrEmpty(contextMessage))
+        {
+            jsonPayload += @"
+                {
+                    ""role"": ""user"",
+                    ""content"": """ + contextMessage + escapedMessage + @"""
+                }";
+        }
+        else
+        {
+            jsonPayload += @"
+                {
+                    ""role"": ""user"",
+                    ""content"": """ + escapedMessage + @"""
+                }";
+        }
+        jsonPayload += @"
+            ]
+        }";
+        jsonPayload = Regex.Replace(jsonPayload, @"\s+", " ").Replace(" \"", "\"").Replace("\" ", "\"");
+
+        // Create a placeholder message for streaming and store the label reference.
+        AddStreamingPlaceholderMessage();
+
+        // Define a callback to update the UI as chunks arrive.
+        void OnChunkReceived(string chunk)
+        {
+            string processed = chunk.StartsWith("data:") ? chunk.Substring(5).Trim() : chunk;
+            if (processed == "[DONE]")
+                return;
+            OpenAIStreamChunk chunkObj = null;
+            try
+            {
+                chunkObj = JsonUtility.FromJson<OpenAIStreamChunk>(processed);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("Failed to parse streaming JSON chunk from Claude: " + e.Message);
+                return;
+            }
+            if (chunkObj?.choices != null && chunkObj.choices.Length > 0)
+            {
+
+                // Text Streaming CodeBlock Error FIX: Instead of splitting on spaces:
+                string content = chunkObj.choices[0].delta?.content;
+                if (!string.IsNullOrEmpty(content))
+                {
+                    // Just append the raw chunk:
+                    UpdateStreamingMessage(content);
+                }
+                // string content = chunkObj.choices[0].delta?.content;
+                // if (!string.IsNullOrEmpty(content))
+                // {
+                //     string[] words = content.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                //     foreach (string word in words)
+                //     {
+                //         UpdateStreamingMessage(word + " ");
+                //     }
+                // }
+            }
+        }
+
+        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        {
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
+            var streamingHandler = new StreamingDownloadHandler(OnChunkReceived);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = streamingHandler;
+
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("x-api-key", apiKey);
+            request.SetRequestHeader("anthropic-version", "2023-06-01");
+
+            Debug.Log("Sending streaming request to Claude with payload: " + jsonPayload);
+            var operation = request.SendWebRequest();
+            while (!operation.isDone)
+                await Task.Yield();
+
+            queryField.SetEnabled(true);
+            sendButton.SetEnabled(true);
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Claude Streaming API Error: " + request.error);
+                Debug.LogError("Response body: " + request.downloadHandler.text);
+                AddMessageToHistory("System", "<error: could not get response from Claude>");
+                return;
+            }
+        }
+    }
+
+
     private async void SendQueryToClaude(string userMessage, string model, Action<string, string> onResponse)
     {
         const string url = "https://api.anthropic.com/v1/messages";
@@ -1016,6 +1744,23 @@ public class ChatbotEditorWindow : EditorWindow
         if (string.IsNullOrEmpty(apiKey))
         {
             onResponse?.Invoke("<error: Claude API key not set. Click the API Settings button to configure it.>", "Claude");
+            return;
+        }
+
+        // Check if the user is asking for more examples
+        if (userMessage.ToLower().Contains("more example") || 
+            userMessage.ToLower().Contains("more prompt") || 
+            userMessage.ToLower().Contains("give example") ||
+            userMessage.ToLower().Contains("show example"))
+        {
+            // Get more example prompts
+            List<string> moreExamples = PromptRecommender.GetRandomPrompts(3);
+            string examplesMessage = "Here are some more example prompts you can try:\n\n" +
+                                     $"• {moreExamples[0]}\n" +
+                                     $"• {moreExamples[1]}\n" +
+                                     $"• {moreExamples[2]}";
+            
+            onResponse?.Invoke(examplesMessage, "Claude");
             return;
         }
         
@@ -1452,6 +2197,13 @@ public class ChatbotEditorWindow : EditorWindow
                     AddMessageToHistoryWithoutSaving(message.Sender, message.Content);
                 }
             }
+
+            // If this is a new session with no messages, add the welcome message
+            if (currentSession.Messages.Count == 0)
+            {
+                AddWelcomeMessage();
+            }
+           
             
             // Scroll to bottom
             EditorApplication.delayCall += ScrollToBottom;
@@ -1538,18 +2290,32 @@ public class ChatbotEditorWindow : EditorWindow
         EditorApplication.delayCall += ScrollToBottom;
     }
 
-    private void OnAnalyzeSceneClicked()
+    // Combined scene analysis method
+    private void OnSceneAnalysisClicked()
     {
-        string sceneStructure = SceneAnalysisIntegration.GetSceneStructureSummary();
-        AddMessageToHistory("You", "Analyze the current scene structure");
-        AddMessageToHistory("System", sceneStructure);
-    }
-
-    private void OnSpatialAnalysisClicked()
-    {
-        string spatialInfo = SceneAnalysisIntegration.GetSpatialInformation();
-        AddMessageToHistory("You", "Perform spatial analysis on the scene");
-        AddMessageToHistory("System", spatialInfo);
+        // Create a dropdown menu with scene analysis options
+        var menu = new GenericMenu();
+        
+        menu.AddItem(new GUIContent("Scene Structure"), false, () => {
+            string sceneStructure = SceneAnalysisIntegration.GetSceneStructureSummary();
+            AddMessageToHistory("You", "Analyze the current scene structure");
+            AddMessageToHistory("System", sceneStructure);
+        });
+        
+        menu.AddItem(new GUIContent("Spatial Analysis"), false, () => {
+            string spatialInfo = SceneAnalysisIntegration.GetSpatialInformation();
+            AddMessageToHistory("You", "Perform spatial analysis on the scene");
+            AddMessageToHistory("System", spatialInfo);
+        });
+        
+        menu.AddItem(new GUIContent("Complete Analysis"), false, () => {
+            string sceneStructure = SceneAnalysisIntegration.GetSceneStructureSummary();
+            string spatialInfo = SceneAnalysisIntegration.GetSpatialInformation();
+            AddMessageToHistory("You", "Perform complete scene analysis");
+            AddMessageToHistory("System", "Scene Structure:\n" + sceneStructure + "\n\nSpatial Analysis:\n" + spatialInfo);
+        });
+        
+        menu.ShowAsContext();
     }
 
     // Add a method to handle scene context in queries
@@ -1600,6 +2366,15 @@ public class ChatbotEditorWindow : EditorWindow
                     return;
                 }
             }
+            
+            // Add the scene path to the selected files array if not already in the array
+            if (Array.IndexOf(selectedFiles, scenePath) < 0) {
+                Array.Resize(ref selectedFiles, selectedFiles.Length + 1);
+                selectedFiles[selectedFiles.Length - 1] = scenePath;
+            }
+
+            // Update the display of selected files
+            UpdateSelectedFilesDisplay();
             
             // Load the scene
             UnityEditor.SceneManagement.EditorSceneManager.OpenScene(scenePath, UnityEditor.SceneManagement.OpenSceneMode.Single);
@@ -1761,6 +2536,13 @@ public class ChatbotEditorWindow : EditorWindow
         
         // Save the updated state
         SaveChatSessionsToEditorPrefs();
+    }
+
+    // Add a method to display the welcome message with example prompts
+    private void AddWelcomeMessage()
+    {
+        string welcomeMessage = PromptRecommender.GetWelcomeMessage();
+        AddMessageToHistory("XeleR", welcomeMessage);
     }
 
     private void SaveCurrentSessionState()
@@ -1969,5 +2751,217 @@ public class ChatbotEditorWindow : EditorWindow
     private class ChatSessionsWrapper
     {
         public List<ChatSession> Sessions;
+    }
+
+    // Add this method to handle the button click
+    private void OnContextMenuButtonClicked()
+    {
+        if (isContextMenuOpen)
+        {
+            CloseContextMenu();
+        }
+        else
+        {
+            OpenContextMenu();
+        }
+    }
+
+    private void OpenContextMenu()
+    {
+        // Position the dropdown above the @ button
+        var buttonRect = contextMenuButton.worldBound;
+        
+        // Calculate the height of the dropdown based on the number of items
+        // Each item is 24px high plus margins (4px total), and we have padding (10px total)
+        float dropdownHeight = (2 * (24 + 4)) + 10; // Only 2 items now: Browse Scripts and Browse Scenes
+        
+        // Add additional offset to position it higher
+        float additionalOffset = 24;
+        
+        contextMenuDropdown.style.left = buttonRect.x;
+        contextMenuDropdown.style.top = buttonRect.y - dropdownHeight - additionalOffset;
+        contextMenuDropdown.style.width = 200;
+        
+        // Clear existing items
+        contextMenuDropdown.Clear();
+        
+        // Add only the file browsing options
+        AddContextMenuItem("Browse Scripts", OnBrowseScriptsClicked);
+        AddContextMenuItem("Browse Scenes", OnBrowseScenesClicked);
+        
+        // Show the dropdown
+        contextMenuDropdown.style.display = DisplayStyle.Flex;
+        isContextMenuOpen = true;
+        
+        // Add a click event handler to the root to close the menu when clicking outside
+        rootVisualElement.RegisterCallback<MouseDownEvent>(OnClickOutsideContextMenu);
+    }
+
+    private void CloseContextMenu()
+    {
+        contextMenuDropdown.style.display = DisplayStyle.None;
+        isContextMenuOpen = false;
+        rootVisualElement.UnregisterCallback<MouseDownEvent>(OnClickOutsideContextMenu);
+    }
+
+    private void OnClickOutsideContextMenu(MouseDownEvent evt)
+    {
+        // Check if the click is outside the dropdown
+        if (!contextMenuDropdown.worldBound.Contains(evt.mousePosition))
+        {
+            CloseContextMenu();
+        }
+    }
+
+    // Modify the AddContextMenuItem method to update the display after tracking clicks
+    private void AddContextMenuItem(string label, Action clickAction)
+    {
+        var item = new Button(() => {
+            // Just execute the original action without tracking menu clicks
+            clickAction();
+        }) { text = label };
+        
+        item.style.height = 24;
+        item.style.width = 190;
+        item.style.marginLeft = 5;
+        item.style.marginRight = 5;
+        item.style.marginTop = 2;
+        item.style.marginBottom = 2;
+        item.style.backgroundColor = new Color(0.25f, 0.25f, 0.25f);
+        
+        contextMenuDropdown.Add(item);
+    }
+
+    // Modify the UpdateSelectedFilesDisplay method to add close buttons to each file box
+    private void UpdateSelectedFilesDisplay()
+    {
+        // First, clear any existing option boxes
+        var existingBoxes = sessionContainer.Query(className: "selected-file-box").ToList();
+        foreach (var box in existingBoxes)
+        {
+            sessionContainer.Remove(box);
+        }
+        
+        // Display all selected files
+        for (int i = 0; i < selectedFiles.Length; i++)
+        {
+            string filePath = selectedFiles[i];
+            string fileName = Path.GetFileName(filePath);
+            bool isScene = filePath.EndsWith(".unity");
+            
+            var fileBox = new VisualElement();
+            fileBox.AddToClassList("selected-file-box");
+            fileBox.style.flexDirection = FlexDirection.Row; // Make it horizontal to fit the close button
+            
+            // Use different colors for scripts vs scenes
+            if (isScene)
+                fileBox.style.backgroundColor = new Color(0.5f, 0.3f, 0.7f); // Purple for scenes
+            else
+                fileBox.style.backgroundColor = new Color(0.3f, 0.5f, 0.7f); // Blue for scripts
+            
+            fileBox.style.borderTopLeftRadius = 3;
+            fileBox.style.borderTopRightRadius = 3;
+            fileBox.style.borderBottomLeftRadius = 3;
+            fileBox.style.borderBottomRightRadius = 3;
+            fileBox.style.paddingLeft = 4;
+            fileBox.style.paddingRight = 2; // Reduced right padding to fit close button
+            fileBox.style.paddingTop = 2;
+            fileBox.style.paddingBottom = 2;
+            fileBox.style.marginLeft = 4;
+            fileBox.style.height = 18;
+            
+            // Create a container for the file name label
+            var labelContainer = new VisualElement();
+            labelContainer.style.flexGrow = 1; // Take up available space
+            
+            // Make the file box clickable to reload the file
+            int index = i; // Capture the index for the click handler
+            labelContainer.RegisterCallback<ClickEvent>((evt) => {
+                if (isScene)
+                    LoadSceneFile(selectedFiles[index]);
+                else
+                    LoadScriptFile(selectedFiles[index]);
+            });
+            
+            var fileLabel = new Label(fileName);
+            fileLabel.style.fontSize = 10;
+            fileLabel.style.color = Color.white;
+            fileLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+            
+            labelContainer.Add(fileLabel);
+            fileBox.Add(labelContainer);
+            
+            // Add a close button
+            var closeButton = new Button(() => RemoveSelectedFile(index)) { text = "×" };
+            closeButton.AddToClassList("file-close-button");
+            closeButton.style.width = 14;
+            closeButton.style.height = 14;
+            closeButton.style.fontSize = 10;
+            closeButton.style.paddingLeft = 0;
+            closeButton.style.paddingRight = 0;
+            closeButton.style.paddingTop = 0;
+            closeButton.style.paddingBottom = 0;
+            closeButton.style.marginLeft = 2;
+            closeButton.style.marginRight = 0;
+            closeButton.style.marginTop = 0;
+            closeButton.style.marginBottom = 0;
+            closeButton.style.backgroundColor = new Color(0.7f, 0.3f, 0.3f); // Red for close button
+            closeButton.style.color = Color.white;
+            closeButton.style.borderTopLeftRadius = 2;
+            closeButton.style.borderTopRightRadius = 2;
+            closeButton.style.borderBottomLeftRadius = 2;
+            closeButton.style.borderBottomRightRadius = 2;
+            
+            fileBox.Add(closeButton);
+            sessionContainer.Add(fileBox);
+        }
+    }
+
+    // Add a method to remove a file from the selectedFiles array
+    private void RemoveSelectedFile(int index)
+    {
+        if (index < 0 || index >= selectedFiles.Length)
+            return;
+        
+        // Create a new array without the selected file
+        string[] newSelectedFiles = new string[selectedFiles.Length - 1];
+        
+        // Copy all elements except the one at the specified index
+        for (int i = 0, j = 0; i < selectedFiles.Length; i++)
+        {
+            if (i != index)
+            {
+                newSelectedFiles[j++] = selectedFiles[i];
+            }
+        }
+        
+        // Update the array
+        selectedFiles = newSelectedFiles;
+        
+        // Update the UI
+        UpdateSelectedFilesDisplay();
+    }
+
+    // Helper method to standardize button styling
+    private void StyleButton(Button button)
+    {
+        button.style.height = 22;
+        button.style.marginRight = 4;
+        button.style.paddingLeft = 8;
+        button.style.paddingRight = 8;
+        button.style.backgroundColor = new Color(0.25f, 0.25f, 0.25f);
+        button.style.color = Color.white;
+        button.style.borderTopLeftRadius = 4;
+        button.style.borderTopRightRadius = 4;
+        button.style.borderBottomLeftRadius = 4;
+        button.style.borderBottomRightRadius = 4;
+        button.style.borderTopWidth = 1;
+        button.style.borderBottomWidth = 1;
+        button.style.borderLeftWidth = 1;
+        button.style.borderRightWidth = 1;
+        button.style.borderTopColor = new Color(0.4f, 0.4f, 0.4f);
+        button.style.borderBottomColor = new Color(0.4f, 0.4f, 0.4f);
+        button.style.borderLeftColor = new Color(0.4f, 0.4f, 0.4f);
+        button.style.borderRightColor = new Color(0.4f, 0.4f, 0.4f);
     }
 }
