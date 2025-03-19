@@ -202,11 +202,11 @@ Base class for AI chat functionality that can be used in runtime applications.
    - Success/error message is displayed to user
   
 3. **Context:**
-   - @Context Button implements hierarchical context management that traverses the Unity scene graph and project asset database
+   - @Context button implements hierarchical context management that traverses the Unity scene graph and project asset database
    - Captures code files, GameObject properties, component configurations, and inheritance hierarchies
    - Serializes scene structure and code into a compact JSON representation to add to user queries
    - Maintains persistent file references across editor sessions, with async I/O operations
-   - Quick Context Toggle injects current scene and code data into prompts
+   - Quick Context toggle injects current scene and code data into prompts
      
 5. **Scene Analysis Flow:**
    - User requests scene analysis via menu
