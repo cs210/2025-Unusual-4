@@ -128,3 +128,17 @@ Below is a high-level diagram of how XeleR’s chatbot fits into your Unity work
 - **Cross-Platform Compatibility:**  
   Develop once and deploy across multiple XR devices seamlessly, ensuring broad reach and flexibility.
 
+  ---
+
+**Future Plans:**
+
+- **Scene Edit Application:**  
+  Currently, XeleR provides the code to make the changes that we instruct it to make and provides the user with the steps in order to load the script and implement the behavior. However, we want the changes to the scene to be automatically applied and go through an approval system similar to how Cursor works. 
+
+- **Product-Market Fit**  
+  So far, we have been entirely focused on building the Unity extension. Future steps include testing out what a developers think about our extension and getting feedback on its use cases. Through this research, we hope to uncover insights that we can center further functionality and features around.
+
+- **Asset Integration**  
+  We want to work on improving our current architecture to also be able to support importing assets from the Unity source and other sources that the system require essential to edit the scene; this holds immense value in cases where scenes are to be generated from a prompt from scratch. 
+
+
