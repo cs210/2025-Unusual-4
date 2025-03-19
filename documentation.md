@@ -2,7 +2,9 @@
 
 ## Overview
 
-XeleR is a Unity Editor extension that provides AI-assisted XR prototyping capabilities. This document provides a technical overview of the codebase structure, implementation details, and key components to help new developers understand and contribute to the project. If you are looking for a more product-focused overview, please refer to the [README](README.md).
+XeleR is a Unity Editor extension that provides AI-assisted XR prototyping capabilities. This document provides a technical overview of the codebase structure, implementation details, and key components to help new developers understand and contribute to the project. 
+
+If you are looking for a more product-focused overview, please refer to the [README](README.md).
 
 ## Technical Architecture
 
@@ -10,6 +12,9 @@ XeleR follows a modular architecture with clear separation between:
 - Editor UI components (Unity Editor integration)
 - AI communication services
 - Scene analysis utilities
+- Runtime robot control components
+
+The system uses a combination of Unity's Editor extension APIs, UIElements for modern UI, and external AI services (OpenAI and Claude) to provide an integrated development experience.
 
 ## Core Components - Technical Details
 
@@ -39,6 +44,15 @@ The main UI component that inherits from `EditorWindow` to create a dockable win
 - Maintains session persistence using EditorPrefs serialization
 - Implements a token-aware context management system to stay within API limits
 
+**Implementation Details:**
+- The window is registered with Unity's Editor extension system via `[MenuItem("Window/Chatbox")]`
+- Uses `UnityWebRequest` with chunked processing for streaming API responses
+- Implements custom `VisualElement` creation for chat messages with markdown support
+- Uses `EditorPrefs.SetString()` with JSON serialization for session persistence
+- Implements file I/O operations with proper error handling for code application
+- Uses `EditorApplication.delayCall` for UI updates to avoid threading issues
+- Implements custom dropdown menus with `GenericMenu` for context selection
+
 #### SceneAnalysisIntegration.cs
 Static utility class that provides scene analysis capabilities by extracting information about Unity scenes.
 
@@ -56,6 +70,15 @@ Static utility class that provides scene analysis capabilities by extracting inf
 - Performs raycasting for spatial relationship detection
 - Captures scene screenshots for visual context
 
+**Implementation Details:**
+- Uses `SceneManager.GetActiveScene().GetRootGameObjects()` to access scene hierarchy
+- Implements depth-first traversal with `transform.GetChildren()` for hierarchy analysis
+- Uses `GameObject.GetComponents<Component>()` with reflection to extract properties
+- Implements spatial analysis with `Physics.Raycast()` for object relationships
+- Uses `EditorWindow.GetWindow<SceneView>()` for scene view capture
+- Implements caching with `DateTime.Now` comparison for performance optimization
+- Uses `StringBuilder` for efficient string concatenation in analysis results
+
 #### ApiKeyManager.cs
 Static utility class for secure API key management.
 
@@ -69,6 +92,14 @@ Static utility class for secure API key management.
 - Stores encrypted keys in EditorPrefs for cross-session persistence
 - Implements key validation before API calls
 - Provides constants for consistent key naming
+
+**Implementation Details:**
+- Uses `System.Security.Cryptography.AesManaged` for encryption
+- Implements PKCS7 padding for AES encryption
+- Uses Base64 encoding for encrypted string storage
+- Stores keys in `EditorPrefs` with consistent key names
+- Implements proper disposal of cryptographic resources
+- Uses static initialization to ensure keys are loaded at startup
 
 #### MarkdownRenderer.cs
 Utility class that renders markdown-formatted text in the Unity UI.
@@ -84,6 +115,14 @@ Utility class that renders markdown-formatted text in the Unity UI.
 - Creates UIElements with appropriate styling for each markdown component
 - Implements basic syntax highlighting for code blocks
 - Supports nested elements like lists within lists
+
+**Implementation Details:**
+- Uses `System.Text.RegularExpressions.Regex` for pattern matching
+- Creates `VisualElement` hierarchies with proper styling
+- Implements custom USS (Unity Style Sheets) for markdown styling
+- Uses `Label`, `Box`, and custom elements for different markdown components
+- Implements recursive parsing for nested markdown elements
+- Handles code blocks with language-specific formatting
 
 ### 2. AI Communication
 
@@ -109,6 +148,15 @@ The system communicates with multiple AI providers through REST APIs.
 - Manages connection timeouts and error handling
 - Implements backoff strategies for rate limiting
 
+**Implementation Details:**
+- Uses `UnityWebRequest.Post()` with JSON body for API requests
+- Sets appropriate content-type headers for each API provider
+- Implements custom download handlers for streaming responses
+- Uses `DownloadHandlerBuffer.data` for chunked response processing
+- Implements proper error handling with HTTP status codes
+- Uses `EditorUtility.DisplayProgressBar()` for request progress indication
+- Implements exponential backoff for rate limit handling
+
 ### 3. Runtime Components
 
 #### ChatBot.cs
@@ -133,21 +181,13 @@ Base class for AI chat functionality that can be used in runtime applications.
 - Handles conversation history as a list of message objects
 - Supports temperature and frequency penalty adjustments
 
-#### PlannerGPT.cs
-Extends ChatBot to provide planning capabilities for Unity scenes.
-
-**Key Functions:**
-- `LoadPlanningPrompt()`: Loads specialized prompts for scene planning
-- `ProcessUserInput()`: Handles user input and maintains conversation
-- `StreamGPT4Response()`: Streams AI responses in real-time
-- `CheckForConversationFinished()`: Detects conversation completion
-- `UpdateHistoryUI()`: Updates UI with conversation history
-
-**Technical Implementation:**
-- Loads planning-specific prompts from external files
-- Maintains conversation context across multiple exchanges
-- Triggers scene processing when conversation is complete
-- Updates UI in real-time with streaming responses
+**Implementation Details:**
+- Uses `TikToken.Encode()` for token counting
+- Implements token management with configurable strategies
+- Uses `Resources.Load<TextAsset>()` for prompt loading
+- Implements proper message role assignment (system, user, assistant)
+- Uses `JsonUtility.ToJson()` for API request serialization
+- Implements proper error handling with try/catch blocks
 
 ## Data Flow
 
@@ -184,6 +224,20 @@ To add a new AI model:
 3. Update the model selector dropdown to include the new model
 4. Implement appropriate token counting for the new model
 
+**Implementation Example:**
+```csharp
+// Add new model to the list
+availableModels.Add(new ModelInfo { Name = "new-model-name", Provider = "NewProvider" });
+
+// Update dropdown
+modelSelector.choices = availableModels.Select(m => m.Name + " (" + m.Provider + ")").ToList();
+
+// Check provider in send method
+if (selectedModel.Provider == "NewProvider") {
+    SendQueryToNewProviderStreaming(userMessage, selectedModel.Name);
+}
+```
+
 ### 2. Adding New Scene Analysis Features
 
 To add new scene analysis capabilities:
@@ -193,6 +247,37 @@ To add new scene analysis capabilities:
 3. Format the results as markdown for display
 4. Add a UI option in the scene analysis context menu
 5. Consider caching for performance optimization
+
+**Implementation Example:**
+```csharp
+// Cache variables
+private static string cachedPhysicsAnalysis;
+private static DateTime lastPhysicsAnalysisTime;
+
+// Analysis method
+public static string GetPhysicsAnalysis() {
+    // Check cache first
+    if (cachedPhysicsAnalysis != null && 
+        (DateTime.Now - lastPhysicsAnalysisTime) < CacheTimeout) {
+        return cachedPhysicsAnalysis;
+    }
+    
+    // Analysis implementation
+    var rigidbodies = GameObject.FindObjectsOfType<Rigidbody>();
+    // Process and format results...
+    
+    // Cache results
+    cachedPhysicsAnalysis = result;
+    lastPhysicsAnalysisTime = DateTime.Now;
+    return result;
+}
+
+// UI menu option
+menu.AddItem(new GUIContent("Physics Analysis"), false, () => {
+    string result = SceneAnalysisIntegration.GetPhysicsAnalysis();
+    AddMessageToHistory("System", result);
+});
+```
 
 ## Performance Considerations
 
@@ -231,13 +316,12 @@ To add new scene analysis capabilities:
 ## Debugging Tips
 
 1. **API Communication Issues**
-   - Check Unity console for HTTP status codes and error messages
    - Verify API keys are correctly configured
    - Check for network connectivity issues
    - Examine request/response headers for API-specific errors
 
 2. **Code Application Problems**
-   - Check file paths for correctness (case sensitivity matters on some platforms)
+   - Check file paths for correctness (case sensitivity matters)
    - Verify file permissions allow writing to the target location
    - Look for syntax errors in the generated code
    - Check Unity console for compilation errors after code application
