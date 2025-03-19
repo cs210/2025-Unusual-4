@@ -1279,9 +1279,6 @@ public class ChatbotEditorWindow : EditorWindow
                     streamingMessageLabel.parent.RemoveFromHierarchy();
                 streamingMessageLabel = null;
 
-                // We add it to the UI
-                AddMessageToHistory("XeleR", finalResponse);
-
                 // Then pass the actual text so ProcessAndApplyCodeEdits can detect code blocks
                 onResponse?.Invoke(finalResponse, "OpenAI");
             }
