@@ -4,15 +4,15 @@
 
 XeleR is a Unity Editor extension that provides AI-assisted XR prototyping capabilities. This document provides a technical overview of the codebase structure, implementation details, and key components to help new developers understand and contribute to the project. 
 
-If you are looking for a more product-focused overview, please refer to the [README](README.md).
+If you want a more product-focused overview, please refer to the [README](README.md).
 
 ## Technical Architecture
 
-XeleR follows a modular architecture with clear separation between:
+XeleR follows a modular architecture with a clear separation between:
 - Editor UI components (Unity Editor integration)
 - AI communication services
+- Context Gathering 
 - Scene analysis utilities
-- Runtime robot control components
 
 The system uses a combination of Unity's Editor extension APIs, UIElements for modern UI, and external AI services (OpenAI and Claude) to provide an integrated development experience.
 
@@ -65,7 +65,7 @@ Static utility class that provides scene analysis capabilities by extracting inf
 
 **Technical Implementation:**
 - Uses recursive scene traversal to build complete hierarchy representations
-- Implements a caching system with configurable timeout to improve performance
+- Implements a caching system with a configurable timeout to improve performance
 - Uses reflection to extract component properties dynamically
 - Performs raycasting for spatial relationship detection
 - Captures scene screenshots for visual context
@@ -133,13 +133,11 @@ The system communicates with multiple AI providers through REST APIs.
 - Supports models: gpt-3.5-turbo, gpt-4, gpt-4-turbo, gpt-4o
 - Implements streaming API for real-time responses
 - Handles token counting and context management
-- Processes chunked responses for incremental UI updates
+- Processes chunked responses for incremental UI updates (text streaming)
 
 **Claude Integration:**
 - Supports models: claude-3-opus, claude-3-5-sonnet, claude-3-7-sonnet
 - Uses Anthropic's API with appropriate headers and authentication
-- Implements streaming response handling
-- Processes event-stream formatted responses
 
 **Technical Implementation:**
 - Uses UnityWebRequest for HTTP communication
@@ -155,7 +153,6 @@ The system communicates with multiple AI providers through REST APIs.
 - Uses `DownloadHandlerBuffer.data` for chunked response processing
 - Implements proper error handling with HTTP status codes
 - Uses `EditorUtility.DisplayProgressBar()` for request progress indication
-- Implements exponential backoff for rate limit handling
 
 ### 3. Runtime Components
 
@@ -197,21 +194,25 @@ Base class for AI chat functionality that can be used in runtime applications.
    - Query is sent to AI service via SendQueryToOpenAIStreaming/SendQueryToClaudeStreaming
    - Response is streamed back and displayed incrementally
    - Code blocks are extracted via ProcessCodeBlocksInMessage
-   - Apply buttons are added for each code block
 
 2. **Code Application Flow:**
-   - User clicks Apply button for a code block
-   - System extracts file path and code content
-   - ApplyCodeEdit validates file path and handles file I/O
+   - System extracts file path and code content through ProcessAndApplyCodeEdits
+   - ApplyEditToFile applies or creates the code edits for a Unity file  
    - Unity's AssetDatabase is refreshed to recognize changes
    - Success/error message is displayed to user
-
-3. **Scene Analysis Flow:**
-   - User requests scene analysis via context menu
+  
+3. **Context:**
+   - @Context Button implements hierarchical context management that traverses the Unity scene graph and project asset database
+   - Captures code files, GameObject properties, component configurations, and inheritance hierarchies
+   - Serializes scene structure and code into a compact JSON representation to add to user queries
+   - Maintains persistent file references across editor sessions, with async I/O operations
+   - Quick Context Toggle injects current scene and code data into prompts
+     
+5. **Scene Analysis Flow:**
+   - User requests scene analysis via menu
    - System calls appropriate SceneAnalysisIntegration methods
    - Analysis results are formatted as markdown
    - Results are added to chat history and displayed
-   - Results may be included in subsequent AI queries
 
 ## Extension Points
 
@@ -280,21 +281,18 @@ menu.AddItem(new GUIContent("Physics Analysis"), false, () => {
 ```
 
 ## Performance Considerations
-
 1. **Scene Analysis Optimization**
    - Scene analysis results are cached with a 30-second timeout
    - Large scenes use selective analysis to avoid performance issues
    - Hierarchy traversal is optimized to minimize GameObject.Find calls
-   - Screenshot capture is only performed when specifically requested
 
-2. **Token Management**
+3. **Token Management**
    - The system implements token counting to stay within API limits
-   - FIFO strategy removes oldest messages first when context window is full
-   - Full_Reset strategy clears all history except system prompt when context is full
+   - FIFO strategy removes the oldest messages first when the context window is full
+   - Full_Reset strategy clears all history except the system prompt when the context is full
    - Token counting uses the TikToken library for accurate estimates
 
-3. **UI Performance**
-   - The chat UI uses virtualization for large message histories
+4. **UI Performance**
    - Markdown rendering is optimized for common patterns
    - Long responses are streamed to avoid UI freezing
    - EditorPrefs are used efficiently to minimize serialization overhead
@@ -309,12 +307,9 @@ menu.AddItem(new GUIContent("Physics Analysis"), false, () => {
 
 2. **File System Access**
    - The system validates file paths before reading/writing
-   - Directory traversal attacks are prevented by path normalization
    - File operations are wrapped in try/catch blocks for error handling
-   - User confirmation is required before overwriting existing files
 
 ## Debugging Tips
-
 1. **API Communication Issues**
    - Verify API keys are correctly configured
    - Check for network connectivity issues
@@ -323,7 +318,6 @@ menu.AddItem(new GUIContent("Physics Analysis"), false, () => {
 2. **Code Application Problems**
    - Check file paths for correctness (case sensitivity matters)
    - Verify file permissions allow writing to the target location
-   - Look for syntax errors in the generated code
    - Check Unity console for compilation errors after code application
 
 3. **Scene Analysis Errors**
