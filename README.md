@@ -143,4 +143,6 @@ Below is a high-level diagram of how XeleR’s chatbot fits into your Unity work
 - **Asset Integration**  
   We want to work on improving our current architecture to also be able to support importing assets from the Unity source and other sources that the system require essential to edit the scene; this holds immense value in cases where scenes are to be generated from a prompt from scratch. 
 
+## Sample Scripts
+You can try one of our sample scripts generated using XeleR. The scripts are in Assets>Scripts>Sample Scripts. We currently have DuplicatePlayerOnStart.cs which duplicates the player in the GameScene on start.
 
