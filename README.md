@@ -81,8 +81,8 @@ Below is a high-level diagram of how XeleR’s chatbot fits into your Unity work
 
 1. **Add the Script Files**  
    - Clone or download this repository.  
-   - Place the script files into an `Editor` folder within your Unity project.  
-   - Unity will automatically compile them as part of its editor extension workflow.
+   - To run this project: Open Unity Hub and add this repository as a project with Unity version 2022.3.11f1.
+   - To use XeleR in your existing project: Place the script files into an `Editor` folder within your Unity project. Unity will automatically compile them as part of its editor extension workflow.
 
 2. **Configure API Keys**  
    - In the Unity menu, go to **Window → Chatbox** to open the XeleR Chat window.  
