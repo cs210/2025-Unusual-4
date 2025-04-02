@@ -371,6 +371,20 @@ public class ChatbotEditorWindow : EditorWindow
         newChatButton.style.height = 22;
         sessionContainer.Add(newChatButton);
 
+        // Delete chat button
+        var deleteChatButton = new Button(() =>
+        {
+            if (EditorUtility.DisplayDialog("Delete Chat", 
+                "Are you sure you want to delete this chat session?", "Yes", "No"))
+            {
+                DeleteCurrentSession();
+            }
+        }) { text = "🗑" };
+
+        deleteChatButton.style.width = 24;
+        deleteChatButton.style.height = 22;
+        sessionContainer.Add(deleteChatButton);
+
         // Add the @ context button for file browsing
         contextMenuButton = new Button(OnContextMenuButtonClicked) { text = "@ Context" };
         contextMenuButton.style.height = 22;
