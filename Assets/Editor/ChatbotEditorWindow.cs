@@ -1773,12 +1773,8 @@ public class ChatbotEditorWindow : EditorWindow
         // Scroll to bottom using the helper method
         EditorApplication.delayCall += ScrollToBottom;
     }
-
-    // Process code blocks in AI responses for better display
     private void ProcessCodeBlocksInMessage(string message)
     {
-        // Pattern to match code blocks with file paths
-        // Format: ```csharp:Assets/Scripts/SomeFile.cs ... ```
         var codeBlockPattern = new Regex(@"```(?:csharp|cs):([^\n]+)\n([\s\S]*?)```");
         var matches = codeBlockPattern.Matches(message);
         
@@ -1788,12 +1784,12 @@ public class ChatbotEditorWindow : EditorWindow
             {
                 string filePath = match.Groups[1].Value.Trim();
                 string codeContent = match.Groups[2].Value;
-                
-                // Create a visual representation of the code block
-                AddCodeBlockToHistory(filePath, codeContent);
+                VisualElement codeBlockElement = MarkdownRenderer.RenderCodeBlock(filePath, codeContent);
+                conversationScrollView.Add(codeBlockElement);
             }
         }
     }
+
 
     // Add a formatted code block to the conversation
     private void AddCodeBlockToHistory(string filePath, string content)
