@@ -37,12 +37,169 @@ public class OpenAIStreamChunk
     }
 }
 
+// Add this class before the ChatbotEditorWindow class
+public class StreamingMarkdownContainer
+{
+    private VisualElement container;
+    private VisualElement contentContainer;
+    public string currentText { get; private set; } = "";
+    private bool inCodeBlock = false;
+    private string currentCodeBlock = "";
+    private string currentCodeBlockLanguage = "";
+
+    public VisualElement parent => container;
+
+    public StreamingMarkdownContainer(VisualElement parent)
+    {
+        container = new VisualElement
+        {
+            style =
+            {
+                marginBottom = 8,
+                paddingLeft = 4,
+                paddingRight = 4
+            }
+        };
+
+        contentContainer = new VisualElement
+        {
+            style =
+            {
+                marginLeft = 4,
+                marginRight = 4
+            }
+        };
+
+        container.Add(contentContainer);
+        parent.Add(container);
+    }
+
+    public void AppendText(string newText)
+    {
+        currentText += newText;
+        UpdateDisplay();
+    }
+
+    private void UpdateDisplay()
+    {
+        contentContainer.Clear();
+
+        // Split the text into blocks
+        var blocks = SplitIntoBlocks(currentText);
+        
+        foreach (var block in blocks)
+        {
+            if (IsCodeBlock(block, out string language, out string code))
+            {
+                var codeBlockElement = MarkdownRenderer.RenderCodeBlock("", code);
+                contentContainer.Add(codeBlockElement);
+            }
+            else
+            {
+                var formattedContent = MarkdownRenderer.RenderMarkdown(block);
+                contentContainer.Add(formattedContent);
+            }
+        }
+    }
+
+    private List<string> SplitIntoBlocks(string text)
+    {
+        var blocks = new List<string>();
+        var lines = text.Split('\n');
+        string currentBlock = "";
+        bool inCodeBlock = false;
+        string currentCodeBlock = "";
+
+        foreach (var line in lines)
+        {
+            if (line.StartsWith("```"))
+            {
+                if (!inCodeBlock)
+                {
+                    // Start of code block
+                    if (!string.IsNullOrWhiteSpace(currentBlock))
+                    {
+                        blocks.Add(currentBlock.Trim());
+                        currentBlock = "";
+                    }
+                    inCodeBlock = true;
+                    currentCodeBlock = line + "\n";
+                }
+                else
+                {
+                    // End of code block
+                    currentCodeBlock += line;
+                    blocks.Add(currentCodeBlock);
+                    currentCodeBlock = "";
+                    inCodeBlock = false;
+                }
+                continue;
+            }
+
+            if (inCodeBlock)
+            {
+                currentCodeBlock += line + "\n";
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    if (!string.IsNullOrWhiteSpace(currentBlock))
+                    {
+                        blocks.Add(currentBlock.Trim());
+                        currentBlock = "";
+                    }
+                }
+                else
+                {
+                    currentBlock += line + "\n";
+                }
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(currentBlock))
+        {
+            blocks.Add(currentBlock.Trim());
+        }
+
+        if (!string.IsNullOrWhiteSpace(currentCodeBlock))
+        {
+            blocks.Add(currentCodeBlock);
+        }
+
+        return blocks;
+    }
+
+    private bool IsCodeBlock(string block, out string language, out string code)
+    {
+        language = "";
+        code = "";
+
+        if (!block.StartsWith("```") || !block.EndsWith("```"))
+            return false;
+
+        var lines = block.Split('\n');
+        if (lines.Length <= 2)
+            return false;
+
+        // Extract language from first line
+        string firstLine = lines[0].Trim();
+        if (firstLine.Length > 3)
+        {
+            language = firstLine.Substring(3).Trim();
+        }
+
+        // Extract code content
+        code = string.Join("\n", lines.Skip(1).Take(lines.Length - 2));
+        return true;
+    }
+}
 
 [InitializeOnLoad]
 public class ChatbotEditorWindow : EditorWindow
 {
-    // Add a field to store the streaming message label
-    private Label streamingMessageLabel;
+    // Replace the streamingMessageLabel field with:
+    private StreamingMarkdownContainer streamingContainer;
 
     private void AddStreamingPlaceholderMessage()
     {
@@ -68,16 +225,8 @@ public class ChatbotEditorWindow : EditorWindow
         };
         messageContainer.Add(senderLabel);
 
-        // Create and store the streaming message label
-        streamingMessageLabel = new Label("")
-        {
-            style =
-            {
-                whiteSpace = WhiteSpace.Normal,
-                marginLeft = 4
-            }
-        };
-        messageContainer.Add(streamingMessageLabel);
+        // Create and store the streaming container
+        streamingContainer = new StreamingMarkdownContainer(messageContainer);
 
         // Add the container to the conversation view
         conversationScrollView.Add(messageContainer);
@@ -85,15 +234,15 @@ public class ChatbotEditorWindow : EditorWindow
 
     private void UpdateStreamingMessage(string newText)
     {
-        if (streamingMessageLabel != null)
+        if (streamingContainer != null)
         {
-            streamingMessageLabel.text += newText;
+            streamingContainer.AppendText(newText);
             // Optionally scroll to bottom
             EditorApplication.delayCall += ScrollToBottom;
         }
         else
         {
-            Debug.LogWarning("Streaming message label is null. Unable to update streaming text.");
+            Debug.LogWarning("Streaming container is null. Unable to update streaming text.");
         }
     }
 
@@ -1286,19 +1435,19 @@ public class ChatbotEditorWindow : EditorWindow
                 return;
             }
 
-            if (streamingMessageLabel != null)
+            if (streamingContainer != null)
             {
-                string finalResponse = streamingMessageLabel.text;
-                if (streamingMessageLabel.parent != null)
-                    streamingMessageLabel.parent.RemoveFromHierarchy();
-                streamingMessageLabel = null;
+                string finalResponse = streamingContainer.currentText;
+                if (streamingContainer.parent != null)
+                    streamingContainer.parent.RemoveFromHierarchy();
+                streamingContainer = null;
 
                 // Then pass the actual text so ProcessAndApplyCodeEdits can detect code blocks
                 onResponse?.Invoke(finalResponse, "OpenAI");
             }
             else
             {
-                // If for some reason streamingMessageLabel was null, just pass empty
+                // If for some reason streamingContainer was null, just pass empty
                 onResponse?.Invoke("", "OpenAI");
             }
         }
