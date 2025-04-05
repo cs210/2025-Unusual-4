@@ -346,11 +346,13 @@ public class ChatbotEditorWindow : EditorWindow
         public string LastLoadedScenePath;
         public bool IsSceneLoaded;
         public DateTime CreatedAt;
+        public bool NeedsAutoNaming = false;
         
         public ChatSession(string name)
         {
             Name = name;
             CreatedAt = DateTime.Now;
+            NeedsAutoNaming = name == "New Chat";
         }
     }
 
@@ -425,14 +427,14 @@ public class ChatbotEditorWindow : EditorWindow
         {
             // If for some reason we can't find InspectorWindow, just open normally
             Debug.LogWarning("InspectorWindow type not found; opening Chatbot without docking.");
-            var wndFallback = GetWindow<ChatbotEditorWindow>("Chat v0", true);
+            var wndFallback = GetWindow<ChatbotEditorWindow>("XeleR", true);
             wndFallback.Show();
         }
         else
         {
             // Dock next to Inspector using the reflected type
             var wnd = GetWindow<ChatbotEditorWindow>(
-                "Chat v0",
+                "XeleR",
                 true,
                 inspectorType
             );
@@ -454,7 +456,7 @@ public class ChatbotEditorWindow : EditorWindow
             // Migrate existing conversation to a session if needed
             if (conversationHistory.Count > 0)
             {
-                var initialSession = new ChatSession("Chat 1");
+                var initialSession = new ChatSession("New Chat");
                 initialSession.Messages = new List<ChatMessage>(conversationHistory);
                 initialSession.LastLoadedScriptPath = lastLoadedScriptPath;
                 initialSession.LastLoadedScriptContent = lastLoadedScriptContent;
@@ -464,7 +466,7 @@ public class ChatbotEditorWindow : EditorWindow
             }
             else
             {
-                chatSessions.Add(new ChatSession("Chat 1"));
+                chatSessions.Add(new ChatSession("New Chat"));
             }
             currentSessionIndex = 0;
             
@@ -905,6 +907,19 @@ public class ChatbotEditorWindow : EditorWindow
         if (string.IsNullOrEmpty(userText)) return;
 
         AddMessageToHistory("You", userText);
+
+        // Check if the chat needs auto-naming and this is the first user message
+        if (currentSessionIndex >= 0 && currentSessionIndex < chatSessions.Count)
+        {
+            var currentSession = chatSessions[currentSessionIndex];
+            if (currentSession.NeedsAutoNaming && 
+                currentSession.Messages.Count > 0 && 
+                currentSession.Messages.Count(m => m.Sender == "You") == 1)
+            {
+                // Start the auto-naming process
+                AutoNameChat(userText);
+            }
+        }
 
         // Temporarily disable input
         queryField.SetEnabled(false);
@@ -2495,8 +2510,7 @@ public class ChatbotEditorWindow : EditorWindow
         SaveCurrentSessionState();
         
         // Create a new chat session
-        int newChatNumber = chatSessions.Count + 1;
-        var newSession = new ChatSession($"Chat {newChatNumber}");
+        var newSession = new ChatSession("New Chat");
         chatSessions.Add(newSession);
         
         // Update the session selector
@@ -2541,7 +2555,7 @@ public class ChatbotEditorWindow : EditorWindow
     }
 
     // Add a method to rename the current chat session
-    private void RenameCurrentSession(string newName)
+    private void RenameCurrentSession(string newName, bool silent = false)
     {
         if (currentSessionIndex >= 0 && currentSessionIndex < chatSessions.Count)
         {
@@ -2552,7 +2566,10 @@ public class ChatbotEditorWindow : EditorWindow
             sessionSelector.choices = sessionNames;
             sessionSelector.index = currentSessionIndex;
             
-            AddMessageToHistory("System", $"Renamed session to: {newName}");
+            if (!silent)
+            {
+                AddMessageToHistory("System", $"Renamed session to: {newName}");
+            }
             
             // Save the updated state
             SaveChatSessionsToEditorPrefs();
@@ -2942,5 +2959,154 @@ public class ChatbotEditorWindow : EditorWindow
         button.style.borderBottomColor = new Color(0.4f, 0.4f, 0.4f);
         button.style.borderLeftColor = new Color(0.4f, 0.4f, 0.4f);
         button.style.borderRightColor = new Color(0.4f, 0.4f, 0.4f);
+    }
+
+    private void AutoNameChat(string userMessage)
+    {
+        if (currentSessionIndex < 0 || currentSessionIndex >= chatSessions.Count)
+            return;
+            
+        var currentSession = chatSessions[currentSessionIndex];
+        if (!currentSession.NeedsAutoNaming)
+            return;
+            
+        // Reset the flag immediately to prevent multiple attempts
+        currentSession.NeedsAutoNaming = false;
+            
+        // Create a prompt for generating a chat name
+        string namingPrompt = $"Generate a very short and concise name (3-5 words maximum) for a chat based on this query: \"{userMessage}\". Reply with ONLY the name, no quotes or explanation.";
+            
+        // Select the model to use (preferably a faster model)
+        var modelForNaming = availableModels.FirstOrDefault(m => m.Name == "gpt-3.5-turbo") ?? availableModels[0];
+            
+        // Make a separate request to get a name
+        if (modelForNaming.Provider == "OpenAI")
+        {
+            GenerateNameWithOpenAI(namingPrompt, modelForNaming.Name);
+        }
+        else if (modelForNaming.Provider == "Claude")
+        {
+            GenerateNameWithClaude(namingPrompt, modelForNaming.Name);
+        }
+    }
+        
+    private async void GenerateNameWithOpenAI(string namingPrompt, string model)
+    {
+        const string url = "https://api.openai.com/v1/chat/completions";
+        string apiKey = ApiKeyManager.GetKey(ApiKeyManager.OPENAI_KEY);
+        if (string.IsNullOrEmpty(apiKey))
+            return;
+            
+        string escapedPrompt = EscapeJson(namingPrompt);
+        string jsonPayload = @"{
+            ""model"": """ + model + @""",
+            ""messages"": [
+                {
+                    ""role"": ""user"",
+                    ""content"": """ + escapedPrompt + @"""
+                }
+            ],
+            ""max_tokens"": 50,
+            ""temperature"": 0.7
+        }";
+            
+        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        {
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+                
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("Authorization", "Bearer " + apiKey);
+                
+            var operation = request.SendWebRequest();
+            while (!operation.isDone)
+                await Task.Yield();
+                
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string chatName = ParseOpenAIReply(request.downloadHandler.text);
+                // Clean up the name and apply it
+                chatName = CleanupChatName(chatName);
+                if (!string.IsNullOrEmpty(chatName))
+                {
+                    RenameCurrentSession(chatName, true);
+                }
+            }
+        }
+    }
+        
+    private async void GenerateNameWithClaude(string namingPrompt, string model)
+    {
+        const string url = "https://api.anthropic.com/v1/messages";
+        string apiKey = ApiKeyManager.GetKey(ApiKeyManager.CLAUDE_KEY);
+        if (string.IsNullOrEmpty(apiKey))
+            return;
+            
+        string escapedPrompt = EscapeJson(namingPrompt);
+        string jsonPayload = @"{
+            ""model"": """ + model + @""",
+            ""max_tokens"": 50,
+            ""messages"": [
+                {
+                    ""role"": ""user"",
+                    ""content"": """ + escapedPrompt + @"""
+                }
+            ]
+        }";
+            
+        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        {
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+                
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("x-api-key", apiKey);
+            request.SetRequestHeader("anthropic-version", "2023-06-01");
+                
+            var operation = request.SendWebRequest();
+            while (!operation.isDone)
+                await Task.Yield();
+                
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string chatName = ParseClaudeReply(request.downloadHandler.text);
+                // Clean up the name and apply it
+                chatName = CleanupChatName(chatName);
+                if (!string.IsNullOrEmpty(chatName))
+                {
+                    RenameCurrentSession(chatName, true);
+                }
+            }
+        }
+    }
+
+    // Helper method to clean up and format chat names
+    private string CleanupChatName(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return "New Chat";
+            
+        // Remove any quotes around the name
+        name = name.Trim('"', '\'', '`', ' ');
+        
+        // If name is too long, truncate it
+        const int maxLength = 30;
+        if (name.Length > maxLength)
+        {
+            name = name.Substring(0, maxLength - 3) + "...";
+        }
+        
+        // Replace any invalid filename characters
+        name = string.Join("_", name.Split(Path.GetInvalidFileNameChars()));
+        
+        // If we end up with an empty string, use default
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return "New Chat";
+        }
+        
+        return name;
     }
 }
