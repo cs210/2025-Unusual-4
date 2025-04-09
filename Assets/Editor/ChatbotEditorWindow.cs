@@ -370,13 +370,12 @@ public class ChatbotEditorWindow : EditorWindow
 
     private List<ModelInfo> availableModels = new List<ModelInfo>
     {
-        new ModelInfo { Name = "gpt-3.5-turbo", Provider = "OpenAI" },
+        new ModelInfo { Name = "gpt-4o", Provider = "OpenAI" },
         new ModelInfo { Name = "gpt-4", Provider = "OpenAI" },
         new ModelInfo { Name = "gpt-4-turbo", Provider = "OpenAI" },
-        new ModelInfo { Name = "gpt-4o", Provider = "OpenAI" },
-        new ModelInfo { Name = "claude-3-opus", Provider = "Claude" },
+        new ModelInfo { Name = "claude-3-7-sonnet", Provider = "Claude" },
         new ModelInfo { Name = "claude-3-5-sonnet", Provider = "Claude" },
-        new ModelInfo { Name = "claude-3-7-sonnet", Provider = "Claude" }
+
     };
     
     // Store selected model index for persistence
