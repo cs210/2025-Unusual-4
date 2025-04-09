@@ -1296,22 +1296,92 @@ public class ChatbotEditorWindow : EditorWindow
 
     private void ApplyPartialEdit(string filePath, string editContent)
     {
-        // This is a simplified implementation - a real one would need more robust parsing
         if (!File.Exists(filePath))
         {
             throw new FileNotFoundException($"File not found: {filePath}");
         }
         
         string originalContent = File.ReadAllText(filePath);
+        string[] originalLines = originalContent.Split('\n');
+        string[] editLines = editContent.Split('\n');
         
-        // Remove comment markers that indicate unchanged code
-        var cleanedEdit = Regex.Replace(editContent, 
-            @"//\s*(?:…|\.\.\.)\s*existing code\s*(?:…|\.\.\.)", 
-            "");
+        // Find the section to edit by looking for the first non-comment, non-empty line
+        int editStartIndex = -1;
+        for (int i = 0; i < editLines.Length; i++)
+        {
+            string line = editLines[i].Trim();
+            if (!string.IsNullOrEmpty(line) && !line.StartsWith("//"))
+            {
+                editStartIndex = i;
+                break;
+            }
+        }
         
-        // For this simple implementation, we'll just replace the entire file
-        // A more robust implementation would identify specific functions or sections to edit
-        File.WriteAllText(filePath, cleanedEdit);
+        if (editStartIndex == -1)
+        {
+            Debug.LogWarning("No valid edit content found in the provided code block");
+            return;
+        }
+        
+        // Find where this code exists in the original file
+        string searchPattern = editLines[editStartIndex].Trim();
+        int originalStartIndex = -1;
+        
+        for (int i = 0; i < originalLines.Length; i++)
+        {
+            if (originalLines[i].Trim() == searchPattern)
+            {
+                originalStartIndex = i;
+                break;
+            }
+        }
+        
+        if (originalStartIndex == -1)
+        {
+            Debug.LogWarning("Could not find the edit location in the original file");
+            return;
+        }
+        
+        // Find the end of the edit section by looking for the next "existing code" marker
+        int editEndIndex = -1;
+        for (int i = editStartIndex + 1; i < editLines.Length; i++)
+        {
+            if (editLines[i].Contains("existing code"))
+            {
+                editEndIndex = i;
+                break;
+            }
+        }
+        
+        if (editEndIndex == -1)
+        {
+            editEndIndex = editLines.Length;
+        }
+        
+        // Find the end of the section in the original file
+        int originalEndIndex = -1;
+        for (int i = originalStartIndex + 1; i < originalLines.Length; i++)
+        {
+            if (originalLines[i].Contains("existing code"))
+            {
+                originalEndIndex = i;
+                break;
+            }
+        }
+        
+        if (originalEndIndex == -1)
+        {
+            originalEndIndex = originalLines.Length;
+        }
+        
+        // Combine the original content with the edit
+        List<string> newLines = new List<string>();
+        newLines.AddRange(originalLines.Take(originalStartIndex));
+        newLines.AddRange(editLines.Skip(editStartIndex).Take(editEndIndex - editStartIndex));
+        newLines.AddRange(originalLines.Skip(originalEndIndex));
+        
+        // Write the combined content back to the file
+        File.WriteAllText(filePath, string.Join("\n", newLines));
         AssetDatabase.Refresh();
     }
 
