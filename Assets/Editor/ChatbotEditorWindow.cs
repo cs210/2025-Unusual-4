@@ -1073,13 +1073,30 @@ public class ChatbotEditorWindow : EditorWindow
 
     private void ProcessSceneEdits(string assistantReply)
     {
-        // Only process scene edits if a scene is loaded
-        if (!isSceneLoaded) return;
+        // Check if a scene is loaded directly from the active scene
+        var activeScene = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+        bool sceneIsLoaded = activeScene.isLoaded && !string.IsNullOrEmpty(activeScene.path);
+        
+        Debug.Log($"[Scene Edit] Checking scene loaded status: isSceneLoaded={isSceneLoaded}, direct check={sceneIsLoaded}");
+        Debug.Log($"[Scene Edit] Active scene name: {activeScene.name}");
+        Debug.Log($"[Scene Edit] Scene is loaded: {activeScene.isLoaded}");
+        Debug.Log($"[Scene Edit] Scene path: {activeScene.path}");
+        
+        if (!sceneIsLoaded)
+        {
+            Debug.Log("[Scene Edit] No scene is currently loaded. Scene edits will be ignored.");
+            return;
+        }
+        
+        Debug.Log("[Scene Edit] Processing scene edits from AI response...");
+        Debug.Log($"[Scene Edit] Full AI response: {assistantReply}");
         
         // Pattern to match scene edit instructions
         // Format: ```scene:ObjectPath/Component/Property=Value```
         var sceneEditPattern = new Regex(@"```scene:([^\n]+)```");
         var matches = sceneEditPattern.Matches(assistantReply);
+        
+        Debug.Log($"[Scene Edit] Found {matches.Count} scene edit instructions");
         
         if (matches.Count > 0)
         {
@@ -1090,6 +1107,7 @@ public class ChatbotEditorWindow : EditorWindow
                 if (match.Groups.Count >= 2)
                 {
                     string editInstruction = match.Groups[1].Value.Trim();
+                    Debug.Log($"[Scene Edit] Processing instruction: {editInstruction}");
                     try
                     {
                         bool success = ApplySceneEdit(editInstruction);
@@ -1097,7 +1115,7 @@ public class ChatbotEditorWindow : EditorWindow
                     }
                     catch (Exception ex)
                     {
-                        Debug.LogError($"Error applying scene edit: {ex.Message}");
+                        Debug.LogError($"[Scene Edit] Error applying scene edit: {ex.Message}\nStack trace: {ex.StackTrace}");
                         AddMessageToHistory("System", $"Error applying scene edit: {ex.Message}");
                     }
                 }
@@ -1109,13 +1127,25 @@ public class ChatbotEditorWindow : EditorWindow
                 UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(
                     UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
                 
+                Debug.Log("[Scene Edit] Scene modifications applied successfully");
                 AddMessageToHistory("System", "Scene modifications applied. Remember to save your scene.");
             }
+            else
+            {
+                Debug.Log("[Scene Edit] No scene modifications were successfully applied");
+            }
+        }
+        else
+        {
+            Debug.Log("[Scene Edit] No scene edit instructions found in AI response");
+            Debug.Log("[Scene Edit] Looking for pattern: ```scene:...```");
         }
     }
 
     private bool ApplySceneEdit(string editInstruction)
     {
+        Debug.Log($"[Scene Edit] Applying edit: {editInstruction}");
+        
         // Parse the edit instruction
         // Format: ObjectPath/Component/Property=Value
         // Example: Main Camera/Camera/fieldOfView=60
@@ -1123,6 +1153,7 @@ public class ChatbotEditorWindow : EditorWindow
         string[] parts = editInstruction.Split('=');
         if (parts.Length != 2)
         {
+            Debug.LogError($"[Scene Edit] Invalid scene edit format: {editInstruction}");
             AddMessageToHistory("System", $"Invalid scene edit format: {editInstruction}");
             return false;
         }
@@ -1133,38 +1164,60 @@ public class ChatbotEditorWindow : EditorWindow
         string[] pathParts = path.Split('/');
         if (pathParts.Length < 2)
         {
+            Debug.LogError($"[Scene Edit] Invalid object path: {path}");
             AddMessageToHistory("System", $"Invalid object path: {path}");
             return false;
         }
         
-        // The first part is the GameObject path
-        string objectPath = pathParts[0];
-        for (int i = 1; i < pathParts.Length - 1; i++)
-        {
-            objectPath += "/" + pathParts[i];
-        }
-        
-        // The last part is the property name
-        string propertyName = pathParts[pathParts.Length - 1];
+        // The first part is the GameObject name
+        string objectName = pathParts[0];
         
         // The second-to-last part is the component name
         string componentName = pathParts[pathParts.Length - 2];
         
-        // Find the GameObject
-        GameObject targetObject = GameObject.Find(objectPath);
+        // The last part is the property name
+        string propertyName = pathParts[pathParts.Length - 1];
+        
+        Debug.Log($"[Scene Edit] Looking for GameObject: {objectName}");
+        Debug.Log($"[Scene Edit] Component: {componentName}");
+        Debug.Log($"[Scene Edit] Property: {propertyName}");
+        Debug.Log($"[Scene Edit] Value: {value}");
+        
+        // List all GameObjects in the scene for debugging
+        Debug.Log("[Scene Edit] Listing all GameObjects in scene:");
+        GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
+        foreach (GameObject obj in allObjects)
+        {
+            Debug.Log($"[Scene Edit] Found GameObject: {obj.name} (Path: {GetFullPath(obj)})");
+        }
+        
+        // Find the GameObject by name
+        GameObject targetObject = GameObject.Find(objectName);
+        
         if (targetObject == null)
         {
-            AddMessageToHistory("System", $"GameObject not found: {objectPath}");
+            Debug.LogError($"[Scene Edit] GameObject not found: {objectName}");
+            Debug.LogError("[Scene Edit] Available paths in scene:");
+            foreach (GameObject obj in allObjects)
+            {
+                Debug.LogError($"[Scene Edit] - {GetFullPath(obj)}");
+            }
+            AddMessageToHistory("System", $"GameObject not found: {objectName}");
             return false;
         }
+        
+        Debug.Log($"[Scene Edit] Found GameObject: {targetObject.name} at path {GetFullPath(targetObject)}");
         
         // Find the component
         Component targetComponent = targetObject.GetComponent(componentName);
         if (targetComponent == null)
         {
-            AddMessageToHistory("System", $"Component not found: {componentName} on {objectPath}");
+            Debug.LogError($"[Scene Edit] Component not found: {componentName} on {objectName}");
+            AddMessageToHistory("System", $"Component not found: {componentName} on {objectName}");
             return false;
         }
+        
+        Debug.Log($"[Scene Edit] Found component: {targetComponent.GetType().Name}");
         
         // Set the property value using reflection
         try
@@ -1175,7 +1228,8 @@ public class ChatbotEditorWindow : EditorWindow
                 // Convert the value to the appropriate type
                 object convertedValue = ConvertValue(value, property.PropertyType);
                 property.SetValue(targetComponent, convertedValue);
-                AddMessageToHistory("System", $"Set {objectPath}/{componentName}/{propertyName} = {value}");
+                Debug.Log($"[Scene Edit] Successfully set property {propertyName} = {value}");
+                AddMessageToHistory("System", $"Set {objectName}/{componentName}/{propertyName} = {value}");
                 return true;
             }
             
@@ -1185,15 +1239,18 @@ public class ChatbotEditorWindow : EditorWindow
                 // Convert the value to the appropriate type
                 object convertedValue = ConvertValue(value, field.FieldType);
                 field.SetValue(targetComponent, convertedValue);
-                AddMessageToHistory("System", $"Set {objectPath}/{componentName}/{propertyName} = {value}");
+                Debug.Log($"[Scene Edit] Successfully set field {propertyName} = {value}");
+                AddMessageToHistory("System", $"Set {objectName}/{componentName}/{propertyName} = {value}");
                 return true;
             }
             
+            Debug.LogError($"[Scene Edit] Property or field not found: {propertyName} on {componentName}");
             AddMessageToHistory("System", $"Property or field not found: {propertyName} on {componentName}");
             return false;
         }
         catch (Exception ex)
         {
+            Debug.LogError($"[Scene Edit] Error setting property: {ex.Message}\nStack trace: {ex.StackTrace}");
             AddMessageToHistory("System", $"Error setting property: {ex.Message}");
             return false;
         }
@@ -1412,7 +1469,27 @@ public class ChatbotEditorWindow : EditorWindow
         }
         
         string escapedMessage = EscapeJson(userMessage);
-        string systemPrompt = "You are a Unity development assistant that can help with code. When suggesting code changes, use the format ```csharp:Assets/Scripts/FileName.cs\\n// code here\\n``` so the changes can be automatically applied.";
+        string systemPrompt = "You are a Unity development assistant that can help with code and scene modifications. " +
+            "When suggesting code changes, use the format ```csharp:Assets/Scripts/FileName.cs\\n// code here\\n``` so the changes can be automatically applied. " +
+            "\n\nFor scene modifications, you can make the following types of changes:\n" +
+            "1. Add or modify components: Use ```scene:GameObjectPath/ComponentName/PropertyName=Value```\n" +
+            "   Examples:\n" +
+            "   - Add a Rigidbody: ```scene:Player/Rigidbody/mass=10```\n" +
+            "   - Change camera field of view: ```scene:Main Camera/Camera/fieldOfView=60```\n" +
+            "   - Set transform position: ```scene:Player/Transform/position=(1,2,3)```\n" +
+            "   - Enable/disable components: ```scene:Player/Camera/enabled=true```\n\n" +
+            "2. Create new GameObjects: Use ```scene:Create/GameObjectName/ComponentName```\n" +
+            "   Examples:\n" +
+            "   - Create empty GameObject: ```scene:Create/NewObject/Transform```\n" +
+            "   - Create with component: ```scene:Create/Player/Rigidbody```\n\n" +
+            "Important notes:\n" +
+            "- GameObjectPath must be the full path in the hierarchy (e.g., 'Player/ChildObject')\n" +
+            "- ComponentName must be the exact Unity component name (e.g., 'Rigidbody', 'Camera', 'Transform')\n" +
+            "- PropertyName must be the exact property name on the component\n" +
+            "- For vector values, use the format (x,y,z)\n" +
+            "- For boolean values, use 'true' or 'false'\n" +
+            "- For numeric values, use the number directly\n" +
+            "- You can make multiple scene changes in one response by using multiple scene edit blocks";
         string sceneAnalyzerPrompt = SceneAnalysisIntegration.LoadMetaprompt("SceneAnalyzer_RequestAware");
         if (!string.IsNullOrEmpty(sceneAnalyzerPrompt))
         {
@@ -1574,7 +1651,27 @@ public class ChatbotEditorWindow : EditorWindow
         string escapedMessage = EscapeJson(userMessage);
         
         // Load scene analyzer metaprompt if available
-        string systemPrompt = "You are a Unity development assistant that can help with code. When suggesting code changes, use the format ```csharp:Assets/Scripts/FileName.cs\\n// code here\\n``` so the changes can be automatically applied.";
+        string systemPrompt = "You are a Unity development assistant that can help with code and scene modifications. " +
+            "When suggesting code changes, use the format ```csharp:Assets/Scripts/FileName.cs\\n// code here\\n``` so the changes can be automatically applied. " +
+            "\n\nFor scene modifications, you can make the following types of changes:\n" +
+            "1. Add or modify components: Use ```scene:GameObjectPath/ComponentName/PropertyName=Value```\n" +
+            "   Examples:\n" +
+            "   - Add a Rigidbody: ```scene:Player/Rigidbody/mass=10```\n" +
+            "   - Change camera field of view: ```scene:Main Camera/Camera/fieldOfView=60```\n" +
+            "   - Set transform position: ```scene:Player/Transform/position=(1,2,3)```\n" +
+            "   - Enable/disable components: ```scene:Player/Camera/enabled=true```\n\n" +
+            "2. Create new GameObjects: Use ```scene:Create/GameObjectName/ComponentName```\n" +
+            "   Examples:\n" +
+            "   - Create empty GameObject: ```scene:Create/NewObject/Transform```\n" +
+            "   - Create with component: ```scene:Create/Player/Rigidbody```\n\n" +
+            "Important notes:\n" +
+            "- GameObjectPath must be the full path in the hierarchy (e.g., 'Player/ChildObject')\n" +
+            "- ComponentName must be the exact Unity component name (e.g., 'Rigidbody', 'Camera', 'Transform')\n" +
+            "- PropertyName must be the exact property name on the component\n" +
+            "- For vector values, use the format (x,y,z)\n" +
+            "- For boolean values, use 'true' or 'false'\n" +
+            "- For numeric values, use the number directly\n" +
+            "- You can make multiple scene changes in one response by using multiple scene edit blocks";
         
         string sceneAnalyzerPrompt = SceneAnalysisIntegration.LoadMetaprompt("SceneAnalyzer_RequestAware");
         if (!string.IsNullOrEmpty(sceneAnalyzerPrompt))
@@ -1692,7 +1789,27 @@ public class ChatbotEditorWindow : EditorWindow
         string escapedMessage = EscapeJson(userMessage);
 
         // Load scene analyzer metaprompt if available
-        string systemPrompt = "You are a Unity development assistant that can help with code. When suggesting code changes, use the format ```csharp:Assets/Scripts/FileName.cs\\n// code here\\n``` so the changes can be automatically applied.";
+        string systemPrompt = "You are a Unity development assistant that can help with code and scene modifications. " +
+            "When suggesting code changes, use the format ```csharp:Assets/Scripts/FileName.cs\\n// code here\\n``` so the changes can be automatically applied. " +
+            "\n\nFor scene modifications, you can make the following types of changes:\n" +
+            "1. Add or modify components: Use ```scene:GameObjectPath/ComponentName/PropertyName=Value```\n" +
+            "   Examples:\n" +
+            "   - Add a Rigidbody: ```scene:Player/Rigidbody/mass=10```\n" +
+            "   - Change camera field of view: ```scene:Main Camera/Camera/fieldOfView=60```\n" +
+            "   - Set transform position: ```scene:Player/Transform/position=(1,2,3)```\n" +
+            "   - Enable/disable components: ```scene:Player/Camera/enabled=true```\n\n" +
+            "2. Create new GameObjects: Use ```scene:Create/GameObjectName/ComponentName```\n" +
+            "   Examples:\n" +
+            "   - Create empty GameObject: ```scene:Create/NewObject/Transform```\n" +
+            "   - Create with component: ```scene:Create/Player/Rigidbody```\n\n" +
+            "Important notes:\n" +
+            "- GameObjectPath must be the full path in the hierarchy (e.g., 'Player/ChildObject')\n" +
+            "- ComponentName must be the exact Unity component name (e.g., 'Rigidbody', 'Camera', 'Transform')\n" +
+            "- PropertyName must be the exact property name on the component\n" +
+            "- For vector values, use the format (x,y,z)\n" +
+            "- For boolean values, use 'true' or 'false'\n" +
+            "- For numeric values, use the number directly\n" +
+            "- You can make multiple scene changes in one response by using multiple scene edit blocks";
         string sceneAnalyzerPrompt = SceneAnalysisIntegration.LoadMetaprompt("SceneAnalyzer_RequestAware");
         if (!string.IsNullOrEmpty(sceneAnalyzerPrompt))
         {
@@ -1838,7 +1955,27 @@ public class ChatbotEditorWindow : EditorWindow
         string escapedMessage = EscapeJson(userMessage);
         
         // Load scene analyzer metaprompt if available
-        string systemPrompt = "You are a Unity development assistant that can help with code. When suggesting code changes, use the format ```csharp:Assets/Scripts/FileName.cs\\n// code here\\n``` so the changes can be automatically applied.";
+        string systemPrompt = "You are a Unity development assistant that can help with code and scene modifications. " +
+            "When suggesting code changes, use the format ```csharp:Assets/Scripts/FileName.cs\\n// code here\\n``` so the changes can be automatically applied. " +
+            "\n\nFor scene modifications, you can make the following types of changes:\n" +
+            "1. Add or modify components: Use ```scene:GameObjectPath/ComponentName/PropertyName=Value```\n" +
+            "   Examples:\n" +
+            "   - Add a Rigidbody: ```scene:Player/Rigidbody/mass=10```\n" +
+            "   - Change camera field of view: ```scene:Main Camera/Camera/fieldOfView=60```\n" +
+            "   - Set transform position: ```scene:Player/Transform/position=(1,2,3)```\n" +
+            "   - Enable/disable components: ```scene:Player/Camera/enabled=true```\n\n" +
+            "2. Create new GameObjects: Use ```scene:Create/GameObjectName/ComponentName```\n" +
+            "   Examples:\n" +
+            "   - Create empty GameObject: ```scene:Create/NewObject/Transform```\n" +
+            "   - Create with component: ```scene:Create/Player/Rigidbody```\n\n" +
+            "Important notes:\n" +
+            "- GameObjectPath must be the full path in the hierarchy (e.g., 'Player/ChildObject')\n" +
+            "- ComponentName must be the exact Unity component name (e.g., 'Rigidbody', 'Camera', 'Transform')\n" +
+            "- PropertyName must be the exact property name on the component\n" +
+            "- For vector values, use the format (x,y,z)\n" +
+            "- For boolean values, use 'true' or 'false'\n" +
+            "- For numeric values, use the number directly\n" +
+            "- You can make multiple scene changes in one response by using multiple scene edit blocks";
         
         string sceneAnalyzerPrompt = SceneAnalysisIntegration.LoadMetaprompt("SceneAnalyzer_RequestAware");
         if (!string.IsNullOrEmpty(sceneAnalyzerPrompt))
@@ -2303,20 +2440,33 @@ public class ChatbotEditorWindow : EditorWindow
     // Override OnEnable to ensure we restore state when the window is enabled
     private void OnEnable()
     {
-        // Load chat sessions from EditorPrefs
+        Debug.Log("[Scene Edit] ChatbotEditorWindow OnEnable called");
+        
+        // Check if a scene is loaded
+        var activeScene = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+        isSceneLoaded = activeScene.isLoaded && !string.IsNullOrEmpty(activeScene.path);
+        lastLoadedScenePath = activeScene.path;
+        
+        Debug.Log($"[Scene Edit] OnEnable - Active scene: {activeScene.name}");
+        Debug.Log($"[Scene Edit] OnEnable - Scene path: {activeScene.path}");
+        Debug.Log($"[Scene Edit] OnEnable - Scene is loaded: {activeScene.isLoaded}");
+        Debug.Log($"[Scene Edit] OnEnable - isSceneLoaded flag: {isSceneLoaded}");
+        
+        // Load saved chat sessions
         LoadChatSessionsFromEditorPrefs();
         
-        // If we already have a UI built, restore the conversation
-        if (rootVisualElement != null && conversationScrollView != null)
+        // Restore the current session if there is one
+        if (chatSessions.Count > 0)
         {
-            // Restore the current session
             RestoreCurrentSession();
-            
-            // Always scroll to bottom when window is enabled (after compilation)
-            EditorApplication.delayCall += ScrollToBottom;
+        }
+        else
+        {
+            // Create a new session if there are none
+            OnNewChatClicked();
         }
         
-        // Register for compilation events
+        // Subscribe to compilation events
         CompilationPipeline.compilationStarted += OnCompilationStarted;
         CompilationPipeline.compilationFinished += OnCompilationFinished;
     }
@@ -2420,50 +2570,39 @@ public class ChatbotEditorWindow : EditorWindow
 
     private void LoadSceneFile(string scenePath)
     {
-        try
+        Debug.Log($"[Scene Edit] Loading scene file: {scenePath}");
+        
+        if (string.IsNullOrEmpty(scenePath))
         {
-            // Check if there are unsaved changes in the current scene
-            if (UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().isDirty)
-            {
-                if (!EditorUtility.DisplayDialog("Unsaved Changes", 
-                    "The current scene has unsaved changes. Do you want to proceed and lose those changes?", 
-                    "Yes", "No"))
-                {
-                    return;
-                }
-            }
-            
-            // Add the scene path to the selected files array if not already in the array
-            if (Array.IndexOf(selectedFiles, scenePath) < 0) {
-                Array.Resize(ref selectedFiles, selectedFiles.Length + 1);
-                selectedFiles[selectedFiles.Length - 1] = scenePath;
-            }
+            Debug.LogError("[Scene Edit] Scene path is null or empty");
+            return;
+        }
 
-            // Update the display of selected files
-            UpdateSelectedFilesDisplay();
-            
-            // Load the scene
-            UnityEditor.SceneManagement.EditorSceneManager.OpenScene(scenePath, UnityEditor.SceneManagement.OpenSceneMode.Single);
-            string sceneName = Path.GetFileName(scenePath);
-            
-            // Add the scene info to the conversation
-            AddMessageToHistory("You", $"Open scene {sceneName}");
-            AddMessageToHistory("System", $"Scene {sceneName} loaded successfully.");
-            
-            // Store the scene path for context in the next API call
-            lastLoadedScenePath = scenePath;
-            isSceneLoaded = true;
-            
-            // Optionally, ask the AI about the scene
-            string prompt = $"I've opened the scene {sceneName}. Can you analyze this scene and suggest improvements?";
-            queryField.SetValueWithoutNotify(prompt);
-            queryField.RemoveFromClassList("placeholder-text");
-        }
-        catch (Exception ex)
+        // Save the current scene if one is loaded
+        if (!string.IsNullOrEmpty(lastLoadedScenePath))
         {
-            Debug.LogError($"Error loading scene file: {ex.Message}");
-            AddMessageToHistory("System", $"Error loading scene: {ex.Message}");
+            SaveCurrentScene();
         }
+
+        // Load the new scene
+        var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(scenePath);
+        lastLoadedScenePath = scenePath;
+        isSceneLoaded = true;  // Set this to true when a scene is loaded
+        
+        Debug.Log($"[Scene Edit] Scene loaded successfully. isSceneLoaded={isSceneLoaded}");
+        Debug.Log($"[Scene Edit] Scene name: {scene.name}");
+        Debug.Log($"[Scene Edit] Scene path: {scene.path}");
+        
+        // Update the current session with the new scene information
+        if (currentSessionIndex >= 0 && currentSessionIndex < chatSessions.Count)
+        {
+            chatSessions[currentSessionIndex].LastLoadedScenePath = scenePath;
+            chatSessions[currentSessionIndex].IsSceneLoaded = true;
+            SaveChatSessionsToEditorPrefs();
+        }
+
+        // Add a message to the conversation about the loaded scene
+        AddMessageToHistory("System", $"Loaded scene: {Path.GetFileNameWithoutExtension(scenePath)}");
     }
 
     // Add a method to create a new GameObject in the scene
@@ -3180,5 +3319,18 @@ public class ChatbotEditorWindow : EditorWindow
         }
         
         return name;
+    }
+
+    // Helper method to get the full path of a GameObject
+    private string GetFullPath(GameObject obj)
+    {
+        string path = obj.name;
+        Transform parent = obj.transform.parent;
+        while (parent != null)
+        {
+            path = parent.name + "/" + path;
+            parent = parent.parent;
+        }
+        return path;
     }
 }
