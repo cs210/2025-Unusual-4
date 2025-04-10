@@ -1227,7 +1227,16 @@ public class ChatbotEditorWindow : EditorWindow
             {
                 // Convert the value to the appropriate type
                 object convertedValue = ConvertValue(value, property.PropertyType);
+                
+                // Record the object for undo
+                UnityEditor.Undo.RecordObject(targetComponent, $"Set {propertyName} on {targetObject.name}");
+                
+                // Set the value
                 property.SetValue(targetComponent, convertedValue);
+                
+                // Mark the object as dirty
+                UnityEditor.EditorUtility.SetDirty(targetComponent);
+                
                 Debug.Log($"[Scene Edit] Successfully set property {propertyName} = {value}");
                 AddMessageToHistory("System", $"Set {objectName}/{componentName}/{propertyName} = {value}");
                 return true;
@@ -1238,7 +1247,16 @@ public class ChatbotEditorWindow : EditorWindow
             {
                 // Convert the value to the appropriate type
                 object convertedValue = ConvertValue(value, field.FieldType);
+                
+                // Record the object for undo
+                UnityEditor.Undo.RecordObject(targetComponent, $"Set {propertyName} on {targetObject.name}");
+                
+                // Set the value
                 field.SetValue(targetComponent, convertedValue);
+                
+                // Mark the object as dirty
+                UnityEditor.EditorUtility.SetDirty(targetComponent);
+                
                 Debug.Log($"[Scene Edit] Successfully set field {propertyName} = {value}");
                 AddMessageToHistory("System", $"Set {objectName}/{componentName}/{propertyName} = {value}");
                 return true;
