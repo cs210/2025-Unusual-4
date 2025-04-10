@@ -702,14 +702,17 @@ public class ChatbotEditorWindow : EditorWindow
         queryField.style.minHeight = 30;
         queryField.SetValueWithoutNotify(PLACEHOLDER_TEXT);
         queryField.AddToClassList("placeholder-text");
-        inputContainer.Add(queryField);
-
-        // Register keydown event for Enter key
-        queryField.RegisterCallback<KeyDownEvent>(OnQueryFieldKeyDown);
         
-        // Focus events for placeholder simulation
+        // Configure the TextField to handle keyboard input properly
+        queryField.focusable = true;
+        queryField.pickingMode = PickingMode.Position;
+        
+        // Register keyboard and focus events
+        queryField.RegisterCallback<KeyDownEvent>(OnQueryFieldKeyDown, TrickleDown.TrickleDown);
         queryField.RegisterCallback<FocusInEvent>(OnFocusInQueryField);
         queryField.RegisterCallback<FocusOutEvent>(OnFocusOutQueryField);
+        
+        inputContainer.Add(queryField);
 
         // Send button
         sendButton = new Button(OnSendButtonClicked) { text = "Send" };
